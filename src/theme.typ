@@ -261,7 +261,21 @@
         show heading.where(level: 3): _monash-heading-three
         show heading.where(level: 4): set text(fill: monash-blue, weight: "bold")
         show strong: it => text(fill: monash-orange, weight: "bold", it.body)
-        show raw: set text(
+        show raw.where(block: false): it => box(
+          fill: monash-blue-wash,
+          stroke: (paint: monash-grey-soft, thickness: .45pt),
+          radius: 1.5pt,
+          inset: (x: .18em, y: .04em),
+          baseline: .08em,
+          text(
+            font: ("Source Code Pro", "DejaVu Sans Mono"),
+            size: .68em,
+            fill: monash-blue-dark,
+            weight: "medium",
+            it,
+          ),
+        )
+        show raw.where(block: true): set text(
           font: ("Source Code Pro", "DejaVu Sans Mono"),
           size: .64em,
           fill: rgb("#EAEAEA"),
