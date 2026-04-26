@@ -6,21 +6,20 @@ an official Monash University asset.
 ## Visual Direction
 
 - Use Monash blue as the dominant academic identity colour.
-- Use red sparingly as an accent for warnings or emphasis.
+- Do not use Monash red in the default presentation theme.
 - Keep slides clean, spacious, and left-to-right readable.
 - Prefer restrained headers and footers over decorative page furniture.
-- Do not bundle, redraw, stretch, recolour, crop, or otherwise modify official
-  Monash logo assets.
+- Do not redraw, stretch, recolour, crop, or otherwise modify Monash logo
+  assets.
 
 ## Current Package Interpretation
 
 The template currently uses:
 
 - `#006DAE` as the primary blue.
-- `#DF0021` as the red accent.
 - neutral greys for body/footer contrast.
-- a user-supplied `logo` slot instead of bundled official marks.
-- a grey tertiary footer/progress colour so red remains a limited accent.
+- the bundled `template/assets/Monash_University_logo.svg` in the starter deck.
+- a grey tertiary footer/progress colour so the theme remains quiet.
 
 ## Logo SVG Notes
 
@@ -29,12 +28,13 @@ direct automated download may be blocked. Wikimedia Commons mirrors a
 `Monash University logo.svg` file sourced from that official URL and marks it as
 simple geometry/public domain while also warning that it may be trademarked.
 
-Do not vendor that SVG into this package by default. If a user has the right to
-use the mark, they can place their own SVG under `template/assets/` and pass:
+The starter template vendors `Monash_University_logo.svg` because this package
+is explicitly intended to ship with the Monash slide scaffold. Users can replace
+that asset under `template/assets/` and pass:
 
 ```typst
 #show: monash-theme.with(
-  logo: image("assets/monash-logo.svg", height: 1.2em),
+  logo: image("assets/Monash_University_logo.svg", height: 1em),
   ...
 )
 ```

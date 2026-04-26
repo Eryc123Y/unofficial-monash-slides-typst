@@ -2,14 +2,12 @@
 
 Place presentation-specific assets here.
 
-Official Monash logo files are not bundled with this package. If you have the
-right to use a Monash logo SVG, place it in this directory and pass it to the
-theme:
+The template includes `Monash_University_logo.svg` and passes it to the theme
+from `template/main.typ`:
 
 ```typst
 #show: monash-theme.with(
-  logo: image("assets/monash-logo.svg", height: 1.2em),
+  logo: image("assets/Monash_University_logo.svg", height: 1em),
   ...
 )
 ```
-

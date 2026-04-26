@@ -1,36 +1,31 @@
 # Monash Student Slides
 
-An unofficial Monash-style presentation template package for Typst, built as a
-thin wrapper around [Touying](https://typst.app/universe/package/touying/).
-
-This package is not endorsed by Monash University. It does not bundle, redraw,
-or modify official Monash logo assets. If you have permission to use an official
-logo, place the SVG in `template/assets/` and pass it through the `logo` option.
-
-## Design Notes
-
-The visual direction follows public Monash brand cues at a conservative level:
-a blue-led academic palette, restrained red accent use, generous whitespace,
-clear left-to-right hierarchy, and a quiet footer suitable for course and
-research talks.
+An unofficial Monash-style presentation package for Typst. It is intentionally
+thin: Touying remains the slide authoring system, while this package supplies a
+Monash theme and theorem-like environments styled with `frame-it`.
 
 ## Usage
 
 ```typst
-#import "@preview/monash-student-slides:0.1.0": *
 #import "@preview/touying:0.7.3": *
+#import themes.university: *
+#import "@preview/monash-student-slides:0.1.0": *
+
+#let monash-logo = image("assets/Monash_University_logo.svg", height: 1em)
 
 #show: monash-theme.with(
-  campus: [Monash University Malaysia],
+  logo: monash-logo,
   config-info(
     title: [Presentation Title],
+    short-title: [Short Title],
     subtitle: [Subtitle],
     author: [Your Name],
     institution: [Monash University],
     date: datetime.today(),
   ),
-  logo: none,
 )
+
+#show: show-monash-frames
 
 #title-slide()
 
@@ -38,13 +33,29 @@ research talks.
 
 == Slide Title
 
-#info-block(title: [Context])[
-  Slide content.
+Use normal Touying content.
+
+#definition[Term][
+  A definition can be placed directly inside a slide.
 ]
 ```
 
-For local development, the template imports `../lib.typ` directly. Universe
-users should import the package with `@preview/...` after publication.
+## Public API
+
+- `monash-theme`
+- `show-monash-frames`
+- `monash-frame-style`
+- `definition`
+- `theorem`
+- `proof`
+- `lemma`
+- `corollary`
+- `remark`
+- `note`
+- `warning`
+
+The package does not provide custom slide wrappers. Use Touying's own headings,
+`#slide`, `#pause`, composers, and other presentation features directly.
 
 ## Development Harness
 
@@ -54,28 +65,11 @@ Run:
 ./scripts/check.sh
 ```
 
-The harness compiles the template and example decks into `build/`.
+The harness compiles the template deck, the frame environment example, and the
+thumbnail.
 
-## Included Helpers
+## Design Notes
 
-- `monash-theme`
-- `title-slide`
-- `section-slide`
-- `closing-slide`
-- `two-column-slide`
-- `equation-slide`
-- `code-slide`
-- `theorem-slide`
-- `definition-slide`
-- `proof-slide`
-- `algorithm-slide`
-- `info-block`
-- `alert-block`
-- `result-block`
-- `metric-row`
-
-## Brand Boundary
-
-This is an unofficial student-oriented template. It uses a Monash-inspired
-layout and palette, but it avoids shipping official marks. Keep any future logo
-support opt-in and user supplied.
+The default visual language uses a restrained Monash-inspired palette: Monash
+blue, darker blue/teal, charcoal, white, and light grey. Monash red is not used
+in the default theme.

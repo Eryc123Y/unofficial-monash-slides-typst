@@ -1,23 +1,180 @@
 #import "@preview/touying:0.7.3": *
-#import themes.university: *
 
-// Monash-inspired palette. This package is unofficial and does not ship
-// Monash logo assets; pass a user-provided logo as content if needed.
-// Public Monash digital brand references list these colour values.
 #let monash-blue = rgb("#006DAE")
 #let monash-blue-dark = rgb("#00739D")
 #let monash-blue-light = rgb("#EAF6FB")
-#let monash-red = rgb("#DF0021")
 #let monash-charcoal = rgb("#3C3C3C")
 #let monash-slate = rgb("#505050")
 #let monash-grey = rgb("#D1D3D4")
 #let monash-grey-light = rgb("#F6F6F6")
 #let monash-paper = rgb("#FFFFFF")
 
-#let _monash-section-break(
+#let _info-value(info, key, fallback: none) = {
+  if key in info and info.at(key) != none {
+    info.at(key)
+  } else {
+    fallback
+  }
+}
+
+#let _display-logo(self, fallback: [Monash University], height: 1em) = {
+  if self.info.logo != none {
+    self.info.logo
+  } else {
+    text(size: height, fill: monash-blue, weight: "bold", fallback)
+  }
+}
+
+#let _monash-header(self) = {
+  set align(top)
+  set text(size: .42em)
+
+  let heading = utils.display-current-heading(level: 2, style: auto)
+  grid(
+    rows: (auto, auto),
+    if self.store.progress-bar {
+      components.progress-bar(
+        height: .08em,
+        monash-blue,
+        monash-grey,
+      )
+    } else {
+      rect(width: 100%, height: .08em, fill: monash-grey, stroke: none)
+    },
+    block(
+      width: 100%,
+      inset: (x: 2em, top: .38em, bottom: .2em),
+      grid(
+        columns: (1fr, auto),
+        align: horizon,
+        text(fill: monash-slate, heading),
+        box(height: 1em, _display-logo(self, height: .58em)),
+      ),
+    ),
+  )
+}
+
+#let _monash-footer(self) = {
+  set align(bottom)
+  set text(size: .36em, fill: monash-slate)
+
+  block(
+    width: 100%,
+    inset: (x: 2em, top: .12em, bottom: .34em),
+    [
+      #line(length: 100%, stroke: (paint: monash-grey, thickness: .35pt))
+      #v(.22em)
+      #grid(
+        columns: (1fr, auto),
+        align: horizon,
+        {
+          let left = _info-value(self.info, "institution", fallback: [Monash University])
+          let title = if self.info.short-title == auto {
+            self.info.title
+          } else {
+            self.info.short-title
+          }
+          text(left)
+          if title != none {
+            text(fill: monash-grey)[  |  ]
+            text(title)
+          }
+        },
+        context [
+          #utils.slide-counter.display() / #utils.last-slide-number
+        ],
+      )
+    ],
+  )
+}
+
+#let slide(
+  config: (:),
+  repeat: auto,
+  setting: body => body,
+  composer: auto,
+  align: auto,
+  ..bodies,
+) = touying-slide-wrapper(self => {
+  if align != auto {
+    self.store.align = align
+  }
+
+  self = utils.merge-dicts(
+    self,
+    config-page(
+      header: _monash-header,
+      footer: _monash-footer,
+    ),
+  )
+
+  let new-setting = body => {
+    show: std.align.with(self.store.align)
+    show: setting
+    body
+  }
+
+  touying-slide(
+    self: self,
+    config: config,
+    repeat: repeat,
+    setting: new-setting,
+    composer: composer,
+    ..bodies,
+  )
+})
+
+#let title-slide(config: (:), extra: none, ..args) = touying-slide-wrapper(self => {
+  self = utils.merge-dicts(
+    self,
+    config-common(freeze-slide-counter: true),
+    config-page(margin: 0em),
+    config,
+  )
+
+  let info = self.info + args.named()
+  let meta = (
+    if info.author != none { info.author },
+    if info.institution != none { info.institution },
+    if info.date != none { utils.display-info-date(self) },
+  ).filter(item => item != none)
+
+  let body = {
+    block(
+      width: 100%,
+      height: 100%,
+      fill: monash-paper,
+      inset: (x: 2.4em, y: 1.7em),
+      [
+        #place(top + right)[#_display-logo((info: info), height: .72em)]
+        #align(left + horizon)[
+          #block(width: 74%)[
+            #text(size: 2.2em, fill: monash-charcoal, weight: "bold", info.title)
+          ]
+          #if info.subtitle != none {
+            v(.65em)
+            text(size: 1em, fill: monash-blue, info.subtitle)
+          }
+          #v(1em)
+          #rect(width: 4.5em, height: .16em, fill: monash-blue, stroke: none)
+          #v(1.15em)
+          #text(size: .62em, fill: monash-slate, meta.join([  |  ]))
+          #if extra != none {
+            v(.55em)
+            text(size: .55em, fill: monash-slate, extra)
+          }
+        ]
+      ],
+    )
+  }
+
+  touying-slide(self: self, body)
+})
+
+#let _monash-new-section(
   config: (:),
   level: 1,
-  numbered: true,
+  numbered: false,
   body,
 ) = touying-slide-wrapper(self => {
   self = utils.merge-dicts(
@@ -27,87 +184,58 @@
     config,
   )
 
-  let section-title = utils.display-current-heading(level: level, numbered: false)
+  let section-title = utils.display-current-heading(level: level, numbered: numbered)
 
-  let slide-body = {
-    grid(
-      columns: (18%, 1fr),
-      block(
-        height: 100%,
-        width: 100%,
-        fill: monash-blue,
-        [
-          #place(bottom + left, dx: 1.25em, dy: -1.25em)[
-            #text(size: .75em, fill: white)[MONASH]
-          ]
-          #place(top + left)[
-            #rect(width: 100%, height: .25em, fill: monash-red, stroke: none)
-          ]
-        ],
-      ),
-      block(
-        height: 100%,
-        width: 100%,
-        fill: white,
-        inset: (left: 2.6em, right: 2.4em),
-        align(left + horizon)[
-          #text(size: .72em, fill: monash-red, weight: "bold")[SECTION]
-          #v(.45em)
-          #text(size: 2.6em, fill: monash-charcoal, weight: "bold", section-title)
-          #v(.6em)
-          #rect(width: 38%, height: .14em, fill: monash-blue, stroke: none)
-        ],
-      ),
-    )
-  }
+  let body = block(
+    width: 100%,
+    height: 100%,
+    fill: monash-paper,
+    inset: (x: 2.4em, y: 1.7em),
+    [
+      #place(top + right)[#_display-logo(self, height: .65em)]
+      #align(left + horizon)[
+        #text(size: .58em, fill: monash-slate, weight: "bold")[SECTION]
+        #v(.6em)
+        #block(width: 76%)[
+          #text(size: 2.15em, fill: monash-charcoal, weight: "bold", section-title)
+        ]
+        #v(.8em)
+        #rect(width: 5.8em, height: .14em, fill: monash-blue, stroke: none)
+      ]
+    ],
+  )
 
-  touying-slide(self: self, slide-body)
+  touying-slide(self: self, body)
 })
 
 #let monash-theme(
   aspect-ratio: "16-9",
   logo: none,
-  campus: none,
   progress-bar: true,
   ..args,
   body,
 ) = {
-  let header-right = self => {
-    let section = utils.display-current-heading(level: 1)
-    if logo != none {
-      box(section) + h(.35em) + logo
-    } else {
-      section
-    }
-  }
-
-  let footer-a = self => {
-    if campus != none {
-      campus
-    } else if self.info.institution != none {
-      self.info.institution
-    } else {
-      [Monash University]
-    }
-  }
-
-  let footer-b = self => {
-    if self.info.short-title == auto {
-      self.info.title
-    } else {
-      self.info.short-title
-    }
-  }
-
-  show: university-theme.with(
-    aspect-ratio: aspect-ratio,
-    progress-bar: progress-bar,
-    header-right: header-right,
-    footer-a: footer-a,
-    footer-b: footer-b,
-    footer-columns: (24%, 1fr, 20%),
-    config-info(logo: logo),
-    config-common(new-section-slide-fn: _monash-section-break),
+  show: touying-slides.with(
+    config-page(
+      ..utils.page-args-from-aspect-ratio(aspect-ratio),
+      margin: (top: 1.45em, bottom: 1.2em, x: 2em),
+      header-ascent: 0em,
+      footer-descent: 0em,
+    ),
+    config-common(
+      slide-fn: slide,
+      new-section-slide-fn: _monash-new-section,
+    ),
+    config-methods(
+      init: (self: none, body) => {
+        set text(size: 25pt)
+        show heading.where(level: 3): set text(fill: monash-blue)
+        show heading.where(level: 4): set text(fill: monash-blue-dark)
+        show strong: set text(fill: monash-blue-dark)
+        body
+      },
+      alert: utils.alert-with-primary-color,
+    ),
     config-colors(
       primary: monash-blue,
       secondary: monash-blue-dark,
@@ -115,16 +243,8 @@
       neutral-lightest: monash-paper,
       neutral-darkest: monash-charcoal,
     ),
-    config-methods(
-      init: (self: none, body) => {
-        set text(size: 25pt)
-        show heading.where(level: 3): set text(fill: self.colors.primary)
-        show heading.where(level: 4): set text(fill: self.colors.secondary)
-        show strong: set text(fill: self.colors.secondary)
-        body
-      },
-      alert: utils.alert-with-primary-color,
-    ),
+    config-store(align: top, progress-bar: progress-bar),
+    config-info(logo: logo),
     ..args,
   )
 

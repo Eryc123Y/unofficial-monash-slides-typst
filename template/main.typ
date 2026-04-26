@@ -1,11 +1,13 @@
-#import "../lib.typ": *
 #import "@preview/touying:0.7.3": *
-#import "@preview/algo:0.3.6": algo, i, d
+#import themes.university: *
+#import "../lib.typ": *
 
 #set text(font: ("Arial", "New Computer Modern"))
 
+#let monash-logo = image("assets/Monash_University_logo.svg", height: 1em)
+
 #show: monash-theme.with(
-  campus: [Monash University Malaysia],
+  logo: monash-logo,
   config-info(
     title: [Monash Student Slides],
     short-title: [Student Slides],
@@ -16,66 +18,73 @@
   ),
 )
 
+#show: show-monash-frames
+
 #title-slide()
 
-= Motivation
+= Foundations
 
-== A Clean Academic Deck
+== Native Touying Syntax
 
-#info-block(title: [Design intent])[
-  This unofficial template uses a restrained Monash-inspired palette, clear
-  hierarchy, and Touying's slide mechanics.
+This template keeps Touying as the authoring model.
+
+- Use headings to create sections and slides.
+- Use `#slide` when you want manual slide control.
+- Use Touying features such as `#pause` directly.
+
+#pause
+
+After the pause, the same slide continues without any package-specific wrapper.
+
+== Definition and Theorem
+
+#definition[Loss Function][
+  A loss function maps a prediction and target to a scalar penalty:
+  $"loss": cal(Y) times cal(Y) -> RR$.
 ]
 
-#alert-block[
-  Official Monash logo assets are not bundled. Pass your own logo through the
-  `logo` option if you have permission to use one.
-]
-
-== Mathematical Content
-
-#theorem-slide(title: [Theorem], theorem-title: [Convergence sketch])[
+#theorem[Convergence Sketch][
   If $f$ is convex and $L$-smooth, gradient descent with a suitable step size
   satisfies $f(x_t) - f(x^*) = O(1 / t)$.
 ]
 
-== Code
+== Proof and Lemma
 
-#code-slide(title: [Python Example])[
-```python
+#lemma[Descent Lemma][
+  Smoothness gives an upper bound on one optimization step.
+]
+
+#proof[Sketch][
+  Apply the descent lemma at each iterate and telescope the resulting
+  inequalities.
+]
+
+== Notes and Warnings
+
+#note[Usage][
+  Frame environments are ordinary content blocks, so they can be inserted in
+  any Touying slide.
+]
+
+#remark[Design][
+  Default frames use neutral surfaces, a compact title row, and a Monash blue
+  accent instead of alert colours.
+]
+
+#warning[Scope][
+  This package does not define an algorithm DSL. Import a dedicated package when
+  a deck needs pseudocode.
+]
+
+== Raw Code
+
+```
 def mse(y, pred):
     return ((y - pred) ** 2).mean()
 ```
-]
 
-== Algorithm
-
-#algorithm-slide(title: [Training Loop])[
-  #algo(
-    title: "Train",
-    parameters: ("model", "data"),
-  )[
-    for batch in data:#i\
-      compute loss\
-      update parameters#d\
+#slide[
+  #align(center + horizon)[
+    #text(size: 1.6em, fill: monash-blue, weight: "bold")[Thank you]
   ]
 ]
-
-== Two Columns
-
-#two-column-slide(
-  title: [Comparison],
-  left: [
-    #result-block(title: [Before])[
-      Manual slide formatting creates repeated layout work.
-    ]
-  ],
-  right: [
-    #result-block(title: [After])[
-      A template centralises visual and academic conventions.
-    ]
-  ],
-)
-
-#closing-slide[Questions?]
-
