@@ -100,18 +100,32 @@
   )
 })
 
-#let _cover-meta(self, info) = (
-  if info.author != none { info.author },
-  if info.institution != none { info.institution },
-  if info.date != none { utils.display-info-date(self) },
-).filter(item => item != none)
+#let _cover-meta-block(self, info, title-color, fontsize) = {
+  let institution = if info.institution != none { info.institution } else { none }
+  let date = if info.date != none { utils.display-info-date(self) } else { none }
+
+  block(width: 100%)[
+    #if info.author != none {
+      text(fill: title-color, size: fontsize * 1.05, weight: "regular", info.author)
+    }
+    #if institution != none or date != none {
+      if info.author != none { v(.18cm) }
+      text(size: fontsize * .82, fill: monash-dark-grey)[
+        #if institution != none { institution }
+        #if institution != none and date != none {
+          text(fill: monash-grey)[ | ]
+        }
+        #if date != none { date }
+      ]
+    }
+  ]
+}
 
 #let title-slide(config: (:), extra: none, ..args) = touying-slide-wrapper(self => {
   let info = self.info + args.named()
   let title-color = _title-color(self.store.titlecolor)
   let titlefontsize = self.store.titlefontsize
   let fontsize = self.store.fontsize
-  let meta = _cover-meta(self, info)
 
   self = utils.merge-dicts(
     self,
@@ -137,8 +151,7 @@
     ]
     place(top + left, dx: 1.0cm, dy: 11.05cm)[
       #block(width: 60%)[
-        #set text(fill: title-color, size: fontsize * 1.1)
-        #meta.join([ | ])
+        #_cover-meta-block(self, info, title-color, fontsize)
         #if extra != none {
           v(.2cm)
           text(size: fontsize * .75, fill: monash-dark-grey, extra)
