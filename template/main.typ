@@ -8,6 +8,9 @@
 
 #show: monash-theme.with(
   logo: monash-logo,
+  brand-motif: true,
+  motto: [Ancora Imparo],
+  progress-position: "footer",
   config-info(
     title: [Monash Student Slides],
     short-title: [Student Slides],
@@ -82,6 +85,8 @@ After the pause, the same slide continues without any package-specific wrapper.
 def mse(y, pred):
     return ((y - pred) ** 2).mean()
 ```
+
+== Closing
 
 #slide[
   #align(center + horizon)[

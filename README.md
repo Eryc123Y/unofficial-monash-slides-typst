@@ -15,6 +15,9 @@ Monash theme and theorem-like environments styled with `frame-it`.
 
 #show: monash-theme.with(
   logo: monash-logo,
+  brand-motif: true,
+  motto: [Ancora Imparo],
+  progress-position: "footer",
   config-info(
     title: [Presentation Title],
     short-title: [Short Title],
@@ -45,6 +48,10 @@ Use normal Touying content.
 - `monash-theme`
 - `show-monash-frames`
 - `monash-frame-style`
+- `monash-facade-pattern`
+- `monash-campus-grid`
+- `monash-accent-rule`
+- `monash-microbrand`
 - `definition`
 - `theorem`
 - `proof`
@@ -70,6 +77,7 @@ thumbnail.
 
 ## Design Notes
 
-The default visual language uses a restrained Monash-inspired palette: Monash
-blue, darker blue/teal, charcoal, white, and light grey. Monash red is not used
-in the default theme.
+The default visual language uses a restrained Monash-inspired palette and
+abstract campus elements drawn directly in Typst: a light facade rhythm inspired
+by campus architecture, low-contrast wayfinding/grid lines, and the optional
+`Ancora Imparo` microbrand. Monash red is not used in the default theme.

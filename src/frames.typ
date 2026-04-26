@@ -1,5 +1,5 @@
 #import "@preview/frame-it:2.0.0": frames, frame-style
-#import "theme.typ": monash-blue, monash-blue-dark, monash-charcoal, monash-slate, monash-grey, monash-grey-light
+#import "design.typ": *
 
 #let _has-title(title) = title not in (none, [], "")
 
@@ -12,22 +12,22 @@
 
   block(
     width: 100%,
-    fill: monash-grey-light,
+    fill: monash-paper,
     stroke: (
-      left: (paint: accent-color, thickness: 2.2pt),
-      rest: (paint: monash-grey, thickness: .55pt),
+      left: (paint: accent-color, thickness: monash-frame-rule),
+      rest: (paint: monash-grey-soft, thickness: .45pt),
     ),
     radius: 2pt,
-    inset: (x: .75em, y: .58em),
+    inset: (x: monash-space-md, y: monash-space-sm),
     [
-      #text(size: .72em, fill: accent-color, weight: "bold", title-line)
+      #text(size: .58em, fill: accent-color, weight: "bold", title-line)
       #if tags.len() > 0 {
-        h(.45em)
-        text(size: .58em, fill: monash-slate, tags.join([, ]))
+        h(monash-space-sm)
+        text(size: .5em, fill: monash-muted, tags.join([, ]))
       }
       #if body != [] {
-        v(.4em)
-        text(fill: monash-charcoal, body)
+        v(monash-space-sm)
+        text(size: .86em, fill: monash-charcoal, body)
       }
     ],
   )
