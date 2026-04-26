@@ -5,7 +5,7 @@ thin wrapper around [Touying](https://typst.app/universe/package/touying/).
 
 This package is not endorsed by Monash University. It does not bundle, redraw,
 or modify official Monash logo assets. If you have permission to use an official
-logo, pass it through the `logo` option yourself.
+logo, place the SVG in `template/assets/` and pass it through the `logo` option.
 
 ## Design Notes
 
@@ -29,6 +29,7 @@ research talks.
     institution: [Monash University],
     date: datetime.today(),
   ),
+  logo: none,
 )
 
 #title-slide()
@@ -78,4 +79,3 @@ The harness compiles the template and example decks into `build/`.
 This is an unofficial student-oriented template. It uses a Monash-inspired
 layout and palette, but it avoids shipping official marks. Keep any future logo
 support opt-in and user supplied.
-

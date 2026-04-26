@@ -32,12 +32,39 @@
   ),
 )
 
+#let _callout(
+  self: none,
+  title: none,
+  accent: monash-red,
+  fill: white,
+  body,
+) = block(
+  width: 100%,
+  fill: fill,
+  stroke: (paint: accent.lighten(45%), thickness: .6pt),
+  radius: 2pt,
+  grid(
+    columns: (.25em, 1fr),
+    rect(width: 100%, height: 100%, fill: accent, stroke: none),
+    block(
+      inset: (x: .85em, y: .65em),
+      [
+        #if title != none {
+          text(fill: accent, weight: "bold", title)
+          v(.35em)
+        }
+        #body
+      ],
+    ),
+  ),
+)
+
 #let info-block(title: none, body) = touying-fn-wrapper(
   _panel.with(title: title, accent: monash-blue, fill: monash-blue-light, body),
 )
 
 #let alert-block(title: [Important], body) = touying-fn-wrapper(
-  _panel.with(title: title, accent: monash-red, fill: monash-red.lighten(92%), body),
+  _callout.with(title: title, accent: monash-red, fill: monash-red.lighten(94%), body),
 )
 
 #let result-block(title: [Result], body) = touying-fn-wrapper(
@@ -57,4 +84,3 @@
     )),
   )
 })
-

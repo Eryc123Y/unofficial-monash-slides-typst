@@ -3,13 +3,66 @@
 
 // Monash-inspired palette. This package is unofficial and does not ship
 // Monash logo assets; pass a user-provided logo as content if needed.
+// Public Monash digital brand references list these colour values.
 #let monash-blue = rgb("#006DAE")
-#let monash-blue-dark = rgb("#004B7A")
-#let monash-blue-light = rgb("#E6F2FA")
+#let monash-blue-dark = rgb("#00739D")
+#let monash-blue-light = rgb("#EAF6FB")
 #let monash-red = rgb("#DF0021")
 #let monash-charcoal = rgb("#3C3C3C")
 #let monash-slate = rgb("#505050")
+#let monash-grey = rgb("#D1D3D4")
+#let monash-grey-light = rgb("#F6F6F6")
 #let monash-paper = rgb("#FFFFFF")
+
+#let _monash-section-break(
+  config: (:),
+  level: 1,
+  numbered: true,
+  body,
+) = touying-slide-wrapper(self => {
+  self = utils.merge-dicts(
+    self,
+    config-common(freeze-slide-counter: true),
+    config-page(margin: 0em),
+    config,
+  )
+
+  let section-title = utils.display-current-heading(level: level, numbered: false)
+
+  let slide-body = {
+    grid(
+      columns: (18%, 1fr),
+      block(
+        height: 100%,
+        width: 100%,
+        fill: monash-blue,
+        [
+          #place(bottom + left, dx: 1.25em, dy: -1.25em)[
+            #text(size: .75em, fill: white)[MONASH]
+          ]
+          #place(top + left)[
+            #rect(width: 100%, height: .25em, fill: monash-red, stroke: none)
+          ]
+        ],
+      ),
+      block(
+        height: 100%,
+        width: 100%,
+        fill: white,
+        inset: (left: 2.6em, right: 2.4em),
+        align(left + horizon)[
+          #text(size: .72em, fill: monash-red, weight: "bold")[SECTION]
+          #v(.45em)
+          #text(size: 2.6em, fill: monash-charcoal, weight: "bold", section-title)
+          #v(.6em)
+          #rect(width: 38%, height: .14em, fill: monash-blue, stroke: none)
+        ],
+      ),
+    )
+  }
+
+  touying-slide(self: self, slide-body)
+})
 
 #let monash-theme(
   aspect-ratio: "16-9",
@@ -52,11 +105,13 @@
     header-right: header-right,
     footer-a: footer-a,
     footer-b: footer-b,
+    footer-columns: (24%, 1fr, 20%),
     config-info(logo: logo),
+    config-common(new-section-slide-fn: _monash-section-break),
     config-colors(
       primary: monash-blue,
       secondary: monash-blue-dark,
-      tertiary: monash-red,
+      tertiary: monash-grey,
       neutral-lightest: monash-paper,
       neutral-darkest: monash-charcoal,
     ),
