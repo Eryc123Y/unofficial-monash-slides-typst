@@ -20,13 +20,16 @@
 #let monash-slide-title-size = 1.18em
 #let monash-body-size = .78em
 #let monash-caption-size = .34em
+#let monash-header-title-size = .52em
+#let monash-footer-size = .32em
 #let monash-micro-size = .27em
 #let monash-cover-title-size = 2.18em
 #let monash-section-title-size = 2.05em
 #let monash-logo-cover-height = .8em
-#let monash-logo-content-height = .58em
+#let monash-logo-content-height = .9em
 
 #let monash-rule-thin = .035em
+#let monash-rule-hairline = .02em
 #let monash-rule-strong = .14em
 #let monash-frame-rule = 1.8pt
 

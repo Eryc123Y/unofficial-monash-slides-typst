@@ -11,7 +11,7 @@ Monash theme and theorem-like environments styled with `frame-it`.
 #import themes.university: *
 #import "@preview/monash-student-slides:0.1.0": *
 
-#let monash-logo = image("assets/Monash_University_logo.svg", height: 1em)
+#let monash-logo = image("assets/Monash_University_logo.svg", height: 1.25em)
 
 #show: monash-theme.with(
   logo: monash-logo,

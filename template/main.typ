@@ -4,7 +4,7 @@
 
 #set text(font: ("Arial", "New Computer Modern"))
 
-#let monash-logo = image("assets/Monash_University_logo.svg", height: 1em)
+#let monash-logo = image("assets/Monash_University_logo.svg", height: 1.25em)
 
 #show: monash-theme.with(
   logo: monash-logo,

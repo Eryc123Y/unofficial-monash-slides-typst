@@ -13,7 +13,7 @@
 
 #let _display-logo(self, fallback: [Monash University], height: 1em) = {
   if self.info.logo != none {
-    self.info.logo
+    box(height: height, self.info.logo)
   } else {
     text(size: height, fill: monash-blue, weight: "bold", fallback)
   }
@@ -21,18 +21,34 @@
 
 #let _monash-header(self) = {
   set align(top)
-  set text(size: monash-caption-size)
+  set text(size: monash-header-title-size)
 
   let heading = utils.display-current-heading(level: 2, style: auto)
+  let section = utils.display-current-heading(level: 1, style: auto)
   block(
     width: 100%,
-    inset: (x: monash-space-2xl, top: monash-space-sm, bottom: monash-space-xs),
+    inset: (x: monash-space-2xl, top: monash-space-md, bottom: monash-space-sm),
     [
       #grid(
         columns: (1fr, auto),
+        column-gutter: monash-space-lg,
         align: horizon,
-        text(fill: monash-slate, weight: "medium", heading),
-        box(height: 1em, _display-logo(self, height: monash-logo-content-height)),
+        [
+          #text(fill: monash-charcoal, weight: "bold", heading)
+          #if section != none {
+            h(monash-space-sm)
+            text(size: .62em, fill: monash-muted, section)
+          }
+        ],
+        _display-logo(self, height: monash-logo-content-height),
+      )
+      #v(monash-space-sm)
+      #grid(
+        columns: (5.2em, 1fr),
+        column-gutter: monash-space-sm,
+        align: horizon,
+        monash-accent-rule(width: 5.2em, height: monash-rule-thin),
+        line(length: 100%, stroke: (paint: monash-grey-soft, thickness: .35pt)),
       )
       #if self.store.progress-position == "header" and self.store.progress-bar {
         v(monash-space-xs)
@@ -44,8 +60,7 @@
           )
         ]
       } else {
-        v(monash-space-xs)
-        monash-accent-rule(width: 3.2em, height: monash-rule-thin)
+        none
       }
     ],
   )
@@ -65,15 +80,15 @@
 
 #let _monash-footer(self) = {
   set align(bottom)
-  set text(size: monash-caption-size, fill: monash-muted)
+  set text(size: monash-footer-size, fill: monash-muted)
 
   block(
     width: 100%,
     inset: (x: monash-space-2xl, bottom: monash-space-md),
     [
       #grid(
-        columns: (1fr, auto, auto),
-        column-gutter: monash-space-md,
+        columns: (1fr, 7.2em, auto),
+        column-gutter: monash-space-lg,
         align: horizon,
         {
           let left = _info-value(self.info, "institution", fallback: [Monash University])
@@ -82,7 +97,7 @@
           } else {
             self.info.short-title
           }
-          text(left)
+          text(fill: monash-charcoal, weight: "medium", left)
           if title != none {
             text(fill: monash-grey, " / ")
             text(title)
@@ -266,7 +281,7 @@
   show: touying-slides.with(
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
-      margin: (top: 1.72em, bottom: 1.35em, x: 2.25em),
+      margin: (top: 2.05em, bottom: 1.35em, x: 2.25em),
       header-ascent: 0em,
       footer-descent: 0em,
     ),
