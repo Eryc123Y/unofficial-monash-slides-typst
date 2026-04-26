@@ -1,0 +1,14 @@
+.DS_Store
+
+# Typst build outputs
+*.pdf
+*.png
+*.svg
+!thumbnail.png
+
+# Local runtime/tooling state
+.omx/
+.codex/
+
+# Harness outputs
+build/

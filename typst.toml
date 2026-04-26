@@ -1,0 +1,16 @@
+[package]
+name = "monash-student-slides"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Eric"]
+license = "MIT"
+description = "An unofficial Monash-style Touying template for academic presentation slides."
+repository = "https://example.com/monash-student-slides"
+keywords = ["slides", "monash", "touying", "presentation", "academic"]
+categories = ["presentation"]
+compiler = "0.14.0"
+
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "thumbnail.png"
