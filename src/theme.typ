@@ -26,29 +26,28 @@
   let section = utils.display-current-heading(level: 1, style: auto)
   block(
     width: 100%,
-    inset: (x: monash-space-2xl, top: monash-space-md, bottom: monash-space-sm),
+    height: 2.42em,
+    inset: (x: monash-space-2xl),
     [
-      #grid(
-        columns: (1fr, auto),
-        column-gutter: monash-space-lg,
-        align: horizon,
-        [
+      #place(top + left, dy: .46em)[
+        #box(width: 70%)[
           #text(size: monash-header-title-size, fill: monash-charcoal, weight: "bold", heading)
           #if section != none {
             h(monash-space-sm)
             text(size: monash-caption-size, fill: monash-muted, section)
           }
-        ],
-        _display-logo(self, height: monash-logo-content-height),
-      )
-      #v(monash-space-sm)
-      #grid(
-        columns: (5.2em, 1fr),
-        column-gutter: monash-space-sm,
-        align: horizon,
-        monash-accent-rule(width: 5.2em, height: monash-rule-thin),
-        line(length: 100%, stroke: (paint: monash-grey-soft, thickness: .35pt)),
-      )
+        ]
+      ]
+      #place(top + right, dy: .18em)[#_display-logo(self, height: monash-logo-content-height)]
+      #place(left + bottom)[
+        #grid(
+          columns: (5.2em, 1fr),
+          column-gutter: monash-space-sm,
+          align: horizon,
+          monash-accent-rule(width: 5.2em, height: monash-header-separator),
+          line(length: 100%, stroke: (paint: monash-grey, thickness: .7pt)),
+        )
+      ]
       #if self.store.progress-position == "header" and self.store.progress-bar {
         v(monash-space-xs)
         box(width: 7.5em)[
@@ -290,7 +289,7 @@
   show: touying-slides.with(
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
-      margin: (top: 3.45em, bottom: 1.35em, x: 2.25em),
+      margin: (top: 3.25em, bottom: 1.35em, x: 2.25em),
       header-ascent: 0em,
       footer-descent: 0em,
     ),

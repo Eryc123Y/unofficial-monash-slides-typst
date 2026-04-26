@@ -30,6 +30,7 @@
 
 #let monash-rule-thin = .035em
 #let monash-rule-hairline = .02em
+#let monash-header-separator = .065em
 #let monash-rule-strong = .14em
 #let monash-frame-rule = 1.8pt
 
