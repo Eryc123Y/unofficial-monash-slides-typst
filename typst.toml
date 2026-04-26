@@ -1,14 +1,15 @@
 [package]
-name = "monash-student-slides"
+name = "unofficial-monash-touying"
 version = "0.1.0"
 entrypoint = "lib.typ"
-authors = ["Eric"]
+authors = ["Eric <@Eryc123Y>"]
 license = "MIT"
-description = "An unofficial Monash-style Touying template for academic presentation slides."
+description = "Monash-inspired academic slides for Touying."
 repository = "https://github.com/Eryc123Y/unofficial-monash-slides-typst"
 keywords = ["slides", "monash", "touying", "presentation", "academic"]
 categories = ["presentation"]
 compiler = "0.14.0"
+exclude = ["docs", "example"]
 
 [template]
 path = "template"

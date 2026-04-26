@@ -2,8 +2,12 @@
 
 Place presentation-specific assets here.
 
-The template includes `Monash_University_logo.svg` and a small vendored subset
-of the Quarto Monash presentation assets under `monash-presentation/`.
+The template includes a small vendored subset of the Quarto Monash presentation
+assets under `monash-presentation/`.
+The Quarto Monash presentation project is distributed under the CC0 1.0
+Universal public domain dedication. Monash names, logos, and marks remain
+associated with Monash University and should be used according to relevant
+brand guidance.
 
 The starter deck passes the title background image to the theme:
 
@@ -15,9 +19,5 @@ The starter deck passes the title background image to the theme:
   fit: "cover",
 )
 
-#show: monash-theme.with(
-  logo: image("assets/Monash_University_logo.svg", height: 1em),
-  titlegraphic: monash-titlegraphic,
-  ...
-)
+#show: monash-theme.with(titlegraphic: monash-titlegraphic, ...)
 ```

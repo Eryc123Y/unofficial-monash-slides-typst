@@ -22,7 +22,8 @@ The template currently uses:
 - `#1969AA` as the primary blue, matching the Quarto Monash Typst template.
 - `#C14B14` as the Quarto Monash orange accent for progress and list markers.
 - neutral greys for body/footer contrast.
-- the bundled `template/assets/Monash_University_logo.svg` in the starter deck.
+- no bundled Monash logo in the starter deck; users can provide their own logo
+  asset through the theme configuration when they have appropriate rights.
 - vendored Quarto Monash PNG assets under `template/assets/monash-presentation/`.
 - a title slide using `background/bg-02.png`.
 - full-width Monash blue title bars on content slides.
@@ -39,20 +40,20 @@ direct automated download may be blocked. Wikimedia Commons mirrors a
 `Monash University logo.svg` file sourced from that official URL and marks it as
 simple geometry/public domain while also warning that it may be trademarked.
 
-The starter template vendors `Monash_University_logo.svg` because this package
-is explicitly intended to ship with the Monash slide scaffold. Users can replace
-that asset under `template/assets/` and pass:
+The starter template does not vendor a Monash logo. Users who have appropriate
+rights can provide their own logo asset and pass:
 
 ```typst
 #show: monash-theme.with(
-  logo: image("assets/Monash_University_logo.svg", height: 1.25em),
+  logo: image("assets/your-logo.svg", height: 1.25em),
   ...
 )
 ```
 
 The Quarto Monash PNG assets are vendored from
 `quarto-monash/presentation/_extensions/presentation/_images/` for visual
-alignment with that template.
+alignment with that template. The upstream Quarto Monash presentation template
+is distributed under the CC0 1.0 Universal public domain dedication.
 
 ## References
 
@@ -61,5 +62,6 @@ alignment with that template.
 - Monash overview and motto: <https://www.monash.edu/about/who>
 - Monash Learning and Teaching Building: <https://www.monash.edu/learning-teaching/inclusive-education/learning-spaces/ltb>
 - Quarto Monash presentation template: <https://github.com/quarto-monash/presentation>
+- Quarto Monash CC0 1.0 license: <https://github.com/quarto-monash/presentation?tab=CC0-1.0-1-ov-file>
 - Wikimedia Commons mirror page: <https://commons.wikimedia.org/wiki/File:Monash_University_logo.svg>
 - Wikimedia Commons SVG file: <https://upload.wikimedia.org/wikipedia/commons/7/7c/Monash_University_logo.svg>

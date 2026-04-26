@@ -1,10 +1,9 @@
 #import "@preview/touying:0.7.3": *
 #import themes.university: *
-#import "../lib.typ": *
+#import "@preview/unofficial-monash-touying:0.1.0": *
 
 #set text(font: ("Arial", "New Computer Modern"))
 
-#let monash-logo = image("assets/Monash_University_logo.svg", height: 1.25em)
 #let monash-titlegraphic = image(
   "assets/monash-presentation/background/bg-02.png",
   width: 100%,
@@ -13,7 +12,6 @@
 )
 
 #show: monash-theme.with(
-  logo: monash-logo,
   titlegraphic: monash-titlegraphic,
   config-info(
     title: [Monash Student Slides],
@@ -29,28 +27,16 @@
 
 #title-slide()
 
-= Foundations
+= Introduction
 
-== Native Touying Syntax
+== First Slide
 
-This template keeps Touying as the authoring model.
+This template keeps Touying as the authoring model while applying a Monash-style
+presentation theme.
 
 - Use headings to create sections and slides.
 - Use `#slide` when you want manual slide control.
 - Use Touying features such as `#pause` directly.
-  - Nested bullets use the Quarto Monash triangle marker.
-
-#pause
-
-After the pause, the same slide continues without any package-specific wrapper.
-
-=== Styled Content Heading
-
-Use level-three headings for compact content sections.
-
-==== Detail Heading
-
-Use level-four headings for smaller subdivisions inside dense slides.
 
 == Definition and Theorem
 
@@ -64,41 +50,13 @@ Use level-four headings for smaller subdivisions inside dense slides.
   satisfies $f(x_t) - f(x^*) = O(1 / t)$.
 ]
 
-#corollary[Rate][
-  Under the same assumptions, the average regret decreases sublinearly.
-]
-
-== Proof and Lemma
-
-#lemma[Descent Lemma][
-  Smoothness gives an upper bound on one optimization step.
-]
-
 #proof[Sketch][
-  Apply the descent lemma at each iterate and telescope the resulting
-  inequalities.
+  Apply the theorem assumptions and simplify.
 ]
 
-== Notes and Warnings
+== Code
 
-#note[Usage][
-  Frame environments are ordinary content blocks, so they can be inserted in
-  any Touying slide.
-]
-
-#remark[Design][
-  Default frames use stronger title rows inspired by Monash presentation
-  blocks, while keeping distinct accent colours for each environment.
-]
-
-#warning[Scope][
-  This package does not define an algorithm DSL. Import a dedicated package when
-  a deck needs pseudocode.
-]
-
-== Raw Code
-
-```py
+```python
 def mse(y, pred):
     return ((y - pred) ** 2).mean()
 ```

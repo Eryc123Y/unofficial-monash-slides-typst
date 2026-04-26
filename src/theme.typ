@@ -71,6 +71,10 @@
   ]
 }
 
+/// Monash-styled Touying content slide.
+///
+/// This is installed as the default slide function by `monash-theme`. Use it
+/// directly only when a deck needs manual Touying slide control.
 #let slide(
   config: (:),
   repeat: auto,
@@ -121,6 +125,10 @@
   ]
 }
 
+/// Creates the title slide for a Monash student deck.
+///
+/// The slide uses the configured `titlegraphic`, title metadata, author,
+/// institution, and date. Extra content can be placed below the metadata.
 #let title-slide(config: (:), extra: none, ..args) = touying-slide-wrapper(self => {
   let info = self.info + args.named()
   let title-color = _title-color(self.store.titlecolor)
@@ -206,18 +214,40 @@
   v(.7em, weak: true)
 }
 
+/// Applies the Monash student slide theme to a Touying deck.
+///
+/// Use this as the main document show rule. It keeps Touying as the authoring
+/// model while applying Monash title bars, footer progress, text styles,
+/// inline code styling, and light `zebraw` code blocks.
+///
+/// ```typst
+/// #show: monash-theme.with(
+///   config-info(title: [Presentation Title]),
+/// )
+/// ```
 #let monash-theme(
+  /// Touying aspect ratio. Defaults to widescreen slides.
   aspect-ratio: "16-9",
+  /// Optional logo content shown by the theme.
   logo: none,
+  /// Title-slide background image path or content.
   titlegraphic: "../template/assets/monash-presentation/background/bg-02.png",
+  /// Title text colour. Accepts `black`, `white`, or a colour value.
   titlecolor: black,
+  /// Main title font size.
   titlefontsize: monash-title-font-size,
+  /// Base slide font size.
   fontsize: monash-body-size,
+  /// Reserved brand motif switch for compatibility with the template surface.
   brand-motif: false,
+  /// Optional motto value stored for future theme extensions.
   motto: none,
+  /// Progress indicator location. The current theme uses the footer.
   progress-position: "footer",
+  /// Whether to show the footer progress bar.
   progress-bar: true,
   ..args,
+  /// Document body transformed by the theme.
   body,
 ) = {
   show: touying-slides.with(
@@ -277,15 +307,14 @@
         )
         show raw.where(block: true): set text(
           font: ("Source Code Pro", "DejaVu Sans Mono"),
-          size: .64em,
-          fill: rgb("#EAEAEA"),
+          size: .72em,
+          fill: monash-charcoal,
         )
         show: zebraw.with(
-          background-color: rgb("#181818"),
-          highlight-color: rgb("#242424"),
-          lang-color: monash-blue,
-          lang-font-args: (size: .54em, weight: "bold"),
-          radius: 0pt,
+          background-color: monash-grey-light,
+          highlight-color: monash-blue-wash,
+          lang: false,
+          radius: 2pt,
           inset: (x: monash-space-md, y: monash-space-sm),
           numbering: false,
         )

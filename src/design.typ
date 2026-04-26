@@ -40,10 +40,23 @@
 #let monash-rule-thin = 2pt
 #let monash-frame-rule = 2.4pt
 
+/// Draws a small Monash accent rule.
+///
+/// Use this for lightweight visual emphasis in custom slides when the full
+/// frame environments are too heavy.
+///
+/// ```typst
+/// #monash-accent-rule()
+/// #monash-accent-rule(vertical: true, paint: monash-orange)
+/// ```
 #let monash-accent-rule(
+  /// Rule width when `vertical` is `false`, or rule thickness when vertical.
   width: 4.7em,
+  /// Rule height when `vertical` is `false`, or rule length when vertical.
   height: .14em,
+  /// Rotate the rule into a vertical accent.
   vertical: false,
+  /// Rule colour. Defaults to the primary Monash blue.
   paint: monash-blue,
 ) = rect(
   width: if vertical { height } else { width },

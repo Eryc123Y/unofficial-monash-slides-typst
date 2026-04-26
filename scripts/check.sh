@@ -2,9 +2,14 @@
 set -euo pipefail
 
 mkdir -p build
+package_path="$(mktemp -d)"
+trap 'rm -rf "$package_path"' EXIT
+mkdir -p "$package_path/preview/unofficial-monash-touying"
+ln -s "$PWD" "$package_path/preview/unofficial-monash-touying/0.1.0"
 
-typst compile --root . template/main.typ build/template-main.pdf
-typst compile --root . examples/frame-environments.typ build/frame-environments.pdf
-typst compile --root . --pages 1 template/main.typ thumbnail.png
+TYPST_PACKAGE_PATH="$package_path" typst compile --root . template/main.typ build/template-main.pdf
+TYPST_PACKAGE_PATH="$package_path" typst compile --root . example/main.typ build/example-main.pdf
+typst compile --root . docs/reference.typ build/reference.pdf
+TYPST_PACKAGE_PATH="$package_path" typst compile --root . --pages 1 template/main.typ thumbnail.png
 
-echo "Compiled template/main.typ, examples/frame-environments.typ, and thumbnail.png"
+echo "Compiled template/main.typ, example/main.typ, docs/reference.typ, and thumbnail.png"

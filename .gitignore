@@ -1,11 +1,10 @@
-.DS_Store
+**/.DS_Store
 
 # Typst build outputs
 *.pdf
 *.png
 *.svg
 !thumbnail.png
-!template/assets/Monash_University_logo.svg
 !template/assets/monash-presentation/
 !template/assets/monash-presentation/**/*.png
 
