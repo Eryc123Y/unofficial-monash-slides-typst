@@ -41,8 +41,14 @@
       #if body != [] {
         block(
           width: 100%,
-          inset: (x: monash-space-md, y: monash-space-sm),
-          text(size: .84em, fill: monash-charcoal, body),
+          inset: (x: monash-space-md, top: 0pt, bottom: .32em),
+          [
+            #set text(size: .84em, fill: monash-charcoal)
+            #set par(leading: .72em, spacing: 0pt)
+            #set block(above: 0pt, below: 0pt)
+            #v(-.52em)
+            #body
+          ],
         )
       }
     ],
