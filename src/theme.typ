@@ -21,7 +21,6 @@
 
 #let _monash-header(self) = {
   set align(top)
-  set text(size: monash-header-title-size)
 
   let heading = utils.display-current-heading(level: 2, style: auto)
   let section = utils.display-current-heading(level: 1, style: auto)
@@ -34,10 +33,10 @@
         column-gutter: monash-space-lg,
         align: horizon,
         [
-          #text(fill: monash-charcoal, weight: "bold", heading)
+          #text(size: monash-header-title-size, fill: monash-charcoal, weight: "bold", heading)
           #if section != none {
             h(monash-space-sm)
-            text(size: .62em, fill: monash-muted, section)
+            text(size: monash-caption-size, fill: monash-muted, section)
           }
         ],
         _display-logo(self, height: monash-logo-content-height),
@@ -87,20 +86,30 @@
     inset: (x: monash-space-2xl, bottom: monash-space-md),
     [
       #grid(
-        columns: (1fr, 7.2em, auto),
-        column-gutter: monash-space-lg,
+        columns: (1fr, 1.35fr, 7.2em, auto),
+        column-gutter: monash-space-md,
         align: horizon,
         {
-          let left = _info-value(self.info, "institution", fallback: [Monash University])
           let title = if self.info.short-title == auto {
             self.info.title
           } else {
             self.info.short-title
           }
-          text(fill: monash-charcoal, weight: "medium", left)
           if title != none {
+            text(fill: monash-charcoal, weight: "medium", title)
+          }
+        },
+        {
+          let author = _info-value(self.info, "author", fallback: none)
+          let institution = _info-value(self.info, "institution", fallback: [Monash University])
+          if author != none {
+            text(author)
             text(fill: monash-grey, " / ")
-            text(title)
+          }
+          text(institution)
+          if self.info.date != none {
+            text(fill: monash-grey, " / ")
+            text(utils.display-info-date(self))
           }
         },
         _footer-progress(self),
@@ -281,7 +290,7 @@
   show: touying-slides.with(
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
-      margin: (top: 2.05em, bottom: 1.35em, x: 2.25em),
+      margin: (top: 3.45em, bottom: 1.35em, x: 2.25em),
       header-ascent: 0em,
       footer-descent: 0em,
     ),

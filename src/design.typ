@@ -25,8 +25,8 @@
 #let monash-micro-size = .27em
 #let monash-cover-title-size = 2.18em
 #let monash-section-title-size = 2.05em
-#let monash-logo-cover-height = .8em
-#let monash-logo-content-height = .9em
+#let monash-logo-cover-height = 1.25em
+#let monash-logo-content-height = 1.25em
 
 #let monash-rule-thin = .035em
 #let monash-rule-hairline = .02em
