@@ -9,7 +9,7 @@ an official Monash University asset.
 - Do not use Monash red in the default presentation theme.
 - Keep slides clean, spacious, and left-to-right readable.
 - Prefer restrained headers and footers over decorative page furniture.
-- Prefer abstract campus elements drawn in Typst over bundled photography.
+- Prefer structural blue rules and typography over decorative motifs.
 - Do not redraw, stretch, recolour, crop, or otherwise modify Monash logo
   assets.
 
@@ -20,10 +20,9 @@ The template currently uses:
 - `#006DAE` as the primary blue.
 - neutral greys for body/footer contrast.
 - the bundled `template/assets/Monash_University_logo.svg` in the starter deck.
-- abstract facade and campus-grid motifs inspired by Monash campus architecture
-  and wayfinding.
-- a footer progress treatment that stays quiet and avoids full-width bars.
-- the `Ancora Imparo` motto as optional microtype, not as a headline.
+- a blue-line system for cover, section, header, and frame accents.
+- a minimal footer that only displays the slide count.
+- no decorative motif graphics or motto text by default.
 
 The template does not bundle campus photos by default. If a future version adds
 an optional photo cover, it should keep the photograph user-supplied or document
@@ -42,7 +41,7 @@ that asset under `template/assets/` and pass:
 
 ```typst
 #show: monash-theme.with(
-  logo: image("assets/Monash_University_logo.svg", height: 1em),
+  logo: image("assets/Monash_University_logo.svg", height: 1.25em),
   ...
 )
 ```

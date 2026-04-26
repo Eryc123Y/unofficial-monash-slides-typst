@@ -1,15 +1,8 @@
 #import "@preview/touying:0.7.3": *
+#import "@preview/zebraw:0.6.1": zebraw
 #import "design.typ": *
 
-#let monash-blue-light = monash-blue-soft
-
-#let _info-value(info, key, fallback: none) = {
-  if key in info and info.at(key) != none {
-    info.at(key)
-  } else {
-    fallback
-  }
-}
+#let monash-blue-light = monash-blue-wash
 
 #let _display-logo(self, fallback: [Monash University], height: 1em) = {
   if self.info.logo != none {
@@ -19,103 +12,59 @@
   }
 }
 
+#let _page-number() = context [
+  #utils.slide-counter.display() / #utils.last-slide-number
+]
+
+#let _monash-rule-line(
+  lead: 5.2em,
+  lead-paint: monash-blue,
+  rest-paint: monash-grey,
+  thickness: monash-header-separator,
+) = grid(
+  columns: (lead, 1fr),
+  column-gutter: monash-space-sm,
+  align: horizon,
+  monash-accent-rule(width: lead, height: thickness, paint: lead-paint),
+  line(length: 100%, stroke: (paint: rest-paint, thickness: .7pt)),
+)
+
 #let _monash-header(self) = {
   set align(top)
 
-  let heading = utils.display-current-heading(level: 2, style: auto)
   let section = utils.display-current-heading(level: 1, style: auto)
   block(
     width: 100%,
-    height: 2.42em,
+    height: monash-masthead-height,
     inset: (x: monash-space-2xl),
     [
-      #place(top + left, dy: .46em)[
-        #box(width: 70%)[
-          #text(size: monash-header-title-size, fill: monash-charcoal, weight: "bold", heading)
-          #if section != none {
-            h(monash-space-sm)
-            text(size: monash-caption-size, fill: monash-muted, section)
-          }
-        ]
-      ]
-      #place(top + right, dy: .18em)[#_display-logo(self, height: monash-logo-content-height)]
-      #place(left + bottom)[
-        #grid(
-          columns: (5.2em, 1fr),
-          column-gutter: monash-space-sm,
-          align: horizon,
-          monash-accent-rule(width: 5.2em, height: monash-header-separator),
-          line(length: 100%, stroke: (paint: monash-grey, thickness: .7pt)),
+      #place(top + left, dy: .42em)[
+        #text(
+          size: monash-header-title-size,
+          fill: monash-charcoal,
+          weight: "bold",
+          if section == none { [] } else { section },
         )
       ]
-      #if self.store.progress-position == "header" and self.store.progress-bar {
-        v(monash-space-xs)
-        box(width: 7.5em)[
-          #components.progress-bar(
-            height: monash-rule-thin,
-            monash-blue,
-            monash-grey-soft,
-          )
-        ]
-      } else {
-        none
-      }
+      #place(top + right, dy: .12em)[
+        #_display-logo(self, height: monash-logo-content-height)
+      ]
+      #place(left + bottom)[#_monash-rule-line()]
     ],
   )
 }
 
-#let _footer-progress(self) = {
-  if self.store.progress-position == "footer" and self.store.progress-bar {
-    box(width: 7.2em)[
-      #components.progress-bar(
-        height: monash-rule-thin,
-        monash-blue,
-        monash-grey-soft,
-      )
-    ]
-  } else { none }
-}
-
 #let _monash-footer(self) = {
   set align(bottom)
-  set text(size: monash-footer-size, fill: monash-muted)
 
   block(
     width: 100%,
-    inset: (x: monash-space-2xl, bottom: monash-space-md),
+    height: monash-footer-height,
+    inset: (x: monash-space-2xl, bottom: monash-space-sm),
     [
-      #grid(
-        columns: (1fr, 1.35fr, 7.2em, auto),
-        column-gutter: monash-space-md,
-        align: horizon,
-        {
-          let title = if self.info.short-title == auto {
-            self.info.title
-          } else {
-            self.info.short-title
-          }
-          if title != none {
-            text(fill: monash-charcoal, weight: "medium", title)
-          }
-        },
-        {
-          let author = _info-value(self.info, "author", fallback: none)
-          let institution = _info-value(self.info, "institution", fallback: [Monash University])
-          if author != none {
-            text(author)
-            text(fill: monash-grey, " / ")
-          }
-          text(institution)
-          if self.info.date != none {
-            text(fill: monash-grey, " / ")
-            text(utils.display-info-date(self))
-          }
-        },
-        _footer-progress(self),
-        context [
-          #utils.slide-counter.display() / #utils.last-slide-number
-        ],
-      )
+      #place(right + bottom)[
+        #text(size: monash-footer-size, fill: monash-muted, weight: "medium", _page-number())
+      ]
     ],
   )
 }
@@ -156,6 +105,12 @@
   )
 })
 
+#let _cover-meta(self, info) = (
+  if info.author != none { info.author },
+  if info.institution != none { info.institution },
+  if info.date != none { utils.display-info-date(self) },
+).filter(item => item != none)
+
 #let title-slide(config: (:), extra: none, ..args) = touying-slide-wrapper(self => {
   self = utils.merge-dicts(
     self,
@@ -165,56 +120,39 @@
   )
 
   let info = self.info + args.named()
-  let meta = (
-    if info.author != none { info.author },
-    if info.institution != none { info.institution },
-    if info.date != none { utils.display-info-date(self) },
-  ).filter(item => item != none)
+  let meta = _cover-meta(self, info)
 
-  let body = {
-    block(
-      width: 100%,
-      height: 100%,
-      fill: monash-paper,
-      inset: (x: monash-space-2xl, y: monash-space-xl),
-      [
-        #if self.store.brand-motif {
-          place(right + horizon, dx: .25em)[
-            #monash-facade-pattern(width: 8.8em, height: 72%)
-          ]
-          place(right + bottom, dx: -.6em, dy: -.15em)[
-            #monash-campus-grid(width: 11em, height: 6.6em)
-          ]
-        }
-        #place(top + right)[#_display-logo((info: info), height: monash-logo-cover-height)]
-        #align(left + horizon)[
-          #grid(
-            columns: (auto, 1fr),
-            column-gutter: monash-space-lg,
-            align: horizon,
-            monash-accent-rule(width: 7.9em, height: .12em, vertical: true),
-            block(width: 64%)[
-              #text(size: monash-cover-title-size, fill: monash-charcoal, weight: "bold", info.title)
-              #if info.subtitle != none {
-                v(monash-space-sm)
-                text(size: .92em, fill: monash-blue, weight: "medium", info.subtitle)
-              }
-              #v(monash-space-lg)
-              #monash-accent-rule(width: 4.6em, height: .11em)
-              #v(monash-space-lg)
-              #text(size: .56em, fill: monash-slate, meta.join([ | ]))
-              #v(monash-space-xs)
-              #monash-microbrand(motto: self.store.motto)
-              #if extra != none {
-                v(monash-space-sm)
-                text(size: .5em, fill: monash-slate, extra)
-              }
-            ],
-          )
+  let body = block(
+    width: 100%,
+    height: 100%,
+    fill: monash-paper,
+    inset: (x: monash-space-2xl, y: monash-space-xl),
+    [
+      #place(top + right)[
+        #_display-logo((info: info), height: monash-logo-cover-height)
+      ]
+      #align(left + horizon)[
+        #block(width: 66%)[
+          #monash-accent-rule(width: 6.2em, height: monash-rule-cover)
+          #v(monash-space-lg)
+          #text(size: monash-cover-title-size, fill: monash-charcoal, weight: "bold", info.title)
+          #if info.subtitle != none {
+            v(monash-space-sm)
+            text(size: .92em, fill: monash-blue, weight: "medium", info.subtitle)
+          }
+          #v(monash-space-xl)
+          #text(size: .56em, fill: monash-slate, meta.join([ | ]))
+          #if extra != none {
+            v(monash-space-sm)
+            text(size: .5em, fill: monash-muted, extra)
+          }
         ]
-      ],
-    )
-  }
+      ]
+      #place(left + bottom)[
+        #monash-accent-rule(width: 8.6em, height: monash-rule-cover)
+      ]
+    ],
+  )
 
   touying-slide(self: self, body)
 })
@@ -247,26 +185,21 @@
     fill: monash-paper,
     inset: (x: monash-space-2xl, y: monash-space-xl),
     [
-      #if self.store.brand-motif {
-        place(right + horizon, dx: .15em)[
-          #monash-facade-pattern(width: 9.2em, height: 78%)
-        ]
-        place(left + bottom, dx: -.45em, dy: .05em)[
-          #monash-campus-grid(width: 12em, height: 6.8em)
-        ]
-      }
-      #place(top + right)[#_display-logo(self, height: monash-logo-content-height)]
+      #place(top + right)[
+        #_display-logo(self, height: monash-logo-content-height)
+      ]
       #align(left + horizon)[
         #grid(
-          columns: (auto, auto, 1fr),
-          column-gutter: monash-space-lg,
+          columns: (auto, 1fr),
+          column-gutter: monash-space-xl,
           align: horizon,
-          text(size: 1.25em, fill: monash-blue, weight: "bold", _section-number()),
-          monash-accent-rule(width: 5.4em, height: .11em, vertical: true),
-          block(width: 68%)[
+          [
+            #text(size: monash-section-number-size, fill: monash-blue, weight: "bold", _section-number())
+          ],
+          block(width: 70%)[
+            #monash-accent-rule(width: 5.8em, height: monash-rule-cover)
+            #v(monash-space-lg)
             #text(size: monash-section-title-size, fill: monash-charcoal, weight: "bold", section-title)
-            #v(monash-space-md)
-            #monash-microbrand(motto: self.store.motto)
           ],
         )
       ]
@@ -276,20 +209,41 @@
   touying-slide(self: self, body)
 })
 
+#let _monash-heading-three(it) = block(
+  width: 100%,
+  above: monash-space-sm,
+  below: monash-space-xs,
+  [
+    #text(size: .78em, fill: monash-blue, weight: "bold", it.body)
+    #v(.12em)
+    #monash-accent-rule(width: 2.4em, height: monash-rule-thin)
+  ],
+)
+
+#let _monash-heading-four(it) = block(
+  above: monash-space-xs,
+  below: monash-space-xs,
+  [
+    #monash-accent-rule(width: .62em, height: monash-rule-thin)
+    #h(monash-space-xs)
+    #text(size: .66em, fill: monash-charcoal, weight: "bold", it.body)
+  ],
+)
+
 #let monash-theme(
   aspect-ratio: "16-9",
   logo: none,
-  brand-motif: true,
-  motto: [Ancora Imparo],
-  progress-position: "footer",
-  progress-bar: true,
+  brand-motif: false,
+  motto: none,
+  progress-position: "none",
+  progress-bar: false,
   ..args,
   body,
 ) = {
   show: touying-slides.with(
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
-      margin: (top: 3.25em, bottom: 1.35em, x: 2.25em),
+      margin: (top: monash-content-top-gap, bottom: 1.05em, x: 2.25em),
       header-ascent: 0em,
       footer-descent: 0em,
     ),
@@ -301,17 +255,26 @@
       init: (self: none, body) => {
         set text(size: 23pt, fill: monash-charcoal)
         set par(leading: .74em)
-        set list(indent: .8em, body-indent: .42em)
-        show heading.where(level: 3): set text(fill: monash-blue)
-        show heading.where(level: 4): set text(fill: monash-blue-dark)
+        set list(
+          indent: .74em,
+          body-indent: .46em,
+          marker: (
+            text(fill: monash-blue, weight: "bold")[•],
+            text(fill: monash-grey, weight: "bold")[–],
+          ),
+        )
+        show heading.where(level: 3): _monash-heading-three
+        show heading.where(level: 4): _monash-heading-four
         show strong: set text(fill: monash-blue-dark, weight: "bold")
-        show raw: set text(size: .72em, fill: monash-charcoal)
-        show raw.where(block: true): block.with(
-          width: 100%,
-          fill: monash-grey-light,
-          stroke: .45pt + monash-grey-soft,
+        show raw: set text(size: .7em, fill: monash-charcoal)
+        show: zebraw.with(
+          background-color: monash-grey-light,
+          highlight-color: monash-blue-wash,
+          lang-color: monash-blue,
+          lang-font-args: (size: .54em, weight: "bold"),
           radius: 2pt,
           inset: (x: monash-space-md, y: monash-space-sm),
+          numbering: false,
         )
         body
       },

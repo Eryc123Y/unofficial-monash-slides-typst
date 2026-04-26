@@ -2,11 +2,12 @@
 
 An unofficial Monash-style presentation package for Typst. It is intentionally
 thin: Touying remains the slide authoring system, while this package supplies a
-Monash theme and theorem-like environments styled with `frame-it`.
+Monash theme, theorem-like environments styled with `frame-it`, and a
+Monash-styled code block treatment powered by `zebraw`.
 
 ## Usage
 
-```typst
+````typst
 #import "@preview/touying:0.7.3": *
 #import themes.university: *
 #import "@preview/monash-student-slides:0.1.0": *
@@ -15,9 +16,6 @@ Monash theme and theorem-like environments styled with `frame-it`.
 
 #show: monash-theme.with(
   logo: monash-logo,
-  brand-motif: true,
-  motto: [Ancora Imparo],
-  progress-position: "footer",
   config-info(
     title: [Presentation Title],
     short-title: [Short Title],
@@ -38,20 +36,29 @@ Monash theme and theorem-like environments styled with `frame-it`.
 
 Use normal Touying content.
 
+- Bullets receive Monash blue markers.
+  - Nested bullets use a quieter grey marker.
+
+=== Content Heading
+
+Level-three headings receive a compact Monash blue accent.
+
 #definition[Term][
   A definition can be placed directly inside a slide.
 ]
+
 ```
+def mse(y, pred):
+    return ((y - pred) ** 2).mean()
+```
+````
 
 ## Public API
 
 - `monash-theme`
 - `show-monash-frames`
 - `monash-frame-style`
-- `monash-facade-pattern`
-- `monash-campus-grid`
 - `monash-accent-rule`
-- `monash-microbrand`
 - `definition`
 - `theorem`
 - `proof`
@@ -77,7 +84,11 @@ thumbnail.
 
 ## Design Notes
 
-The default visual language uses a restrained Monash-inspired palette and
-abstract campus elements drawn directly in Typst: a light facade rhythm inspired
-by campus architecture, low-contrast wayfinding/grid lines, and the optional
-`Ancora Imparo` microbrand. Monash red is not used in the default theme.
+The default visual language is a restrained Monash Blue Line system: white
+surfaces, charcoal typography, clear Monash blue rules, and the official logo
+supplied by the template. Decorative motif graphics and the `Ancora Imparo`
+microbrand are not shown by default. Monash red is not used in the default
+theme.
+
+Code blocks use the locked Typst Universe package `@preview/zebraw:0.6.1` and
+continue to work through ordinary fenced raw blocks.

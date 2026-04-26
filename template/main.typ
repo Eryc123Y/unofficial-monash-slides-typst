@@ -8,9 +8,6 @@
 
 #show: monash-theme.with(
   logo: monash-logo,
-  brand-motif: true,
-  motto: [Ancora Imparo],
-  progress-position: "footer",
   config-info(
     title: [Monash Student Slides],
     short-title: [Student Slides],
@@ -34,10 +31,19 @@ This template keeps Touying as the authoring model.
 - Use headings to create sections and slides.
 - Use `#slide` when you want manual slide control.
 - Use Touying features such as `#pause` directly.
+  - Nested bullets use a quieter grey marker.
 
 #pause
 
 After the pause, the same slide continues without any package-specific wrapper.
+
+=== Styled Content Heading
+
+Use level-three headings for compact content sections.
+
+==== Detail Heading
+
+Use level-four headings for smaller subdivisions inside dense slides.
 
 == Definition and Theorem
 
@@ -49,6 +55,10 @@ After the pause, the same slide continues without any package-specific wrapper.
 #theorem[Convergence Sketch][
   If $f$ is convex and $L$-smooth, gradient descent with a suitable step size
   satisfies $f(x_t) - f(x^*) = O(1 / t)$.
+]
+
+#corollary[Rate][
+  Under the same assumptions, the average regret decreases sublinearly.
 ]
 
 == Proof and Lemma
@@ -70,8 +80,8 @@ After the pause, the same slide continues without any package-specific wrapper.
 ]
 
 #remark[Design][
-  Default frames use neutral surfaces, a compact title row, and a Monash blue
-  accent instead of alert colours.
+  Default frames use neutral surfaces, compact title rows, and distinct accent
+  colours inside the Monash minimal palette.
 ]
 
 #warning[Scope][

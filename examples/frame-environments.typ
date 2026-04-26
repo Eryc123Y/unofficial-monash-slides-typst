@@ -4,7 +4,7 @@
 
 #set text(font: ("Arial", "New Computer Modern"))
 
-#let monash-logo = image("../template/assets/Monash_University_logo.svg", height: 1em)
+#let monash-logo = image("../template/assets/Monash_University_logo.svg", height: 1.25em)
 
 #show: monash-theme.with(
   logo: monash-logo,
@@ -67,3 +67,11 @@
   This package does not provide an algorithm DSL. Use Typst raw blocks or import
   another package when a deck needs pseudocode.
 ]
+
+== Code Block
+
+```typst
+#theorem[Compactness][
+  Every open cover admits a finite subcover.
+]
+```
