@@ -1,5 +1,5 @@
 #import "@preview/tidy:0.4.3"
-#import "../lib.typ" as monash
+#import "@preview/unofficial-monash-touying:0.1.0" as monash
 
 #set document(title: "Monash Student Slides Reference")
 #set page(paper: "a4", margin: 2cm)
