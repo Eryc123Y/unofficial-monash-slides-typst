@@ -23,17 +23,27 @@
       left: (paint: accent-color, thickness: monash-frame-rule),
       rest: (paint: monash-grey-soft, thickness: .55pt),
     ),
-    radius: 3pt,
-    inset: (x: monash-space-md, y: monash-space-xs),
+    radius: 2pt,
+    inset: 0pt,
     [
-      #text(size: .54em, fill: accent-color, weight: "bold", title-line)
-      #if tags.len() > 0 {
-        h(monash-space-sm)
-        text(size: .46em, fill: monash-muted, tags.join([, ]))
-      }
+      #block(
+        width: 100%,
+        fill: accent-color,
+        inset: (x: monash-space-md, y: monash-space-xs),
+        [
+          #text(size: .68em, fill: white, weight: "bold", title-line)
+          #if tags.len() > 0 {
+            h(monash-space-sm)
+            text(size: .52em, fill: white.transparentize(25%), tags.join([, ]))
+          }
+        ],
+      )
       #if body != [] {
-        v(monash-space-xs)
-        text(size: .84em, fill: monash-charcoal, body)
+        block(
+          width: 100%,
+          inset: (x: monash-space-md, y: monash-space-sm),
+          text(size: .84em, fill: monash-charcoal, body),
+        )
       }
     ],
   )
@@ -59,7 +69,7 @@
   theorem: ("Theorem", monash-teal),
   proof: ("Proof", monash-charcoal),
   lemma: ("Lemma", monash-blue-grey),
-  corollary: ("Corollary", monash-teal-muted),
+  corollary: ("Corollary", monash-green),
   remark: ("Remark", monash-slate),
   note: ("Note", monash-blue-dark),
   warning: ("Warning", monash-charcoal),

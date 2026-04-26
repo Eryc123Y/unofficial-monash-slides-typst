@@ -5,9 +5,16 @@
 #set text(font: ("Arial", "New Computer Modern"))
 
 #let monash-logo = image("assets/Monash_University_logo.svg", height: 1.25em)
+#let monash-titlegraphic = image(
+  "assets/monash-presentation/background/bg-02.png",
+  width: 100%,
+  height: 100%,
+  fit: "cover",
+)
 
 #show: monash-theme.with(
   logo: monash-logo,
+  titlegraphic: monash-titlegraphic,
   config-info(
     title: [Monash Student Slides],
     short-title: [Student Slides],
@@ -31,7 +38,7 @@ This template keeps Touying as the authoring model.
 - Use headings to create sections and slides.
 - Use `#slide` when you want manual slide control.
 - Use Touying features such as `#pause` directly.
-  - Nested bullets use a quieter grey marker.
+  - Nested bullets use the Quarto Monash triangle marker.
 
 #pause
 
@@ -80,8 +87,8 @@ Use level-four headings for smaller subdivisions inside dense slides.
 ]
 
 #remark[Design][
-  Default frames use neutral surfaces, compact title rows, and distinct accent
-  colours inside the Monash minimal palette.
+  Default frames use stronger title rows inspired by Monash presentation
+  blocks, while keeping distinct accent colours for each environment.
 ]
 
 #warning[Scope][
@@ -91,7 +98,7 @@ Use level-four headings for smaller subdivisions inside dense slides.
 
 == Raw Code
 
-```
+```py
 def mse(y, pred):
     return ((y - pred) ** 2).mean()
 ```

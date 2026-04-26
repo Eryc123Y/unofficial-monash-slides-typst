@@ -6,6 +6,8 @@
 *.svg
 !thumbnail.png
 !template/assets/Monash_University_logo.svg
+!template/assets/monash-presentation/
+!template/assets/monash-presentation/**/*.png
 
 # Local runtime/tooling state
 .omx/

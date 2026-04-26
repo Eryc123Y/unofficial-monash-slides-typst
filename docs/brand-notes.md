@@ -8,8 +8,10 @@ an official Monash University asset.
 - Use Monash blue as the dominant academic identity colour.
 - Do not use Monash red in the default presentation theme.
 - Keep slides clean, spacious, and left-to-right readable.
-- Prefer restrained headers and footers over decorative page furniture.
-- Prefer structural blue rules and typography over decorative motifs.
+- Follow the `quarto-monash/presentation` Typst template as the primary visual
+  reference.
+- Use the full-width blue title bar and Quarto-style footer progress treatment
+  for content slides.
 - Do not redraw, stretch, recolour, crop, or otherwise modify Monash logo
   assets.
 
@@ -17,16 +19,18 @@ an official Monash University asset.
 
 The template currently uses:
 
-- `#006DAE` as the primary blue.
+- `#1969AA` as the primary blue, matching the Quarto Monash Typst template.
+- `#C14B14` as the Quarto Monash orange accent for progress and list markers.
 - neutral greys for body/footer contrast.
 - the bundled `template/assets/Monash_University_logo.svg` in the starter deck.
-- a blue-line system for cover, section, header, and frame accents.
-- a minimal footer that only displays the slide count.
-- no decorative motif graphics or motto text by default.
+- vendored Quarto Monash PNG assets under `template/assets/monash-presentation/`.
+- a title slide using `background/bg-02.png`.
+- full-width Monash blue title bars on content slides.
+- a footer baseline, orange progress bar, and small grey slide number.
 
-The template does not bundle campus photos by default. If a future version adds
-an optional photo cover, it should keep the photograph user-supplied or document
-the image licence and attribution next to the asset.
+The template vendors only the small set of Quarto Monash presentation assets
+needed by the starter deck. If future versions add more background variants,
+document the source repository and keep paths under `template/assets/`.
 
 ## Logo SVG Notes
 
@@ -46,11 +50,16 @@ that asset under `template/assets/` and pass:
 )
 ```
 
+The Quarto Monash PNG assets are vendored from
+`quarto-monash/presentation/_extensions/presentation/_images/` for visual
+alignment with that template.
+
 ## References
 
 - Monash Malaysia brand guide PDF: <https://www.monash.edu.my/__data/assets/pdf_file/0009/519165/monash-brandguide-2015.pdf>
 - Monash core logo guidelines PDF: <https://www.monash.edu/__data/assets/pdf_file/0010/1656523/3.-CoreElements_Our-Logo.pdf>
 - Monash overview and motto: <https://www.monash.edu/about/who>
 - Monash Learning and Teaching Building: <https://www.monash.edu/learning-teaching/inclusive-education/learning-spaces/ltb>
+- Quarto Monash presentation template: <https://github.com/quarto-monash/presentation>
 - Wikimedia Commons mirror page: <https://commons.wikimedia.org/wiki/File:Monash_University_logo.svg>
 - Wikimedia Commons SVG file: <https://upload.wikimedia.org/wikipedia/commons/7/7c/Monash_University_logo.svg>
