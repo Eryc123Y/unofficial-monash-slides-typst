@@ -9,7 +9,8 @@ ln -s "$PWD" "$package_path/preview/unofficial-monash-touying/0.1.0"
 
 TYPST_PACKAGE_PATH="$package_path" typst compile --root . template/main.typ build/template-main.pdf
 TYPST_PACKAGE_PATH="$package_path" typst compile --root . example/main.typ build/example-main.pdf
+cp build/example-main.pdf example/main.pdf
 TYPST_PACKAGE_PATH="$package_path" typst compile --root . docs/reference.typ build/reference.pdf
 TYPST_PACKAGE_PATH="$package_path" typst compile --root . --pages 1 template/main.typ thumbnail.png
 
-echo "Compiled template/main.typ, example/main.typ, docs/reference.typ, and thumbnail.png"
+echo "Compiled template/main.typ, example/main.typ, docs/reference.typ, example/main.pdf, and thumbnail.png"

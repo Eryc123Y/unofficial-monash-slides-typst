@@ -48,6 +48,23 @@
   v(monash-title-bar-height - monash-page-margin-top + .75cm)
 }
 
+#let _is-visible-outline-heading(it) = {
+  (
+    not it.has("label")
+      or str(it.label) not in (
+      "touying:hidden",
+      "touying:skip",
+      "touying:unoutlined",
+    )
+  )
+}
+
+#let _heading-index(level, loc) = {
+  query(heading.where(level: level))
+    .filter(it => it.location().page() <= loc.page() and _is-visible-outline-heading(it))
+    .len()
+}
+
 #let _monash-footer(self) = {
   set align(bottom)
   block(width: 100%, height: monash-footer-height)[
@@ -125,15 +142,96 @@
   ]
 }
 
+#let _render-monash-toc-slide(
+  self,
+  config: (:),
+  title: [Table of Contents],
+  numbering: true,
+  ..args,
+) = {
+  self = utils.merge-dicts(
+    self,
+    config-common(freeze-slide-counter: true),
+    config-page(footer: none),
+    config,
+  )
+
+  touying-slide(self: self, {
+    v(1.2cm)
+    text(size: self.store.titlefontsize * .72, fill: monash-blue, weight: "bold", title)
+    v(.45cm)
+    monash-accent-rule(width: 4.4cm, height: 4pt, paint: monash-orange)
+    v(.75cm)
+    context {
+      let sections = query(heading.where(level: 1))
+        .filter(it => _is-visible-outline-heading(it))
+      let count = sections.len()
+      let col-count = if count <= 7 { 1 } else if count <= 16 { 2 } else if count <= 36 { 3 } else { 4 }
+      let per-col = calc.ceil(count / col-count)
+      let entry-size = if per-col <= 7 {
+        self.store.fontsize * .9
+      } else if per-col <= 12 {
+        self.store.fontsize * .72
+      } else if per-col <= 18 {
+        self.store.fontsize * .56
+      } else {
+        self.store.fontsize * .44
+      }
+      let entry-gap = if per-col <= 7 { .46em } else if per-col <= 12 { .28em } else if per-col <= 18 { .14em } else { .04em }
+      let number-inset = if per-col <= 12 { (x: 7pt, y: 4pt) } else if per-col <= 18 { (x: 5pt, y: 3pt) } else { (x: 4pt, y: 2pt) }
+
+      grid(
+        columns: (1fr,) * col-count,
+        column-gutter: if col-count == 1 { 0em } else { 1.2cm },
+        ..range(col-count).map(col => {
+          let start = col * per-col
+          let end = calc.min((col + 1) * per-col, count)
+          block(width: 100%)[
+            #for (idx, section) in sections.slice(start, end).enumerate() {
+              let number = start + idx + 1
+              block(width: 100%, below: entry-gap)[
+                #grid(
+                  columns: (auto, 1fr),
+                  column-gutter: .58em,
+                  align: horizon,
+                  if numbering {
+                    box(
+                      fill: monash-orange,
+                      inset: number-inset,
+                      text(fill: white, weight: "bold", size: .72em, str(number)),
+                    )
+                  } else {
+                    monash-accent-rule(width: .85em, height: 3pt, paint: monash-orange)
+                  },
+                  text(
+                    fill: monash-charcoal,
+                    size: entry-size,
+                    weight: "bold",
+                    link(section.location(), utils.short-heading(self: self, section)),
+                  ),
+                )
+              ]
+            }
+          ]
+        }),
+      )
+    }
+  })
+}
+
 /// Creates the title slide for a Monash-inspired Touying deck.
 ///
 /// The slide uses the configured `titlegraphic`, title metadata, author,
-/// institution, and date. Extra content can be placed below the metadata.
-#let title-slide(config: (:), extra: none, ..args) = touying-slide-wrapper(self => {
+/// institution, and date. Extra content can be placed below the metadata. Set
+/// `toc: true` in `monash-theme` or this function to insert an agenda slide
+/// after the title.
+#let title-slide(config: (:), extra: none, toc: auto, ..args) = touying-slide-wrapper(self => {
+  let base-self = self
   let info = self.info + args.named()
   let title-color = _title-color(self.store.titlecolor)
   let titlefontsize = self.store.titlefontsize
   let fontsize = self.store.fontsize
+  let show-toc = if toc == auto { self.store.toc } else { toc }
 
   self = utils.merge-dicts(
     self,
@@ -167,17 +265,27 @@
       ]
     ]
   })
+  if show-toc {
+    _render-monash-toc-slide(
+      base-self,
+      title: base-self.store.toc-title,
+      numbering: base-self.store.toc-numbering,
+    )
+  }
 })
 
-#let _section-number-box() = {
+#let _section-number-box(level: 1) = {
   context {
-    let value = counter(heading).get().first() + 1
-    box(
-      fill: monash-orange,
-      inset: (x: 8pt, y: 5pt),
-      baseline: 20%,
-      text(fill: white, weight: "bold", str(value)),
-    )
+    let current-heading = utils.current-heading(level: level, hierachical: false)
+    if current-heading != none {
+      let value = _heading-index(level, current-heading.location())
+      box(
+        fill: monash-orange,
+        inset: (x: 8pt, y: 5pt),
+        baseline: 20%,
+        text(fill: white, weight: "bold", str(value)),
+      )
+    }
   }
 }
 
@@ -196,16 +304,42 @@
 
   let section-title = utils.display-current-heading(level: level, numbered: false)
   touying-slide(self: self, {
-    _title-bar(section-title)
-    v(.5cm)
-    block(inset: (left: 1cm), [
-      #text(size: self.store.fontsize * 1.1)[
-        #_section-number-box()
-        #h(.4em)
-        #text(fill: monash-orange, weight: "regular", section-title)
+    v(2.1cm)
+    block(width: 82%)[
+      #if numbered {
+        text(size: .78em, fill: monash-orange, weight: "bold")[
+          Section #_section-number-box(level: level)
+        ]
+        v(.45cm)
+      }
+      #text(size: self.store.titlefontsize * .95, fill: monash-blue, weight: "bold")[
+        #section-title
       ]
-    ])
+      #v(.55cm)
+      #monash-accent-rule(width: 4.4cm, height: 4pt, paint: monash-orange)
+    ]
   })
+})
+
+/// Creates a Monash-inspired table-of-contents slide.
+///
+/// Use `toc: true` in `monash-theme` to insert this automatically after the
+/// title slide, or call `#toc-slide()` manually when the table of contents
+/// should appear elsewhere. The slide lists level-one headings and automatically
+/// uses up to three columns for long decks.
+#let toc-slide(
+  config: (:),
+  title: auto,
+  numbering: auto,
+  ..args,
+) = touying-slide-wrapper(self => {
+  _render-monash-toc-slide(
+    self,
+    config: config,
+    title: if title == auto { self.store.toc-title } else { title },
+    numbering: if numbering == auto { self.store.toc-numbering } else { numbering },
+    ..args,
+  )
 })
 
 #let _monash-heading-three(it) = {
@@ -246,6 +380,14 @@
   progress-position: "footer",
   /// Whether to show the footer progress bar.
   progress-bar: true,
+  /// Whether `title-slide` inserts a table-of-contents slide afterwards.
+  toc: false,
+  /// Title used by the table-of-contents slide.
+  toc-title: [Table of Contents],
+  /// Whether top-level table-of-contents entries show section numbers.
+  toc-numbering: true,
+  /// Whether level-one headings create section divider slides.
+  section-slides: true,
   ..args,
   /// Document body transformed by the theme.
   body,
@@ -259,7 +401,8 @@
     ),
     config-common(
       slide-fn: slide,
-      new-section-slide-fn: _monash-new-section,
+      new-section-slide-fn: if section-slides { _monash-new-section } else { none },
+      receive-body-for-new-section-slide-fn: false,
       slide-level: 2,
       show-strong-with-alert: false,
       zero-margin-footer: true,
@@ -335,6 +478,9 @@
       motto: motto,
       progress-bar: progress-bar,
       progress-position: progress-position,
+      toc: toc,
+      toc-title: toc-title,
+      toc-numbering: toc-numbering,
       titlegraphic: titlegraphic,
       titlecolor: titlecolor,
       titlefontsize: titlefontsize,

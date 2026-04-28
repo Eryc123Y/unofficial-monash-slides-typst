@@ -39,7 +39,9 @@
 Touying remains the authoring model. Use headings for sections and slides, and
 use this package for the Monash-inspired theme and academic frame environments.
 
-- Use headings to create sections and slides.
+- Use level-one headings for sections.
+- Set `toc: true` when you want a table of contents after the title.
+- Set `section-slides: false` when you do not want divider slides between sections.
 - Use `#slide` when you want manual slide control.
 - Use Touying features such as `#pause` directly.
 

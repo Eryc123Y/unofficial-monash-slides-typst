@@ -11,7 +11,8 @@ Monash-inspired code blocks powered by `zebraw`.
 The package ships with both a starter template and a full example deck:
 
 - `template/main.typ` is the minimal starter used by `typst init`.
-- `example/main.typ` is a fuller feature showcase and usage guide.
+- `example/main.typ` is a full feature showcase deck.
+- `example/README.md` is a task-oriented usage guide.
 - `thumbnail.png` is the template preview image used by the package manifest.
 
 ## Usage
@@ -75,9 +76,14 @@ def mse(y, pred):
 ```
 ````
 
+For title graphics, logos, Touying authoring patterns, academic frames, code
+blocks, and local development notes, see `example/README.md`. For a complete
+compilable showcase deck, see `example/main.typ`.
+
 ## Exports
 
 - `monash-theme`
+- `toc-slide`
 - `show-monash-frames`
 - `monash-frame-style`
 - `monash-accent-rule`
@@ -92,6 +98,13 @@ def mse(y, pred):
 
 The package does not provide custom slide wrappers. Use Touying's own headings,
 `#slide`, `#pause`, composers, and other presentation features directly.
+`#title-slide()` does not insert an agenda by default; pass `toc: true` to
+`monash-theme.with(...)` to add one after the title, or call `#toc-slide()`
+manually.
+The table-of-contents slide lists level-one headings and automatically uses up
+to three columns for longer decks.
+Level-one headings create section divider slides by default; pass
+`section-slides: false` to `monash-theme.with(...)` to hide section dividers.
 Frame environments are numbered independently by environment type by default.
 Use `#show: show-monash-frames.with(numbering: false)` in the preamble to hide
 frame numbers.

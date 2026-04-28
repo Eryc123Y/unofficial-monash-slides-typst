@@ -13,6 +13,7 @@
 
 #show: monash-theme.with(
   titlegraphic: title-background,
+  toc: true,
   config-info(
     title: [Unofficial Monash Touying],
     short-title: [Monash Touying],
@@ -76,7 +77,7 @@ appropriate rights can pass their own logo or title graphic as content.
 Use standard Touying structure. This package does not introduce a separate slide
 wrapper.
 
-- Level-one headings create sections.
+- Level-one headings create section divider slides by default.
 - Level-two headings create slides.
 - `#pause` works normally.
   - Nested bullets use the triangle marker.
@@ -84,6 +85,11 @@ wrapper.
 #pause
 
 Paused content continues on the same slide.
+
+Pass `section-slides: false` to `monash-theme.with(...)` when a deck should use
+level-one headings without divider slides.
+
+Pass `toc: true` when the title slide should be followed by a table of contents.
 
 == Manual Slides
 
@@ -112,7 +118,6 @@ Level-three headings use Monash blue for compact subsections.
 Level-four headings remain lightweight for dense slide content.
 
 = Academic Frames
-
 == Independent Numbering
 
 Definitions, theorems, lemmas, corollaries, notes, and warnings are numbered
