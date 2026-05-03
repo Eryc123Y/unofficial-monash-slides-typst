@@ -295,9 +295,14 @@
         }
       ],
       [
-        #text(size: self.store.fontsize * 2.05, fill: monash-blue, weight: "bold")[
-          #section-title
-        ]
+        #stack(
+          dir: ttb,
+          spacing: .04cm,
+          text(size: self.store.fontsize * 2.05, fill: monash-blue, weight: "bold")[
+            #section-title
+          ],
+          monash-accent-rule(width: 4.9em, height: 2.6pt, paint: monash-orange),
+        )
       ],
     )
 
