@@ -125,24 +125,114 @@
   ]
 }
 
+#let _section-number(location, level: 1) = context {
+  let number = 1
+  for (index, item) in query(heading.where(level: level)).enumerate() {
+    if item.location() == location {
+      number = index + 1
+    }
+  }
+  str(number)
+}
+
+#let _monash-outline-entry(self, it, current: true, alpha: 100%, large: false) = {
+  let fill = if current { monash-blue } else { monash-muted.transparentize(alpha) }
+  let number-fill = if current { monash-orange } else { monash-orange.transparentize(alpha) }
+  let number-color = if current { white } else { white.transparentize(alpha) }
+  let title = utils.short-heading(self: self, it.element)
+  let number-size = if large { 1em } else { .78em }
+  let title-size = if large { 1.1em } else { .92em }
+
+  link(
+    it.element.location(),
+    box(width: 100%)[
+      #grid(
+        columns: (2.2em, 1fr),
+        column-gutter: .7em,
+        align: (center + horizon, left + horizon),
+        box(
+          width: 1.85em,
+          height: 1.45em,
+          fill: number-fill,
+          baseline: 18%,
+          text(size: number-size, fill: number-color, weight: "bold")[
+            #_section-number(it.element.location(), level: it.level)
+          ],
+        ),
+        text(
+          size: title-size,
+          fill: fill,
+          weight: if current { "bold" } else { "regular" },
+          title,
+        ),
+      )
+    ],
+  )
+}
+
+#let _monash-outline-slide(
+  self,
+  config: (:),
+  title: utils.i18n-outline-title,
+  depth: 1,
+  spacing: .82em,
+  ..args,
+) = {
+  self = utils.merge-dicts(
+    self,
+    config-common(freeze-slide-counter: true),
+    config-page(footer: none),
+    config,
+  )
+
+  touying-slide(self: self, {
+    set std.align(top)
+    block(width: 100%)[
+      #text(size: self.store.fontsize * 1.35, fill: monash-blue, weight: "bold")[
+        #utils.call-or-display(self, title)
+      ]
+      #v(.15cm)
+      #monash-accent-rule(width: 5.8em, height: 3pt, paint: monash-orange)
+    ]
+
+    v(.9cm)
+
+    block(width: 82%, inset: (left: .35cm))[
+      #set par(leading: .62em)
+      #components.custom-progressive-outline(
+        self: self,
+        level: none,
+        depth: depth,
+        numbered: (false,),
+        vspace: (spacing,),
+        title: none,
+        show-current: (level, it) => _monash-outline-entry(self, it),
+        ..args,
+      )
+    ]
+  })
+}
+
 /// Creates the title slide for a Monash-inspired Touying deck.
 ///
 /// The slide uses the configured `titlegraphic`, title metadata, author,
 /// institution, and date. Extra content can be placed below the metadata.
+/// By default, it also creates a table-of-contents slide immediately after the
+/// title. Set `toc: false` in `monash-theme.with(...)` to disable it.
 #let title-slide(config: (:), extra: none, ..args) = touying-slide-wrapper(self => {
   let info = self.info + args.named()
   let title-color = _title-color(self.store.titlecolor)
   let titlefontsize = self.store.titlefontsize
   let fontsize = self.store.fontsize
 
-  self = utils.merge-dicts(
+  let title-self = utils.merge-dicts(
     self,
     config-common(freeze-slide-counter: true),
     config-page(margin: 0em, header: none, footer: none),
     config,
   )
 
-  touying-slide(self: self, {
+  touying-slide(self: title-self, {
     place(top + left)[
       #_titlegraphic(self.store.titlegraphic)
     ]
@@ -167,19 +257,11 @@
       ]
     ]
   })
-})
 
-#let _section-number-box() = {
-  context {
-    let value = counter(heading).get().first() + 1
-    box(
-      fill: monash-orange,
-      inset: (x: 8pt, y: 5pt),
-      baseline: 20%,
-      text(fill: white, weight: "bold", str(value)),
-    )
+  if self.store.toc {
+    _monash-outline-slide(self, ..self.store.toc-args)
   }
-}
+})
 
 #let _monash-new-section(
   config: (:),
@@ -196,15 +278,64 @@
 
   let section-title = utils.display-current-heading(level: level, numbered: false)
   touying-slide(self: self, {
-    _title-bar(section-title)
-    v(.5cm)
-    block(inset: (left: 1cm), [
-      #text(size: self.store.fontsize * 1.1)[
-        #_section-number-box()
-        #h(.4em)
-        #text(fill: monash-orange, weight: "regular", section-title)
-      ]
-    ])
+    set std.align(horizon)
+    grid(
+      columns: (1.05fr, 2fr),
+      column-gutter: 1cm,
+      align: (right + horizon, left + horizon),
+      [
+        #context {
+          let loc = utils.current-heading(level: level).location()
+          text(
+            size: self.store.fontsize * 4.1,
+            fill: monash-orange,
+            weight: "bold",
+            _section-number(loc, level: level),
+          )
+        }
+      ],
+      [
+        #block(width: 100%)[
+          #text(size: self.store.fontsize * 1.55, fill: monash-blue, weight: "bold")[
+            #section-title
+          ]
+          #v(.3cm)
+          #monash-accent-rule(width: 6.5em, height: 3pt, paint: monash-orange)
+        ]
+      ],
+    )
+
+    v(1.05cm)
+
+    block(width: 78%, inset: (left: 13%))[
+      #set par(leading: .58em)
+      #components.custom-progressive-outline(
+        self: self,
+        level: level,
+        depth: level,
+        numbered: (false,),
+        vspace: (.46em,),
+        title: none,
+        show-past: (level, it) => _monash-outline-entry(
+          self,
+          it,
+          current: false,
+          alpha: 58%,
+        ),
+        show-current: (level, it) => _monash-outline-entry(
+          self,
+          it,
+          current: true,
+          large: true,
+        ),
+        show-future: (level, it) => _monash-outline-entry(
+          self,
+          it,
+          current: false,
+          alpha: 58%,
+        ),
+      )
+    ]
   })
 })
 
@@ -246,6 +377,10 @@
   progress-position: "footer",
   /// Whether to show the footer progress bar.
   progress-bar: true,
+  /// Whether `#title-slide()` should also create a table-of-contents slide.
+  toc: true,
+  /// Additional arguments forwarded to the generated table-of-contents slide.
+  toc-args: (:),
   ..args,
   /// Document body transformed by the theme.
   body,
@@ -335,6 +470,8 @@
       motto: motto,
       progress-bar: progress-bar,
       progress-position: progress-position,
+      toc: toc,
+      toc-args: toc-args,
       titlegraphic: titlegraphic,
       titlecolor: titlecolor,
       titlefontsize: titlefontsize,

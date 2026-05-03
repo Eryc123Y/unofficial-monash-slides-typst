@@ -32,7 +32,9 @@
 == Minimal Preamble
 
 Use the package together with Touying's `university` theme exports, then install
-the Monash-inspired theme as a document show rule.
+the Monash-inspired theme as a document show rule. The starter places a global
+outline after the title slide by default; set `toc: false` in
+`monash-theme.with(...)` if a deck should start directly with the first section.
 
 ```typst
 #import "@preview/touying:0.7.3": *
@@ -80,6 +82,9 @@ wrapper.
 - Level-two headings create slides.
 - `#pause` works normally.
   - Nested bullets use the triangle marker.
+
+Each level-one heading also creates a Monash-styled section divider with a
+progressive outline that highlights the current section.
 
 #pause
 

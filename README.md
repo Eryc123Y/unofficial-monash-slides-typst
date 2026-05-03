@@ -92,6 +92,9 @@ def mse(y, pred):
 
 The package does not provide custom slide wrappers. Use Touying's own headings,
 `#slide`, `#pause`, composers, and other presentation features directly.
+`#title-slide()` creates a table of contents after the title slide by default;
+set `toc: false` in `monash-theme.with(...)` if a deck should start directly
+with the first section.
 Frame environments are numbered independently by environment type by default.
 Use `#show: show-monash-frames.with(numbering: false)` in the preamble to hide
 frame numbers.
