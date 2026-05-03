@@ -2,7 +2,7 @@
 name = "unofficial-monash-touying"
 version = "0.1.0"
 entrypoint = "lib.typ"
-authors = ["Eric <@Eryc123Y>"]
+authors = ["EY2234 <@Eryc123Y>"]
 license = "MIT"
 description = "Monash-inspired academic slides for Touying."
 repository = "https://github.com/Eryc123Y/unofficial-monash-slides-typst"
