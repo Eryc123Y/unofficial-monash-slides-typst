@@ -280,8 +280,8 @@
   touying-slide(self: self, {
     set std.align(horizon)
     grid(
-      columns: (1.05fr, 2fr),
-      column-gutter: 1cm,
+      columns: (1fr, 2.35fr),
+      column-gutter: .72cm,
       align: (right + horizon, left + horizon),
       [
         #context {
@@ -295,17 +295,18 @@
         }
       ],
       [
-        #block(width: 100%)[
-          #text(size: self.store.fontsize * 1.55, fill: monash-blue, weight: "bold")[
+        #stack(
+          dir: ttb,
+          spacing: .04cm,
+          text(size: self.store.fontsize * 2.05, fill: monash-blue, weight: "bold")[
             #section-title
-          ]
-          #v(.3cm)
-          #monash-accent-rule(width: 6.5em, height: 3pt, paint: monash-orange)
-        ]
+          ],
+          monash-accent-rule(width: 4.9em, height: 2.6pt, paint: monash-orange),
+        )
       ],
     )
 
-    v(1.05cm)
+    v(.95cm)
 
     block(width: 78%, inset: (left: 13%))[
       #set par(leading: .58em)

@@ -42,6 +42,27 @@ use this package for the Monash-inspired theme and academic frame environments.
 - Use headings to create sections and slides.
 - Use `#slide` when you want manual slide control.
 - Use Touying features such as `#pause` directly.
+- Use `toc: false` in `monash-theme.with(...)` if you do not want the automatic
+  outline after the title slide.
+
+== A Typical Research Slide
+
+Use compact claims, short evidence, and one visual emphasis point per slide.
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 1cm,
+  [
+    - State the problem.
+    - Name the method.
+    - Report the key result.
+  ],
+  [
+    #monash-accent-rule(vertical: true, width: 5em, height: .18em, paint: monash-orange)
+    #h(.5em)
+    #text(fill: monash-blue, weight: "bold")[Replace this panel with a figure, table, or quote.]
+  ],
+)
 
 = Academic Frames
 
@@ -61,6 +82,17 @@ use this package for the Monash-inspired theme and academic frame environments.
   Apply the theorem assumptions and simplify.
 ]
 
+== Notes and Warnings
+
+#note[Usage][
+  Use notes for implementation details, assumptions, or presentation reminders.
+]
+
+#warning[Scope][
+  Keep slide claims narrow enough that the supporting evidence fits on the same
+  slide or the next one.
+]
+
 = Code
 
 == Code
@@ -69,6 +101,15 @@ use this package for the Monash-inspired theme and academic frame environments.
 def mse(y, pred):
     return ((y - pred) ** 2).mean()
 ```
+
+Inline code such as `#slide` is styled consistently with fenced code blocks.
+
+== Closing Checklist
+
+- Replace the title metadata.
+- Add or remove sections.
+- Swap in approved title graphics and logos when appropriate.
+- Run `typst compile main.typ` before presenting.
 
 == Closing
 

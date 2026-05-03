@@ -71,6 +71,19 @@ appropriate rights can pass their own logo or title graphic as content.
 )
 ```
 
+== Turning Off the Outline
+
+The outline is on by default because most academic talks benefit from an early
+agenda slide. Disable it in the theme call when a deck should move directly
+from title to content.
+
+```typst
+#show: monash-theme.with(
+  toc: false,
+  config-info(title: [Presentation Title]),
+)
+```
+
 = Authoring Model
 
 == Native Touying Slides
@@ -115,6 +128,22 @@ Level-three headings use Monash blue for compact subsections.
 ==== Detail Heading
 
 Level-four headings remain lightweight for dense slide content.
+
+== Two-Column Content
+
+Use Typst and Touying layout primitives directly.
+
+#slide(composer: (1fr, 1fr))[
+  *Research question*
+
+  How does the method behave when the input distribution changes?
+][
+  *Evaluation plan*
+
+  - compare against a baseline
+  - report the failure case
+  - keep one takeaway visible
+]
 
 = Academic Frames
 
@@ -166,6 +195,16 @@ unnumbered.
   package when a deck needs pseudocode.
 ]
 
+== Mixed Academic Content
+
+#definition[Empirical Risk][
+  The empirical risk is the average loss over a finite training set:
+  $hat(R)(theta) = 1 / n sum_(i=1)^n "loss"(f_theta(x_i), y_i)$.
+]
+
+The display remains compact enough for slide use while preserving ordinary
+Typst math syntax.
+
 == Hiding Frame Numbers
 
 Install the frame show rule with `numbering: false` when a deck should keep the
@@ -202,6 +241,19 @@ def mse(y, pred):
   A definition can be placed directly inside a slide.
 ]
 ```
+
+== Code With Context
+
+Place code beside the idea it supports when the audience needs both.
+
+#slide(composer: (1fr, 1fr))[
+  The raw block keeps normal Typst syntax and is styled by the theme.
+][
+```python
+def normalize(x):
+    return (x - x.mean()) / x.std()
+```
+]
 
 = Closing
 
