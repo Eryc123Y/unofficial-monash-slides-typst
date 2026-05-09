@@ -1,5 +1,3 @@
-#import "@preview/touying:0.7.3": *
-#import themes.university: *
 #import "@preview/unofficial-monash-touying:0.1.0": *
 
 #set text(font: ("Arial", "New Computer Modern"))
@@ -31,14 +29,12 @@
 
 == Minimal Preamble
 
-Use the package together with Touying's `university` theme exports, then install
-the Monash-inspired theme as a document show rule. The starter places a global
-outline after the title slide by default; set `toc: false` in
-`monash-theme.with(...)` if a deck should start directly with the first section.
+Import only this package, then install the Monash-inspired theme as a document
+show rule. The starter places a global outline after the title slide by default;
+set `toc: false` in `monash-theme.with(...)` if a deck should start directly
+with the first section.
 
 ```typst
-#import "@preview/touying:0.7.3": *
-#import themes.university: *
 #import "@preview/unofficial-monash-touying:0.1.0": *
 
 #show: monash-theme.with(
@@ -88,8 +84,8 @@ from title to content.
 
 == Native Touying Slides
 
-Use standard Touying structure. This package does not introduce a separate slide
-wrapper.
+Use standard Touying structure through this package's exports. The package does
+not introduce a separate slide wrapper.
 
 - Level-one headings create sections.
 - Level-two headings create slides.
@@ -105,7 +101,7 @@ Paused content continues on the same slide.
 
 == Manual Slides
 
-Use Touying's `#slide` for custom one-off layouts.
+Use `#slide` for custom one-off layouts.
 
 #slide[
   #align(center + horizon)[
@@ -116,7 +112,7 @@ Use Touying's `#slide` for custom one-off layouts.
       ]
 
       #v(.5em)
-      This is ordinary Touying content inside the Monash-inspired theme.
+      This is ordinary presentation content inside the Monash-inspired theme.
     ]
   ]
 ]
@@ -131,7 +127,7 @@ Level-four headings remain lightweight for dense slide content.
 
 == Two-Column Content
 
-Use Typst and Touying layout primitives directly.
+Use Typst and exported layout primitives directly.
 
 #slide(composer: (1fr, 1fr))[
   *Research question*

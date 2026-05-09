@@ -1,5 +1,3 @@
-#import "@preview/touying:0.7.3": *
-#import themes.university: *
 #import "@preview/unofficial-monash-touying:0.1.0": *
 
 #set text(font: ("Arial", "New Computer Modern"))
@@ -36,12 +34,13 @@
 
 == Why This Starter
 
-Touying remains the authoring model. Use headings for sections and slides, and
-use this package for the Monash-inspired theme and academic frame environments.
+This package wraps Touying's authoring model. Use headings for sections and
+slides, and use the exported Monash-inspired theme and academic frame
+environments.
 
 - Use headings to create sections and slides.
 - Use `#slide` when you want manual slide control.
-- Use Touying features such as `#pause` directly.
+- Use presentation features such as `#pause` directly.
 - Use `toc: false` in `monash-theme.with(...)` if you do not want the automatic
   outline after the title slide.
 

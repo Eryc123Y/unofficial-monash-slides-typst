@@ -1,10 +1,10 @@
 # Unofficial Monash Touying
 
-An unofficial Monash-inspired presentation package for Typst. It is
-intentionally thin: Touying remains the slide authoring system, while this
-package supplies a theme aligned with the `quarto-monash/presentation` Typst
-template, theorem-like environments styled with `frame-it`, and
-Monash-inspired code blocks powered by `zebraw`.
+An unofficial Monash-inspired presentation package for Typst. It wraps Touying's
+slide authoring system behind this package's public import, while supplying a
+theme aligned with the `quarto-monash/presentation` Typst template,
+theorem-like environments styled with `frame-it`, and Monash-inspired code
+blocks powered by `zebraw`.
 
 ## Preview
 
@@ -22,11 +22,9 @@ Create a deck from the template:
 typst init @preview/unofficial-monash-touying:0.1.0 my-slides
 ```
 
-Or import the package directly in an existing Touying deck:
+Or import the package directly in an existing presentation deck:
 
 ````typst
-#import "@preview/touying:0.7.3": *
-#import themes.university: *
 #import "@preview/unofficial-monash-touying:0.1.0": *
 
 #let monash-titlegraphic = image(
@@ -56,7 +54,7 @@ Or import the package directly in an existing Touying deck:
 
 == Slide Title
 
-Use normal Touying content.
+Use normal slide content.
 
 - Bullets receive Quarto Monash square markers.
   - Nested bullets use triangle markers.
@@ -81,6 +79,18 @@ def mse(y, pred):
 - `show-monash-frames`
 - `monash-frame-style`
 - `monash-accent-rule`
+- `slide`
+- `title-slide`
+- `pause`
+- `uncover`
+- `only`
+- `meanwhile`
+- `config-info`
+- `config-page`
+- `config-common`
+- `config-colors`
+- `config-methods`
+- `config-store`
 - `definition`
 - `theorem`
 - `proof`
@@ -90,8 +100,9 @@ def mse(y, pred):
 - `note`
 - `warning`
 
-The package does not provide custom slide wrappers. Use Touying's own headings,
-`#slide`, `#pause`, composers, and other presentation features directly.
+The package wraps the common Touying authoring API so users only need to import
+`@preview/unofficial-monash-touying`. Use headings, `#slide`, `#pause`,
+composers, and other exported presentation features directly.
 `#title-slide()` creates a table of contents after the title slide by default;
 set `toc: false` in `monash-theme.with(...)` if a deck should start directly
 with the first section.
