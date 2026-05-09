@@ -1,4 +1,4 @@
-#import "@preview/unofficial-monash-touying:0.1.0": *
+#import "@preview/unofficial-monash-touying:0.1.2": *
 
 #set text(font: ("Arial", "New Computer Modern"))
 
@@ -35,7 +35,7 @@ set `toc: false` in `monash-theme.with(...)` if a deck should start directly
 with the first section.
 
 ```typst
-#import "@preview/unofficial-monash-touying:0.1.0": *
+#import "@preview/unofficial-monash-touying:0.1.2": *
 
 #show: monash-theme.with(
   config-info(

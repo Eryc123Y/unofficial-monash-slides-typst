@@ -1,4 +1,4 @@
-#import "@preview/unofficial-monash-touying:0.1.0": *
+#import "@preview/unofficial-monash-touying:0.1.2": *
 
 #set text(font: ("Arial", "New Computer Modern"))
 

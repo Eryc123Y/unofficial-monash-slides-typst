@@ -1,5 +1,5 @@
 #import "@preview/tidy:0.4.3"
-#import "@preview/unofficial-monash-touying:0.1.0" as monash
+#import "@preview/unofficial-monash-touying:0.1.2" as monash
 
 #set document(title: "Unofficial Monash Touying Reference")
 #set page(paper: "a4", margin: 2cm)

@@ -19,13 +19,13 @@ The package ships with both a starter template and a full example deck:
 Create a deck from the template:
 
 ```sh
-typst init @preview/unofficial-monash-touying:0.1.0 my-slides
+typst init @preview/unofficial-monash-touying:0.1.2 my-slides
 ```
 
 Or import the package directly in an existing presentation deck:
 
 ````typst
-#import "@preview/unofficial-monash-touying:0.1.0": *
+#import "@preview/unofficial-monash-touying:0.1.2": *
 
 #let monash-titlegraphic = image(
   "assets/monash-presentation/background/bg-02.png",
@@ -164,7 +164,7 @@ manifest must include the package metadata, and template packages must define
 
 For template packages, the template entrypoint must compile out of the box after
 `typst init`; in particular, it should import this package with an absolute
-package import such as `@preview/unofficial-monash-touying:0.1.0` rather than a
+package import such as `@preview/unofficial-monash-touying:0.1.2` rather than a
 relative path like `../lib.typ`.
 
 Before submitting, run `./scripts/check.sh`. The script compiles the starter
