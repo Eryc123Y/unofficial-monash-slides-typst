@@ -95,6 +95,12 @@ shrinks (to at most 75%) and then wraps; the title bar grows to fit. If a
 slide has more content than fits, it continues on a further page with the
 same title bar.
 
+**Many sections.** The outline slide lists up to 6 sections in one column and
+more in two. Section dividers show at most 5 neighbouring sections, with dots
+for the rest. Up to 12 sections, each of these fits on one slide. With more
+sections, or very long section titles, the outline first shrinks to about
+half size and then continues on a second page.
+
 **Backup slides.** After `#show: appendix`, sections are lettered (A, B, ..),
 left out of every outline, and not counted in the slide total, and the
 progress bar is full on the last main slide.
@@ -175,6 +181,14 @@ width), so any image size works. The
 bundled title background is a logo-free graphic derived from the CC0
 [Quarto Monash presentation template](https://github.com/quarto-monash/presentation).
 
+## Tables
+
+The first row of every table is styled as a header (tinted and bold),
+whether or not it is a `table.header`. To opt out for a table, give it its
+own `fill:` and `stroke:` and add
+`#show table.cell.where(y: 0): set text(weight: "regular", fill: black)` in
+the same scope.
+
 ## Citations
 
 Cite with `@key` as usual. A bibliography on its own slide is set compactly,
@@ -252,6 +266,10 @@ error that names the replacement.
 
 Other changes to check in an existing deck:
 
+- A single-argument environment call is now the body: `#theorem[X]` shows X
+  as the statement with no title, while 0.1.x used X as the title. Use
+  `#theorem[Title][Body]`, or `#theorem[Title][]` for a title alone; `proof`
+  works the same way.
 - The default font is Typst's own font, not Arial. Add `font: "Arial"` to
   keep the old look.
 - `note` and `warning` are no longer numbered.

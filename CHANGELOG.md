@@ -17,6 +17,10 @@ A general-purpose release with a stable, Typst-style API. Requires Typst
 - The default font is Typst's built-in font (`font: auto`) instead of Arial,
   so decks compile without warnings on every platform. Use `font: "Arial"`
   for the previous look.
+- A single-argument environment call is now the body: `#theorem[X]` renders
+  X as the statement without a title, whereas 0.1.x treated X as the title.
+  Write `#theorem[Title][Body]` for both, or `#theorem[Title][]` for a title
+  alone. `proof` follows the same rule.
 - `note` and `warning` are no longer numbered.
 - The package exports a fixed list of names instead of all of Touying.
 - Unknown `monash-theme` options are an error.
@@ -49,7 +53,12 @@ A general-purpose release with a stable, Typst-style API. Requires Typst
 - Appendix sections are lettered, left out of outlines, and not counted in
   the slide total.
 - A frame on a slide with `#pause` is counted once.
-- Long inline code breaks across lines instead of wrapping inside its box.
+- Long inline code breaks across lines instead of wrapping inside its box;
+  inline code in a slide heading or on a focus slide has no code box.
+- A level-three heading at the bottom of a page moves to the next page with
+  its content.
+- With many sections (up to 12) the outline slide and every section divider
+  fit on one page.
 - Nested list levels have distinct markers and sizes; the slide number is
   larger and darker.
 
