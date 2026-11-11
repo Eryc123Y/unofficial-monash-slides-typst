@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="81" height="60" viewBox="0 0 135 100">
+  <!-- Placeholder stacked logo (1.35:1) for tests. Not any institution's logo. -->
+  <path d="M47 4 H88 V30 C88 44 78 52 67.5 58 C57 52 47 44 47 30 Z" fill="#1a1a2e"/>
+  <rect x="6" y="70" width="34" height="26" rx="5" fill="#1a1a2e"/>
+  <rect x="48" y="70" width="24" height="26" rx="5" fill="#1a1a2e"/>
+  <rect x="80" y="70" width="49" height="26" rx="5" fill="#1a1a2e"/>
+</svg>

@@ -7,6 +7,7 @@
 !thumbnail.png
 !template/assets/monash-presentation/
 !template/assets/monash-presentation/**/*.png
+!tests/assets/*.svg
 
 # Local runtime/tooling state
 .omx/

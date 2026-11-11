@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 100 100">
+  <!-- Placeholder crest (1:1) for tests. Not any institution's logo. -->
+  <path d="M10 8 H90 V50 C90 75 70 88 50 96 C30 88 10 75 10 50 Z" fill="#1a1a2e"/>
+  <path d="M28 30 H72 V44 H28 Z M28 56 H72 V70 H28 Z" fill="#ffffff"/>
+</svg>
