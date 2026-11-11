@@ -1,4 +1,4 @@
-#import "@preview/unofficial-monash-touying:0.1.2": *
+#import "@preview/unofficial-monash-touying:0.1.3": *
 
 #set text(font: ("Arial", "New Computer Modern"))
 
@@ -35,7 +35,7 @@ set `toc: false` in `monash-theme.with(...)` if a deck should start directly
 with the first section.
 
 ```typst
-#import "@preview/unofficial-monash-touying:0.1.2": *
+#import "@preview/unofficial-monash-touying:0.1.3": *
 
 #show: monash-theme.with(
   config-info(
@@ -98,6 +98,15 @@ progressive outline that highlights the current section.
 #pause
 
 Paused content continues on the same slide.
+
+== Numbered Lists
+
+Numbered lists use orange number boxes.
+
++ State the question.
++ Show the evidence.
+  + Nested items restart their own numbering.
++ Close with one takeaway.
 
 == Manual Slides
 

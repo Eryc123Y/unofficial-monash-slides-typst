@@ -23,13 +23,13 @@ The package ships with both a starter template and a full example deck:
 Create a deck from the template:
 
 ```sh
-typst init @preview/unofficial-monash-touying:0.1.2 my-slides
+typst init @preview/unofficial-monash-touying:0.1.3 my-slides
 ```
 
 Or import the package directly in an existing presentation deck:
 
 ````typst
-#import "@preview/unofficial-monash-touying:0.1.2": *
+#import "@preview/unofficial-monash-touying:0.1.3": *
 
 #let monash-titlegraphic = image(
   "assets/monash-presentation/background/bg-02.png",
@@ -137,7 +137,7 @@ footer progress, and a small grey slide number. The template vendors a
 logo-free background PNG derived from that design under
 `template/assets/monash-presentation/`.
 
-Code blocks use the locked Typst Universe package `@preview/zebraw:0.6.1` with
+Code blocks use the locked Typst Universe package `@preview/zebraw:0.6.3` with
 a Monash light code block style, and continue to work through ordinary fenced
 raw blocks.
 
@@ -168,7 +168,7 @@ manifest must include the package metadata, and template packages must define
 
 For template packages, the template entrypoint must compile out of the box after
 `typst init`; in particular, it should import this package with an absolute
-package import such as `@preview/unofficial-monash-touying:0.1.2` rather than a
+package import such as `@preview/unofficial-monash-touying:0.1.3` rather than a
 relative path like `../lib.typ`.
 
 Before submitting, run `./scripts/check.sh`. The script compiles the starter

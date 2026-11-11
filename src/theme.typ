@@ -414,7 +414,7 @@
           numbering: (..nums) => box(
             fill: monash-orange,
             inset: (x: 4pt, y: 2pt),
-            text(fill: white, size: .72em, weight: "bold", nums.pos().last()),
+            text(fill: white, size: .72em, weight: "bold")[#nums.pos().last()],
           ),
           indent: 1.2em,
           body-indent: .8em,
