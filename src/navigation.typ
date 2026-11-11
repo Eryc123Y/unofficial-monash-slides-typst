@@ -35,6 +35,14 @@
   if in-appendix(location) { return }
   let fill = if current { monash-blue } else { monash-muted.transparentize(alpha) }
   let title = utils.short-heading(self: self, it.element)
+  // Deeper levels are indented under their section, without a number box.
+  if it.level > 1 {
+    return link(location, pad(left: 2.9em * (it.level - 1), text(
+      size: .8em,
+      fill: fill,
+      title,
+    )))
+  }
   link(location, grid(
     columns: (2.2em, 1fr),
     column-gutter: .7em,

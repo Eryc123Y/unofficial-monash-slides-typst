@@ -39,7 +39,7 @@ The number continues from the slide before the focus slide.
 
 The outline slide below can be placed anywhere.
 
-#outline-slide(title: [Where we are])
+#outline-slide(title: [Where we are], depth: 2)
 
 == After a mid-deck outline
 

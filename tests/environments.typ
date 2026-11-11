@@ -56,6 +56,9 @@
 
 See @thm-first, @def-term, and @lem-helper.
 
+A custom supplement: @thm-first[Claim]. A page reference:
+#ref(<thm-first>, form: "page").
+
 == A frame on a slide with pauses
 
 #theorem[Counted once][Shown before the pause.]

@@ -1,8 +1,9 @@
 // Scenario 7: each theme option visibly changes the output. scripts/check.sh
 // compiles this deck once per variant:
 //   typst compile tests/options.typ --input variant=logo
-// Variants: default, no-progress-bar, logo, footer-auto, numbering-total,
-// numbering-none, accent-teal, no-section-slides, no-outline, plain-cover.
+// Variants: default, no-progress-bar, logo, wide-logo, footer-auto,
+// authors-array, numbering-total, numbering-none, accent-teal,
+// no-section-slides, no-outline, plain-cover.
 // Add `--input aspect=4-3` for the narrow format.
 #import "@preview/unofficial-monash-touying:1.0.0": *
 
@@ -24,7 +25,10 @@
   default: (:),
   no-progress-bar: (progress-bar: false),
   logo: (logo: test-logo),
+  // Much wider than tall: bounded by width as well as height.
+  wide-logo: (logo: rect(width: 40cm, height: 1cm, fill: white, stroke: 2pt + monash-blue)),
   footer-auto: (footer: auto),
+  authors-array: (footer: auto),
   numbering-total: (slide-numbering: "1 / 1"),
   numbering-none: (slide-numbering: none),
   accent-teal: (accent-color: teal),
@@ -40,7 +44,7 @@
     title: [Options Test Deck],
     short-title: [Options],
     subtitle: [Variant: #raw(variant)],
-    author: [Test Author],
+    author: if variant == "authors-array" { ("First Author", "Second Author") } else { [Test Author] },
     institution: [Monash University],
     date: datetime(year: 2026, month: 3, day: 14),
   ),

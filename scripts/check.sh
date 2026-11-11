@@ -2,8 +2,9 @@
 # Compiles every deck in the repository through a temporary local package
 # path and fails on any error or warning.
 #
-# Usage: scripts/check.sh [--ignore-system-fonts] [--thumbnail]
+# Usage: scripts/check.sh [--ignore-system-fonts] [--require-fonts] [--thumbnail]
 #   --ignore-system-fonts  compile with only the fonts embedded in Typst
+#   --require-fonts        fail instead of skipping decks whose font is missing
 #   --thumbnail            also regenerate thumbnail.png and docs/preview/*.png
 set -euo pipefail
 
@@ -11,9 +12,11 @@ cd "$(dirname "$0")/.."
 
 font_flags=()
 thumbnail=false
+require_fonts=false
 for arg in "$@"; do
   case "$arg" in
     --ignore-system-fonts) font_flags+=(--ignore-system-fonts) ;;
+    --require-fonts) require_fonts=true ;;
     --thumbnail) thumbnail=true ;;
     *) echo "unknown argument: $arg" >&2; exit 2 ;;
   esac
@@ -28,6 +31,7 @@ export TYPST_PACKAGE_PATH="$package_path"
 
 mkdir -p build
 failures=0
+skipped=0
 
 # typst_compile <input> <output> [extra typst args...]
 typst_compile() {
@@ -76,8 +80,9 @@ variant_runs=(
   "tests/visual.typ|aspect=4-3"
   "examples/lecture.typ|handout=true"
 )
-for variant in no-progress-bar logo footer-auto numbering-total numbering-none \
-  accent-teal no-section-slides no-outline plain-cover; do
+for variant in no-progress-bar logo wide-logo footer-auto authors-array \
+  numbering-total numbering-none accent-teal no-section-slides no-outline \
+  plain-cover; do
   variant_runs+=("tests/options.typ|variant=$variant")
 done
 variant_runs+=("tests/options.typ|variant=plain-cover,aspect=4-3")
@@ -101,7 +106,13 @@ font_available() {
 font_runs=()
 for deck in tests/fonts/*.typ; do
   [[ -e "$deck" ]] || continue
-  font_runs+=("$deck||$(sed -n 's/^\/\/ requires-font: //p' "$deck" | head -1)")
+  required="$(sed -n 's/^\/\/ requires-font: //p' "$deck" | head -1)"
+  if [[ -z "$required" ]]; then
+    echo "FAIL  $deck has no '// requires-font:' line"
+    failures=$((failures + 1))
+    continue
+  fi
+  font_runs+=("$deck||$required")
 done
 font_runs+=("tests/fonts/cjk.typ|cjk=off|Noto Sans CJK SC")
 font_runs+=("tests/fonts/cjk.typ|latin=Arial|Arial")
@@ -110,7 +121,13 @@ font_runs+=("examples/showcase.typ|font=Arial|Arial")
 for run in "${font_runs[@]}"; do
   IFS='|' read -r deck inputs font <<<"$run"
   if ! font_available "$font"; then
-    echo "skip  $deck [$inputs] (font \"$font\" not installed)"
+    if [[ "$require_fonts" == true ]]; then
+      echo "FAIL  $deck [$inputs] (font \"$font\" not installed)"
+      failures=$((failures + 1))
+    else
+      echo "skip  $deck [$inputs] (font \"$font\" not installed)"
+      skipped=$((skipped + 1))
+    fi
     continue
   fi
   input_args=()
@@ -126,7 +143,7 @@ done
 count_pages() {
   local dir
   dir="$(mktemp -d)"
-  typst compile --root . ${font_flags[@]+"${font_flags[@]}"} --ppi 10 "$@" "$dir/p-{p}.png" >/dev/null 2>&1
+  typst compile --root . ${font_flags[@]+"${font_flags[@]}"} --ppi 10 "$@" "$dir/p-{p}.png" >&2 || true
   ls "$dir" | wc -l | tr -d ' '
   rm -rf "$dir"
 }
@@ -151,6 +168,9 @@ legacy_cases=(
   "motto|\`motto\` was removed"
   "progress-position|\`progress-position\` was removed"
   "title-graphic-path|Pass \`title-graphic: image("
+  "font-size-relative|\`font-size\` must be a positive absolute length"
+  "numbering-no-symbol|\`slide-numbering\` must be \`none\` or a numbering pattern"
+  "unknown-option|unknown option \`colour\`"
 )
 for case in "${legacy_cases[@]}"; do
   name="${case%%|*}"
@@ -167,19 +187,29 @@ for case in "${legacy_cases[@]}"; do
   fi
 done
 
+if [[ "$failures" -gt 0 ]]; then
+  echo "$failures check(s) failed"
+  [[ "$thumbnail" == true ]] && echo "Previews not regenerated because checks failed"
+  exit 1
+fi
+
 if [[ "$thumbnail" == true ]]; then
   preview_dir="$(mktemp -d)"
+  trap 'rm -rf "$package_path" "$preview_dir"' EXIT
   typst compile --root . --ignore-system-fonts --ppi 100 docs/preview.typ "$preview_dir/p-{p}.png"
+  if [[ "$(ls "$preview_dir" | wc -l | tr -d ' ')" != 4 ]]; then
+    echo "FAIL  docs/preview.typ must have exactly 4 pages; previews not regenerated"
+    exit 1
+  fi
   cp "$preview_dir/p-1.png" thumbnail.png
   cp "$preview_dir/p-1.png" docs/preview/title-slide.png
   cp "$preview_dir/p-3.png" docs/preview/content-slide.png
   cp "$preview_dir/p-4.png" docs/preview/academic-frames.png
-  rm -rf "$preview_dir"
   echo "Regenerated thumbnail.png and docs/preview/*.png"
 fi
 
-if [[ "$failures" -gt 0 ]]; then
-  echo "$failures check(s) failed"
-  exit 1
+if [[ "$skipped" -gt 0 ]]; then
+  echo "All checks passed ($skipped font-dependent run(s) skipped; use --require-fonts to fail instead)"
+else
+  echo "All checks passed"
 fi
-echo "All checks passed"

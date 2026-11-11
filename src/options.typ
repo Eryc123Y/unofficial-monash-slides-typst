@@ -61,13 +61,22 @@
   panic(_prefix + message)
 }
 
+// A family name, a font definition dictionary such as
+// `(name: "X", covers: "latin-in-cjk")`, or a non-empty array of these.
+#let _is-font-entry(value) = type(value) == str or (
+  type(value) == dictionary and "name" in value
+)
 #let _is-font(value) = (
-  type(value) == str
-    or (
-      type(value) == array
-        and value.len() > 0
-        and value.all(it => type(it) == str)
-    )
+  _is-font-entry(value)
+    or (type(value) == array and value.len() > 0 and value.all(_is-font-entry))
+)
+
+/// Counting symbols of Typst numbering patterns.
+#let counting-symbols = regex("[1aAiIαΑ一壹あいアイא가ㄱ*١۱१১ক①⓵༡]")
+
+// An absolute, positive length such as `22pt`.
+#let _is-size(value) = (
+  type(value) == length and value.em == 0 and value.abs > 0pt
 )
 
 /// Checks the types and values of the documented options.
@@ -98,10 +107,13 @@
     _is-font(code-font),
     "`code-font` must be a font family name or an array of names.",
   )
-  _expect(type(font-size) == length, "`font-size` must be a length such as `22pt`.")
   _expect(
-    type(title-font-size) == length,
-    "`title-font-size` must be a length such as `36pt`.",
+    _is-size(font-size),
+    "`font-size` must be a positive absolute length such as `22pt`.",
+  )
+  _expect(
+    _is-size(title-font-size),
+    "`title-font-size` must be a positive absolute length such as `36pt`.",
   )
   _expect(type(title-color) == color, "`title-color` must be a color.")
   _expect(
@@ -123,7 +135,12 @@
   _expect(type(section-slides) == bool, "`section-slides` must be `true` or `false`.")
   _expect(type(progress-bar) == bool, "`progress-bar` must be `true` or `false`.")
   _expect(
-    slide-numbering == none or type(slide-numbering) in (str, function),
+    slide-numbering == none
+      or type(slide-numbering) == function
+      or (
+        type(slide-numbering) == str
+          and slide-numbering.matches(counting-symbols).len() > 0
+      ),
     "`slide-numbering` must be `none` or a numbering pattern such as \"1\" or \"1 / 1\".",
   )
 }

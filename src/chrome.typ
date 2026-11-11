@@ -3,16 +3,25 @@
 
 #import "@preview/touying:0.8.0": components, touying-notes, utils
 #import "design.typ": *
+#import "options.typ": counting-symbols
 
-/// Scales `logo` down so it is at most `max-height` tall. Needs no context.
-#let bounded-logo(logo, max-height) = context {
+/// Scales `logo` down so it is at most `max-height` tall and at most
+/// `max-width` (a ratio of the page width) wide. Needs no context.
+#let bounded-logo(logo, max-height, max-width: 25%) = context {
   let size = measure(logo)
-  if size.height <= max-height {
-    logo
-  } else {
-    scale(max-height / size.height * 100%, reflow: true, logo)
-  }
+  if size.height == 0pt or size.width == 0pt { return logo }
+  let ratio = calc.min(
+    1,
+    max-height / size.height,
+    max-width * page.width / size.width,
+  )
+  if ratio >= 1 { logo } else { scale(ratio * 100%, reflow: true, logo) }
 }
+
+/// The author field as content: Touying also accepts an array of authors.
+#let author-text(author) = if type(author) == array {
+  author.join(", ")
+} else { author }
 
 #let _bar-min-height(self) = self.store.font-size * bar-height-factor
 #let _bar-inset-y(self) = self.store.font-size * .4
@@ -81,9 +90,8 @@
   if extra > 0pt { v(extra) }
 }
 
-// Counting symbols of Typst numbering patterns. A pattern with one of them
-// shows the current slide only; with two it receives (current, total).
-#let _counting-symbols = regex("[1aAiIαΑ一壹あいアイא가ㄱ*١۱१১ক①⓵]")
+// A pattern with one counting symbol shows the current slide only; with two
+// it receives (current, total).
 
 /// The formatted slide number. In the appendix only the current number is
 /// shown, because the total counts main slides only. Needs no context.
@@ -94,7 +102,7 @@
   let appendix = self.at("appendix", default: false)
   if type(pattern) == function {
     pattern(current, total)
-  } else if appendix or pattern.matches(_counting-symbols).len() < 2 {
+  } else if appendix or pattern.matches(counting-symbols).len() < 2 {
     numbering(pattern, current)
   } else {
     numbering(pattern, current, total)
@@ -109,7 +117,7 @@
   if footer == auto {
     let info = self.info
     let title = if info.short-title != auto { info.short-title } else { info.title }
-    let parts = (title, info.author).filter(it => it not in (none, []))
+    let parts = (title, author-text(info.author)).filter(it => it not in (none, [], ()))
     parts.join[#h(.6em)#sym.dot.c#h(.6em)]
   } else {
     footer

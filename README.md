@@ -170,7 +170,8 @@ the right to use a logo, pass it yourself:
 #show: monash-theme.with(logo: image("assets/logo.svg"), ..)
 ```
 
-The logo is scaled to fit the title bar, so any image size works. The
+The logo is scaled to fit the title bar (at most a quarter of the slide
+width), so any image size works. The
 bundled title background is a logo-free graphic derived from the CC0
 [Quarto Monash presentation template](https://github.com/quarto-monash/presentation).
 
@@ -264,11 +265,13 @@ Other changes to check in an existing deck:
 ```sh
 scripts/check.sh                        # compile every deck; fail on any warning
 scripts/check.sh --ignore-system-fonts  # as CI does
+scripts/check.sh --require-fonts        # fail rather than skip font-dependent decks
 scripts/check.sh --thumbnail            # also regenerate the preview images
 ```
 
 `tests/` holds the stress decks for each requirement; decks that need Arial
-or a CJK font run only where that font is installed. See
+or a CJK font run only where that font is installed, and the summary says how
+many were skipped. See
 [CHANGELOG.md](CHANGELOG.md) for changes between versions.
 
 ## Credits

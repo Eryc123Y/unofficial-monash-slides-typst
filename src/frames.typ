@@ -126,15 +126,17 @@
   let env = _environments.find(env => env.kind == el.kind)
   if env == none { return it }
   let numbered = numbering and env.numbered
-  if not numbered {
-    link(el.location(), el.supplement)
-  } else if shared-counter and env.shared {
+  let shared = numbered and shared-counter and env.shared
+  if it.form != "normal" or (numbered and not shared) { return it }
+  let supplement = if it.supplement == auto { el.supplement } else if (
+    type(it.supplement) == function
+  ) { (it.supplement)(el) } else { it.supplement }
+  let number = if shared {
     // The counter is stepped inside the frame, just after its location.
-    let value = _shared-counter.at(el.location()).first() + 1
-    link(el.location(), [#el.supplement #value])
-  } else {
-    it
+    str(_shared-counter.at(el.location()).first() + 1)
   }
+  let parts = (supplement, number).filter(part => part not in (none, []))
+  link(el.location(), parts.join([~]))
 }
 
 /// Activates the Monash environments. Place it after `monash-theme`.
