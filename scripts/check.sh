@@ -91,6 +91,9 @@ variant_runs+=("tests/options.typ|variant=plain-cover,aspect=4-3")
 variant_runs+=("tests/options.typ|variant=logo,aspect=4-3")
 variant_runs+=("tests/options.typ|variant=logo-crest,aspect=4-3")
 variant_runs+=("tests/options.typ|variant=logo-stacked,aspect=4-3")
+variant_runs+=("tests/cover-meta.typ|aspect=4-3")
+variant_runs+=("tests/cover-meta.typ|logo=on")
+variant_runs+=("tests/cover-meta.typ|logo=on,aspect=4-3")
 variant_runs+=("tests/stress.typ|logo=on")
 variant_runs+=("tests/stress.typ|logo=on,aspect=4-3")
 variant_runs+=("tests/options.typ|variant=logo-both,aspect=4-3")
@@ -125,6 +128,8 @@ font_runs+=("tests/fonts/cjk.typ|cjk=off|Noto Sans CJK SC")
 font_runs+=("tests/fonts/cjk.typ|latin=Arial|Arial")
 font_runs+=("tests/fonts/arial.typ|aspect=4-3|Arial")
 font_runs+=("examples/showcase.typ|font=Arial|Arial")
+font_runs+=("tests/cover-meta.typ|font=Arial|Arial")
+font_runs+=("tests/cover-meta.typ|font=Arial,aspect=4-3,logo=on|Arial")
 for run in "${font_runs[@]}"; do
   IFS='|' read -r deck inputs font <<<"$run"
   if ! font_available "$font"; then

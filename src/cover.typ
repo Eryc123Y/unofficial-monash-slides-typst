@@ -29,17 +29,22 @@
   paint: self.store.accent-color,
 )
 
+// Institution and date: "institution | date" on one line when it fits,
+// otherwise the date on its own line without the separator, so a line
+// never ends with a dangling "|".
 #let _meta-line(self, info) = {
   let parts = ()
   if info.institution != none { parts.push(info.institution) }
   if info.date != none { parts.push(utils.display-info-date(self)) }
-  if parts.len() > 0 {
-    text(
-      size: self.store.font-size * .8,
-      fill: monash-dark-grey,
-      parts.join(text(fill: monash-grey)[#h(.4em)|#h(.4em)]),
-    )
-  }
+  if parts.len() == 0 { return }
+  let style = text.with(size: self.store.font-size * .8, fill: monash-dark-grey)
+  let joined = style(parts.join(text(fill: monash-grey)[#h(.4em)|#h(.4em)]))
+  if parts.len() == 1 { return joined }
+  layout(region => {
+    if measure(joined).width <= region.width { joined } else {
+      style(parts.join(linebreak()))
+    }
+  })
 }
 
 // The text column: logo, title, subtitle, rule, author, institution and
