@@ -90,6 +90,7 @@
     align: top,
     aspect-ratio: aspect-ratio,
     font-size: font-size,
+    code-font: code-font,
     title-font-size: title-font-size,
     title-color: title-color,
     title-graphic: title-graphic,

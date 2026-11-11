@@ -5,10 +5,15 @@
 #import "@preview/zebraw:0.6.3": zebraw
 #import "design.typ": *
 
-#let _heading-three(it) = {
-  v(1em, weak: true)
-  text(weight: "bold", fill: monash-blue, it.body)
-  v(.7em, weak: true)
+// Headings inside a slide are styled with set rules only, so they keep
+// Typst's heading behaviour: a heading at the bottom of a page moves to the
+// next page with the content after it.
+#let _heading-rules(body) = {
+  show heading.where(level: 3): set text(size: 1em, weight: "bold", fill: monash-blue)
+  show heading.where(level: 3): set block(above: 1em, below: .7em)
+  show heading.where(level: 4): set text(size: 1em, weight: "bold", fill: monash-blue)
+  show heading.where(level: 4): set block(above: .9em, below: .6em)
+  body
 }
 
 // Each nested list or enumeration is set a little smaller than its parent,
@@ -138,8 +143,7 @@
 #let slide-rules(accent, self: none, body) = {
   set par(justify: false, leading: .65em)
   set figure(placement: none)
-  show heading.where(level: 3): _heading-three
-  show heading.where(level: 4): set text(fill: monash-blue, weight: "bold")
+  show: _heading-rules
   show strong: it => text(fill: accent, weight: "bold", it.body)
   show: _list-rules.with(accent)
   show: _code-rules

@@ -3,7 +3,7 @@
 #import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
 #import "labels.typ": labels
-#import "chrome.typ": title-bar-spacer
+#import "chrome.typ": plain-inline-code, title-bar-spacer
 #import "appendix.typ": appendix-marker
 
 /// Content slide with the Monash title bar and footer.
@@ -81,6 +81,7 @@
     appendix-marker(self)
     set text(fill: white, size: 1.6em, weight: "bold")
     set par(leading: .5em)
+    show: plain-inline-code.with(self)
     show: std.align.with(center + horizon)
     body
   }

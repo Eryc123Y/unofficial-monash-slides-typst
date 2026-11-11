@@ -57,6 +57,22 @@ User arguments win over the theme's set rules.
   [1], [2], [3],
 )
 
+== Opting out of the header row
+
+The README's opt-out: the first row is styled as a header unless the table
+sets its own fill and stroke and a show rule resets the first row's text.
+
+#[
+  #show table.cell.where(y: 0): set text(weight: "regular", fill: black)
+  #table(
+    columns: 3,
+    fill: none,
+    stroke: .5pt + black,
+    [A], [B], [C],
+    [1], [2], [3],
+  )
+]
+
 = Text
 
 == Lists by level
@@ -98,3 +114,11 @@ def mse(y, pred):
     size. Block code keeps Typst's 0.8em.
   ]
 }
+
+// Inline code in a slide heading and on a focus slide is drawn in the code
+// font and the surrounding text colour, without the light code box.
+== Calling `normalize(x)` in a heading
+
+Inline code in the body keeps its box: `normalize(x)`.
+
+#focus-slide[Prefer `pathlib` over `os.path`.]

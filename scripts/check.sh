@@ -79,6 +79,7 @@ variant_runs=(
   "tests/visual.typ|notes=on"
   "tests/visual.typ|aspect=4-3"
   "examples/lecture.typ|handout=true"
+  "tests/many-sections.typ|aspect=4-3"
 )
 for variant in no-progress-bar logo wide-logo footer-auto authors-array \
   numbering-total numbering-none accent-teal no-section-slides no-outline \
@@ -155,6 +156,21 @@ else
   echo "FAIL  handout: expected 7 and 4 pages, got $presentation_pages and $handout_pages"
   failures=$((failures + 1))
 fi
+
+# With up to 12 sections the outline slide and every section divider fit on
+# one page each: title + outline + n x (divider + slide) = 2 + 2n pages.
+for aspect in 16-9 4-3; do
+  for sections in 7 11 12; do
+    pages="$(count_pages --input "aspect=$aspect" --input "sections=$sections" tests/many-sections.typ)"
+    expected=$((2 + 2 * sections))
+    if [[ "$pages" == "$expected" ]]; then
+      echo "ok    $sections sections in $aspect fit on $pages pages"
+    else
+      echo "FAIL  $sections sections in $aspect: expected $expected pages, got $pages"
+      failures=$((failures + 1))
+    fi
+  done
+done
 
 # Every 0.1.x option name must fail with a message naming the replacement.
 legacy_cases=(

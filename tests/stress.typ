@@ -95,6 +95,17 @@ A claim that needs a source.#footnote[The source of the claim, given in a footno
     - Third level
       - Fourth level cycles
 
+// A level-three heading on the last line of a page must move to the next
+// page together with its paragraph.
+== Heading at the page end
+
+#block(width: 100%, height: 100% - 2.4em, fill: monash-grey-light, inset: .5em)[
+  Filler that leaves room for one more line.
+]
+
+=== A level-three heading
+The paragraph that belongs to the heading.
+
 = Appendix test
 
 == Last main slide

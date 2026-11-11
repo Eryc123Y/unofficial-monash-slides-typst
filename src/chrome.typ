@@ -18,6 +18,18 @@
   if ratio >= 1 { logo } else { scale(ratio * 100%, reflow: true, logo) }
 }
 
+/// Show rule for coloured backgrounds (title bar, focus slide): inline code
+/// keeps the code font but drops the light code box and takes the
+/// surrounding text colour.
+#let plain-inline-code(self, body) = {
+  show raw.where(block: false): it => text(
+    font: self.store.code-font,
+    size: .85em,
+    it.text,
+  )
+  body
+}
+
 /// The author field as content: Touying also accepts an array of authors.
 #let author-text(author) = if type(author) == array {
   author.join(", ")
@@ -53,6 +65,7 @@
     align: (left + horizon, right + horizon),
     {
       set par(leading: .35em)
+      show: plain-inline-code.with(self)
       text(size: full-size * ratio, weight: "bold", fill: white, body)
     },
     logo-box,
