@@ -62,5 +62,9 @@
   show strong: it => text(fill: accent, weight: "bold", it.body)
   show: _list-rules.with(accent)
   show: _code-rules
+  // The slide heading already titles a reference slide.
+  set bibliography(title: none)
+  show bibliography: set text(size: .62em)
+  show bibliography: set par(spacing: .55em)
   body
 }

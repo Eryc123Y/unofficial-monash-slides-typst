@@ -1,6 +1,8 @@
-// Content slide.
+// Content slide and the special slides without a title bar.
 
-#import "@preview/touying:0.8.0": touying-slide, touying-slide-wrapper
+#import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
+#import "design.typ": *
+#import "labels.typ": labels
 #import "chrome.typ": title-bar-spacer
 #import "appendix.typ": appendix-marker
 
@@ -40,4 +42,91 @@
     composer: composer,
     ..bodies,
   )
+})
+
+/// A heading that is laid out invisibly, so that a special slide's title is
+/// found by `utils.display-current-heading` (Touying's theme guide, step 3).
+#let hidden-heading(self, title) = place(hide(heading(
+  level: self.slide-level,
+  title,
+  bookmarked: false,
+  outlined: false,
+  numbering: none,
+)))
+
+/// One statement shown large on a full-bleed Monash blue slide, without
+/// title bar or footer. It does not advance the slide counter.
+///
+/// ```typst
+/// #focus-slide[Questions?]
+/// ```
+#let focus-slide(
+  /// Touying configuration for this slide.
+  config: (:),
+  /// The statement.
+  body,
+) = touying-slide-wrapper(self => {
+  self = utils.merge-dicts(
+    self,
+    config-common(freeze-slide-counter: true),
+    config-page(
+      fill: monash-blue,
+      header: none,
+      footer: none,
+      margin: (x: page-margin-x * 3, y: page-margin-x * 2),
+    ),
+    config,
+  )
+  let setting(body) = {
+    appendix-marker(self)
+    set text(fill: white, size: 1.6em, weight: "bold")
+    set par(leading: .5em)
+    show: std.align.with(center + horizon)
+    body
+  }
+  touying-slide(self: self, setting: setting, body)
+})
+
+/// Closing slide with a large title and free content below it, such as
+/// contact details and links. No title bar; it does not advance the slide
+/// counter.
+///
+/// ```typst
+/// #ending-slide[
+///   Your Name \ your.name\@monash.edu
+/// ]
+/// ```
+#let ending-slide(
+  /// The large title.
+  title: labels.thank-you,
+  /// Touying configuration for this slide.
+  config: (:),
+  /// Closing content.
+  body,
+) = touying-slide-wrapper(self => {
+  let size = self.store.font-size
+  self = utils.merge-dicts(
+    self,
+    config-common(freeze-slide-counter: true),
+    config-page(
+      header: none,
+      footer: none,
+      margin: (x: page-margin-x * 2, top: size * 1.6, bottom: size * 2.6),
+      background: place(bottom + left, block(width: 100%, {
+        block(width: 100%, height: 3pt, fill: self.store.accent-color, below: 0pt)
+        block(width: 100%, height: size * 1.1, fill: monash-blue)
+      })),
+    ),
+    config,
+  )
+  let setting(body) = {
+    appendix-marker(self)
+    hidden-heading(self, title)
+    show: std.align.with(horizon)
+    block(below: size * .6, text(size: size * 2.2, fill: monash-blue, weight: "bold", title))
+    block(below: size * 1.1, monash-accent-rule(width: 3.2em, height: 3pt, paint: self.store.accent-color))
+    set text(fill: monash-charcoal)
+    body
+  }
+  touying-slide(self: self, setting: setting, body)
 })

@@ -67,6 +67,11 @@ done
 variant_runs=(
   "tests/stress.typ|aspect=4-3"
   "tests/options.typ|aspect=4-3"
+  "tests/environments.typ|counter=shared"
+  "tests/environments.typ|counter=off"
+  "tests/slide-kinds.typ|sections=off"
+  "tests/slide-kinds.typ|aspect=4-3"
+  "tests/citations.typ|footnotes=off"
 )
 for variant in no-progress-bar logo footer-auto numbering-total numbering-none \
   accent-teal no-section-slides no-outline plain-cover; do

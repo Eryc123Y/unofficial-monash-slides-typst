@@ -2,6 +2,7 @@
 
 #import "@preview/touying:0.8.0": components, config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
+#import "slides.typ": hidden-heading
 #import "appendix.typ": appendix-marker, in-appendix, section-label
 
 // Page setup shared by the navigation slides: no title bar, no footer.
@@ -85,6 +86,7 @@
   let title = if title == auto { utils.i18n-outline-title } else { title }
   touying-slide(self: self, {
     appendix-marker(self)
+    hidden-heading(self, title)
     _outline-body(self, title, depth)
   })
 }

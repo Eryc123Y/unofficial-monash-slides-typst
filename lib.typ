@@ -32,13 +32,15 @@
 
 // Theme and slide kinds.
 #import "src/theme.typ": monash-theme
-#import "src/slides.typ": slide
+#import "src/slides.typ": ending-slide, focus-slide, slide
 #import "src/cover.typ": title-slide
+#import "src/navigation.typ": new-section-slide, outline-slide
 
 // Environments.
 #import "src/frames.typ": (
-  corollary, definition, lemma, monash-frame-style, note, proof, remark,
-  show-monash-frames, theorem, warning,
+  assumption, corollary, definition, example, exercise, lemma,
+  monash-frame-style, note, proof, proposition, remark, show-monash-frames,
+  theorem, warning,
 )
 
 // Colour tokens and the accent rule.

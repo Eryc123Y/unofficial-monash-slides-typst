@@ -1,12 +1,13 @@
 // The `monash-theme` show rule: validates options and configures Touying.
 
-#import "@preview/touying:0.8.0": config-colors, config-common, config-info, config-methods, config-page, config-store, touying-slides, utils
+#import "@preview/touying:0.8.0": config-colors, default-config, config-common, config-info, config-methods, config-page, config-store, touying-slides, utils
 #import "design.typ": *
 #import "options.typ": check-footer, check-options, check-unknown-options
 #import "chrome.typ": content-margin-bottom, content-margin-top, footer as page-footer, title-bar
 #import "styles.typ": slide-rules
 #import "slides.typ": slide
 #import "navigation.typ": new-section-slide
+#import "frames.typ": frame-counters
 
 #let _font-rules(font, code-font, font-size, body) = {
   set text(size: font-size, fill: black)
@@ -118,6 +119,7 @@
       new-section-slide-fn: if section-slides { new-section-slide } else { none },
       slide-level: 2,
       show-strong-with-alert: false,
+      default-frozen-counters: default-config.default-frozen-counters + frame-counters,
     ),
     config-methods(
       init: slide-rules.with(accent-color),
