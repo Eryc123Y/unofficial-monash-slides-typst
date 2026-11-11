@@ -31,6 +31,9 @@ A general-purpose release with a stable, Typst-style API. Requires Typst
 
 - Options `font`, `code-font`, `accent-color`, `section-slides`,
   `slide-numbering`, and `footer`.
+- `logo` takes an image for the title and ending slides, or
+  `(cover: .., bar: ..)` with a white version for the blue title bar. Logos
+  are scaled to fit each place.
 - Slide kinds `outline-slide`, `focus-slide`, and `ending-slide`;
   `new-section-slide` is exported.
 - Environments `proposition`, `assumption`, `example`, and `exercise`;
@@ -49,7 +52,8 @@ A general-purpose release with a stable, Typst-style API. Requires Typst
 - A long slide heading shrinks and wraps instead of being clipped.
 - Paragraphs, lists, and equations inside frames no longer overlap.
 - Footnotes sit above the footer.
-- `progress-bar: false` and `logo` take effect.
+- `progress-bar: false` and `logo` take effect (in 0.1.x `logo` was stored
+  but never shown).
 - Appendix sections are lettered, left out of outlines, and not counted in
   the slide total.
 - A frame on a slide with `#pause` is counted once.

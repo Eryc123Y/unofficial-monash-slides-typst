@@ -103,7 +103,7 @@ parameters, plus Touying `config-*` values as positional arguments:
 | `title-color` | `black` | color | `titlecolor` |
 | `title-graphic` | `auto` | `auto` (bundled background), `none`, or content | `titlegraphic` |
 | `accent-color` | `monash-orange` | color | — |
-| `logo` | `none` | `none` or content | `logo` (was ignored) |
+| `logo` | `none` | `none`, content, or a dictionary with keys `cover` and `bar` | `logo` (was ignored) |
 | `outline` | `true` | bool | `toc` |
 | `section-slides` | `true` | bool | — |
 | `progress-bar` | `true` | bool | `progress-bar` (was ignored) |
@@ -183,9 +183,16 @@ asserts that every documented name resolves.
   framed environment have normal vertical spacing. No negative-space hacks.
 - **R4 Footnotes.** Footnotes sit fully above the footer rule and progress bar.
 - **R5 `progress-bar: false`** removes the progress bar.
-- **R6 `logo`.** When set, the logo appears on the title slide and at the right
-  end of the title bar on content slides, bounded in height. When `none`, the
-  layout is identical to having no logo support.
+- **R6 `logo`.** Plain content (`logo: image("assets/logo.svg")`) appears on
+  the title slide (and the ending slide) only. A dictionary
+  `(cover: .., bar: ..)` shows `cover` there and `bar` at the right end of the
+  title bar on content slides; either key may be omitted, and any other key or
+  a non-content value panics with a hint. Logos are bounded in size in every
+  place. When `none`, the layout is identical to having no logo support. The
+  README tells users the bar is blue, so `bar` should be a white or reversed
+  version, and that logos come from their institution's brand resources.
+  (Revised after the first review: one image cannot suit both the white cover
+  and the blue bar.)
 - **R7 Appendix.** After `#show: appendix`: appendix sections are absent from
   the main outline and from other sections' divider outlines, the total in
   `slide-numbering` counts main slides only, and the progress bar is full on

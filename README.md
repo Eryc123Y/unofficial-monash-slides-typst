@@ -66,7 +66,7 @@ passed as positional `config-*(..)` arguments, as in the quick start.
 | `title-color` | `black` | color | Colour of the title-slide text. |
 | `title-graphic` | `auto` | `auto`, `none`, or content | `auto`: the bundled background. `none`: a plain cover drawn with shapes. Content: your own, e.g. `image("bg.png", width: 100%, height: 100%, fit: "cover")`. |
 | `accent-color` | `monash-orange` | color | List markers, strong text, progress bar, outline and section numbers. |
-| `logo` | `none` | `none` or content | Your logo, on the title slide and at the right of the title bar. See [Logos](#logos). |
+| `logo` | `none` | `none`, content, or `(cover: .., bar: ..)` | Content: your logo on the title and ending slides. A dictionary: `cover` there and `bar` at the right of the title bar. See [Logos](#logos). |
 | `outline` | `true` | bool | Whether `#title-slide()` is followed by an outline slide. |
 | `section-slides` | `true` | bool | Whether each level-one heading creates a divider slide. Sections still appear in the outline and PDF bookmarks. |
 | `progress-bar` | `true` | bool | The progress bar along the bottom edge. |
@@ -169,16 +169,41 @@ for example `#show math.equation: set text(font: "New Computer Modern Math")`.
 
 ## Logos
 
-The package bundles **no** Monash logos, crests, or wordmarks. If you have
-the right to use a logo, pass it yourself:
+The package bundles **no** Monash logos, crests, or wordmarks: they are
+trademarks, and the right to use them depends on who you are and what the
+slides are for. Get your institution's logo from its official brand
+resources (for Monash, the university's brand guidelines and logo files for
+staff and students) and follow the usage rules that come with it.
+
+Put the file in your project, for example in the `assets/` folder that
+`typst init` creates, and pass it with one line. SVG and PNG both work:
 
 ```typst
 #show: monash-theme.with(logo: image("assets/logo.svg"), ..)
 ```
 
-The logo is scaled to fit the title bar (at most a quarter of the slide
-width), so any image size works. The
-bundled title background is a logo-free graphic derived from the CC0
+A logo given this way appears on the title slide and the ending slide,
+which are white, so the ordinary dark version of the logo is right.
+
+The title bar on content slides is Monash blue, where a dark logo is hard to
+see. To show a logo there too, give a white or reversed version for the bar
+and the ordinary one for the cover:
+
+```typst
+#show: monash-theme.with(
+  logo: (
+    cover: image("assets/logo.svg"),
+    bar: image("assets/logo-white.svg"),
+  ),
+  ..
+)
+```
+
+Leave out either key to show nothing in that place. Each logo is scaled to
+fit its place, so the image's own size does not matter: a wide wordmark is
+limited by width and a square crest by height.
+
+The bundled title background is a logo-free graphic derived from the CC0
 [Quarto Monash presentation template](https://github.com/quarto-monash/presentation).
 
 ## Tables
@@ -275,7 +300,9 @@ Other changes to check in an existing deck:
 - `note` and `warning` are no longer numbered.
 - The package no longer re-exports all of Touying; see
   [Exported names](#exported-names).
-- `progress-bar: false` and `logo:` now take effect.
+- `progress-bar: false` now takes effect, and `logo:` now shows the logo:
+  plain content on the title and ending slides only, or
+  `(cover: .., bar: ..)` with a white version for the blue title bar.
 - Typst 0.15 or newer is required (Touying 0.8.0).
 
 ## Development

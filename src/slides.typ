@@ -3,7 +3,7 @@
 #import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
 #import "labels.typ": labels
-#import "chrome.typ": plain-inline-code, title-bar-spacer
+#import "chrome.typ": cover-logo, plain-inline-code, title-bar-spacer
 #import "appendix.typ": appendix-marker
 
 /// Content slide with the Monash title bar and footer.
@@ -124,6 +124,8 @@
     appendix-marker(self)
     hidden-heading(self, title)
     show: std.align.with(horizon)
+    let logo = self.info.at("logo", default: none)
+    if logo != none { block(below: size * 1.2, cover-logo(self, logo)) }
     block(below: size * .6, text(size: size * 2.2, fill: monash-blue, weight: "bold", title))
     block(below: size * 1.1, monash-accent-rule(width: 3.2em, height: 3pt, paint: self.store.accent-color))
     set text(fill: monash-charcoal)

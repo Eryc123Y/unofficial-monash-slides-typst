@@ -5,17 +5,18 @@
 #import "design.typ": *
 #import "options.typ": counting-symbols
 
-/// Scales `logo` down so it is at most `max-height` tall and at most
-/// `max-width` (a ratio of the page width) wide. Needs no context.
-#let bounded-logo(logo, max-height, max-width: 25%) = context {
+/// Scales `logo` up or down to the largest size that fits in a box
+/// `max-height` tall and `max-width` (a ratio of the page width) wide, so a
+/// wide wordmark is limited by width and a square crest by height, whatever
+/// the image's own size. Needs no context.
+#let fitted-logo(logo, max-height, max-width: 25%) = context {
   let size = measure(logo)
   if size.height == 0pt or size.width == 0pt { return logo }
   let ratio = calc.min(
-    1,
     max-height / size.height,
     max-width * page.width / size.width,
   )
-  if ratio >= 1 { logo } else { scale(ratio * 100%, reflow: true, logo) }
+  scale(ratio * 100%, reflow: true, logo)
 }
 
 /// Show rule for coloured backgrounds (title bar, focus slide): inline code
@@ -29,6 +30,15 @@
   )
   body
 }
+
+/// A logo on a white slide: a wide wordmark is limited by width (26% of the
+/// page) and a square crest by height (3.2 times the body size), so both
+/// come out at a similar visual weight.
+#let cover-logo(self, logo) = fitted-logo(
+  logo,
+  self.store.font-size * 3.2,
+  max-width: 26%,
+)
 
 /// The author field as content: Touying also accepts an array of authors.
 #let author-text(author) = if type(author) == array {
@@ -48,9 +58,9 @@
 // The title bar at its natural height and its text size. Needs context.
 #let _bar-layout(self) = {
   let body = _bar-heading(self)
-  let logo = self.info.at("logo", default: none)
+  let logo = self.store.logo-bar
   let logo-box = if logo != none {
-    box(bounded-logo(logo, _logo-height(self)))
+    box(fitted-logo(logo, _logo-height(self)))
   }
   let logo-width = if logo-box != none { measure(logo-box).width + self.store.font-size } else { 0pt }
   let available = page.width - 2 * page-margin-x - logo-width

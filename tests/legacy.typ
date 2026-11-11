@@ -22,6 +22,8 @@
   font-size-relative: (font-size: 1.2em),
   numbering-no-symbol: (slide-numbering: "-"),
   unknown-option: (colour: red),
+  logo-bad-key: (logo: (corner: [Logo])),
+  logo-bad-value: (logo: (cover: "logo.svg")),
 )
 
 #let theme-args = if name in invalid { invalid.at(name) } else {

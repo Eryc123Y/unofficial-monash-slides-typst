@@ -79,6 +79,40 @@
   type(value) == length and value.em == 0 and value.abs > 0pt
 )
 
+#let _logo-hint = (
+  "Pass `logo: image(\"assets/logo.svg\")` for the title slide only, or "
+    + "`logo: (cover: image(..), bar: image(..))` with a white or reversed "
+    + "version for the blue title bar."
+)
+
+#let _check-logo(logo) = {
+  if logo == none or type(logo) == content { return }
+  _expect(
+    type(logo) == dictionary,
+    "`logo` must be `none`, content, or a dictionary. " + _logo-hint,
+  )
+  for (key, value) in logo {
+    _expect(
+      key in ("cover", "bar"),
+      "`logo` has no place called `" + key + "`; use `cover` and `bar`. " + _logo-hint,
+    )
+    _expect(
+      value == none or type(value) == content,
+      "`logo." + key + "` must be `none` or content such as `image(..)`, got "
+        + str(type(value)) + ". " + _logo-hint,
+    )
+  }
+}
+
+/// The logo for each place: plain content goes on the title slide only.
+#let logo-places(logo) = {
+  if type(logo) == dictionary {
+    (cover: logo.at("cover", default: none), bar: logo.at("bar", default: none))
+  } else {
+    (cover: logo, bar: none)
+  }
+}
+
 /// Checks the types and values of the documented options.
 #let check-options(
   aspect-ratio: none,
@@ -127,10 +161,7 @@
     "`title-graphic` must be `auto`, `none`, or content such as `image(..)`.",
   )
   _expect(type(accent-color) == color, "`accent-color` must be a color.")
-  _expect(
-    logo == none or type(logo) == content,
-    "`logo` must be `none` or content such as `image(..)`.",
-  )
+  _check-logo(logo)
   _expect(type(outline) == bool, "`outline` must be `true` or `false`.")
   _expect(type(section-slides) == bool, "`section-slides` must be `true` or `false`.")
   _expect(type(progress-bar) == bool, "`progress-bar` must be `true` or `false`.")

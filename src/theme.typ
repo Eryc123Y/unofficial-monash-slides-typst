@@ -2,7 +2,7 @@
 
 #import "@preview/touying:0.8.0": config-colors, default-config, config-common, config-info, config-methods, config-page, config-store, touying-slides, utils
 #import "design.typ": *
-#import "options.typ": check-footer, check-options, check-unknown-options
+#import "options.typ": check-footer, check-options, check-unknown-options, logo-places
 #import "chrome.typ": content-margin-bottom, content-margin-top, footer as page-footer, notes, title-bar
 #import "styles.typ": slide-rules
 #import "slides.typ": slide
@@ -47,7 +47,9 @@
   title-graphic: auto,
   /// Accent colour for list markers, strong text, progress, and numbers.
   accent-color: monash-orange,
-  /// Logo content shown on the title slide and in the title bar.
+  /// Logo. Content goes on the title and ending slides; a dictionary
+  /// `(cover: .., bar: ..)` also puts `bar` (a white or reversed version)
+  /// at the right of the blue title bar. Either key may be left out.
   logo: none,
   /// Whether `#title-slide()` is followed by an outline slide.
   outline: true,
@@ -99,6 +101,7 @@
     progress-bar: progress-bar,
     slide-numbering: slide-numbering,
     footer: footer,
+    logo-bar: logo-places(logo).bar,
   )
   let margin-self = (store: store)
 
@@ -135,7 +138,7 @@
       neutral-darkest: monash-charcoal,
     ),
     config-store(..store),
-    config-info(logo: logo),
+    config-info(logo: logo-places(logo).cover),
     ..args,
   )
 

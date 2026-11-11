@@ -3,7 +3,7 @@
 
 #import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
-#import "chrome.typ": author-text, bounded-logo
+#import "chrome.typ": author-text, cover-logo
 #import "navigation.typ": outline-slide-fn
 
 #let _bundled-graphic = image(
@@ -49,7 +49,7 @@
   set par(justify: false)
   set block(spacing: 0pt)
   if info.logo != none {
-    block(below: size * 1.2, bounded-logo(info.logo, size * 2.2, max-width: 40%))
+    block(below: size * 1.2, cover-logo(self, info.logo))
   }
   block(below: size * .75, {
     set par(leading: .3em)

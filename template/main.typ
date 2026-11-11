@@ -3,6 +3,8 @@
 #show: monash-theme.with(
   // For the Monash look, use Arial where it is installed:
   // font: "Arial",
+  // Your institution's logo, saved under assets/ (see the README's Logos section):
+  // logo: image("assets/logo.svg"),
   config-info(
     title: [Presentation Title],
     short-title: [Short Title],
