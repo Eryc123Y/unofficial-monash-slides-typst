@@ -96,7 +96,7 @@ parameters, plus Touying `config-*` values as positional arguments:
 | Parameter | Default | Values | Replaces |
 |---|---|---|---|
 | `aspect-ratio` | `"16-9"` | `"16-9"`, `"4-3"` | — |
-| `font` | `"Arial"` | string or array of strings | hard-coded Arial |
+| `font` | `auto` | `auto`, string, or array of strings | hard-coded Arial |
 | `code-font` | `"DejaVu Sans Mono"` | string or array of strings | hard-coded list |
 | `font-size` | `22pt` | length | `fontsize` |
 | `title-font-size` | `36pt` | length | `titlefontsize` |
@@ -110,6 +110,12 @@ parameters, plus Touying `config-*` values as positional arguments:
 | `slide-numbering` | `"1"` | `none` or a Typst numbering pattern that receives (current, total), e.g. `"1 / 1"` | — |
 | `footer` | `none` | `none`, `auto`, or content | — |
 
+- `font: auto` means the theme sets no font family at all: the deck uses
+  Typst's own default text font, which is embedded in the compiler and present
+  on every platform, or whatever the user set with `#set text(font: ..)` before
+  the theme. The theme must look right in that default serif face, not only in
+  a sans-serif one. The recommended font for the Monash look is `"Arial"`; it
+  is recommended in the documentation, never applied by default.
 - `footer: auto` shows the short title (falling back to the title) and the
   author, in the footer's left side.
 - `accent-color` recolours everything that is orange today: list and
@@ -184,10 +190,12 @@ asserts that every documented name resolves.
   the main outline and from other sections' divider outlines, the total in
   `slide-numbering` counts main slides only, and the progress bar is full on
   the last main slide.
-- **R8 Fonts.** With defaults on macOS the decks compile with zero warnings.
-  `code-font` defaults to a font embedded in the Typst compiler. The README
-  states that a missing body font produces one warning and shows the one-line
-  fix (`font: ...`).
+- **R8 Fonts.** With default options the package names only fonts embedded in
+  the Typst compiler, so every deck in the repository compiles with zero
+  warnings under `typst compile --ignore-system-fonts`. The README recommends
+  `font: "Arial"` for the Monash look, notes that naming a font that is not
+  installed produces a warning, and names one freely available sans-serif
+  alternative whose family name has been verified.
 - **R9 Overflow.** Touying's overflow detection stays enabled at its default;
   the theme does nothing that defeats it.
 - **R10 Numbered lists** keep working to three nested levels (0.1.3 fix).
@@ -226,7 +234,9 @@ asserts that every documented name resolves.
 
 - **E1** `template/main.typ` is a neutral, editable skeleton: title, outline,
   two or three sections, one of each common element, an ending slide. It must
-  compile immediately after `typst init`.
+  compile immediately after `typst init` with no warnings on any platform, so
+  it uses the default font and carries the recommended `font: "Arial"` as a
+  commented-out line.
 - **E2** `examples/` holds four decks: `showcase` (the feature tour, replacing
   `example/`), `research-talk`, `lecture`, `short-talk` (`outline: false`,
   `section-slides: false`). Update `exclude` in `typst.toml` accordingly.
@@ -237,7 +247,8 @@ asserts that every documented name resolves.
 - **E4** `CHANGELOG.md` covering 0.1.3 and 1.0.0, with breaking changes listed.
 - **E5** `docs/reference.typ` compiles; every public function has a `tidy` doc
   comment. Preview images in `docs/preview/` and `thumbnail.png` are
-  regenerated from the new title slide using a fixed date.
+  regenerated from the new title slide using a fixed date and the default
+  font, so the published preview matches what a new user gets.
 
 ### 5.7 Engineering — P0
 
@@ -246,9 +257,11 @@ asserts that every documented name resolves.
 - **Q2** `scripts/check.sh` compiles the template, all examples, all tests, and
   the reference through a temporary local package path, and exits non-zero on
   any error or warning. It regenerates the thumbnail only with `--thumbnail`.
-- **Q3** `.github/workflows/check.yml` runs the script on Typst 0.15.x. If a
-  font is installed for CI, the workflow does it explicitly and the test decks
-  select it; the published defaults are not changed for CI's sake.
+- **Q3** `.github/workflows/check.yml` runs the script on Typst 0.15.x with
+  `--ignore-system-fonts`, so CI needs no font installation and renders the
+  same on every runner. Tests that exercise a named font (the CJK and Arial
+  cases) are kept in a separate deck that the script compiles only when the
+  font is present.
 - **Q4** Source files stay under 400 lines; split `src/theme.typ` by concern.
   Functions stay short and single-purpose.
 
@@ -282,11 +295,13 @@ layout is involved.
 9. **Legacy names**: each name in A2 → the documented panic message.
 10. **Table and figure**: a three-column table and a captioned figure → V1, V2.
 11. **Citations**: C1 and C2 on real `.bib` data.
-12. **CJK**: a slide with Chinese text and a CJK font appended to `font` →
-    renders with that font, no layout change elsewhere.
+12. **Fonts**: the showcase deck renders correctly with the default font and
+    again with `font: "Arial"`; a slide with Chinese text and a CJK font
+    appended to `font` renders with that font, with no layout change elsewhere.
 13. **Handout**: `config-common(handout: true)` compiles and collapses
     animations.
-14. **Clean build**: `scripts/check.sh` exits 0 with no warnings on macOS.
+14. **Clean build**: `scripts/check.sh` exits 0 with no warnings, including
+    under `--ignore-system-fonts`.
 
 ## 7. Success measures
 
@@ -300,7 +315,6 @@ layout is involved.
 
 | Question | Who | Blocking |
 |---|---|---|
-| Is Arial available on typst.app? If not, the README's font note needs a typst.app-specific line. | Maintainer, during trial | No |
 | Does anything in the trial deck need an API change? | Maintainer | Blocks Universe submission only |
 | Can `frame-it` 2.1.0 express the shared counter in A4 without forking its logic? If not, report the options before choosing one. | Implementer | No |
 
