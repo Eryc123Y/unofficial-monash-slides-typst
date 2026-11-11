@@ -24,6 +24,7 @@
   unknown-option: (colour: red),
   logo-bad-key: (logo: (corner: [Logo])),
   logo-bad-value: (logo: (cover: "logo.svg")),
+  logo-bad-fill: (logo: (bar: [Logo], bar-fill: "white")),
 )
 
 #let theme-args = if name in invalid { invalid.at(name) } else {

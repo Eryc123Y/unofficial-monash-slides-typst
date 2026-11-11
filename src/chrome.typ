@@ -1,23 +1,10 @@
-// Page furniture of content slides: the title bar in the page header, the
-// footer with slide number and progress bar, and the bounded logo.
+// Page furniture of content slides: the title bar in the page header and
+// the footer with slide number and progress bar.
 
 #import "@preview/touying:0.8.0": components, touying-notes, utils
 #import "design.typ": *
 #import "options.typ": counting-symbols
-
-/// Scales `logo` up or down to the largest size that fits in a box
-/// `max-height` tall and `max-width` (a ratio of the page width) wide, so a
-/// wide wordmark is limited by width and a square crest by height, whatever
-/// the image's own size. Needs no context.
-#let fitted-logo(logo, max-height, max-width: 25%) = context {
-  let size = measure(logo)
-  if size.height == 0pt or size.width == 0pt { return logo }
-  let ratio = calc.min(
-    max-height / size.height,
-    max-width * page.width / size.width,
-  )
-  scale(ratio * 100%, reflow: true, logo)
-}
+#import "logo.typ": bar-logo, bar-logo-width
 
 /// Show rule for coloured backgrounds (title bar, focus slide): inline code
 /// keeps the code font but drops the light code box and takes the
@@ -31,15 +18,6 @@
   body
 }
 
-/// A logo on a white slide: a wide wordmark is limited by width (26% of the
-/// page) and a square crest by height (3.2 times the body size), so both
-/// come out at a similar visual weight.
-#let cover-logo(self, logo) = fitted-logo(
-  logo,
-  self.store.font-size * 3.2,
-  max-width: 26%,
-)
-
 /// The author field as content: Touying also accepts an array of authors.
 #let author-text(author) = if type(author) == array {
   author.join(", ")
@@ -47,7 +25,6 @@
 
 #let _bar-min-height(self) = self.store.font-size * bar-height-factor
 #let _bar-inset-y(self) = self.store.font-size * .4
-#let _logo-height(self) = _bar-min-height(self) - 2 * _bar-inset-y(self)
 
 // The slide heading shown in the bar, or `none`. Needs context.
 #let _bar-heading(self) = {
@@ -58,31 +35,25 @@
 // The title bar at its natural height and its text size. Needs context.
 #let _bar-layout(self) = {
   let body = _bar-heading(self)
-  let logo = self.store.logo-bar
-  let logo-box = if logo != none {
-    box(fitted-logo(logo, _logo-height(self)))
+  // Space on the right: the margin, or the logo panel plus a gap.
+  let logo-width = bar-logo-width(self, _bar-min-height(self))
+  let right = if logo-width > 0pt { logo-width + self.store.font-size * .8 } else {
+    page-margin-x
   }
-  let logo-width = if logo-box != none { measure(logo-box).width + self.store.font-size } else { 0pt }
-  let available = page.width - 2 * page-margin-x - logo-width
+  let available = page.width - page-margin-x - right
   let full-size = self.store.font-size * bar-text-factor
   let natural = measure(text(size: full-size, weight: "bold", body)).width
   let ratio = if natural <= available { 1 } else {
     calc.max(bar-min-text-ratio, available / natural)
   }
-  let content = grid(
-    columns: (1fr, auto),
-    column-gutter: if logo-box != none { self.store.font-size } else { 0pt },
-    align: (left + horizon, right + horizon),
-    {
-      set par(leading: .35em)
-      show: plain-inline-code.with(self)
-      text(size: full-size * ratio, weight: "bold", fill: white, body)
-    },
-    logo-box,
-  )
+  let content = {
+    set par(leading: .35em)
+    show: plain-inline-code.with(self)
+    text(size: full-size * ratio, weight: "bold", fill: white, body)
+  }
   let inner = block(
     width: page.width,
-    inset: (x: page-margin-x, y: _bar-inset-y(self)),
+    inset: (left: page-margin-x, right: right, y: _bar-inset-y(self)),
     content,
   )
   let height = calc.max(_bar-min-height(self), measure(inner).height)
@@ -98,7 +69,10 @@
     width: 100%,
     height: bar.height,
     fill: monash-blue,
-    align(horizon, bar.inner),
+    {
+      bar-logo(self, bar.height, _bar-min-height(self))
+      align(horizon, bar.inner)
+    },
   ))
 }
 

@@ -3,7 +3,8 @@
 #import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
 #import "labels.typ": labels
-#import "chrome.typ": cover-logo, plain-inline-code, title-bar-spacer
+#import "chrome.typ": plain-inline-code, title-bar-spacer
+#import "logo.typ": corner-margin, with-corner-logo
 #import "appendix.typ": appendix-marker
 
 /// Content slide with the Monash title bar and footer.
@@ -106,13 +107,19 @@
   body,
 ) = touying-slide-wrapper(self => {
   let size = self.store.font-size
+  let logo = self.info.at("logo", default: none)
   self = utils.merge-dicts(
     self,
     config-common(freeze-slide-counter: true),
     config-page(
       header: none,
       footer: none,
-      margin: (x: page-margin-x * 2, top: size * 1.6, bottom: size * 2.6),
+      margin: (
+        left: if logo != none { corner-margin } else { page-margin-x * 2 },
+        right: page-margin-x * 2,
+        top: if logo != none { corner-margin } else { size * 1.6 },
+        bottom: size * 2.6,
+      ),
       background: place(bottom + left, block(width: 100%, {
         block(width: 100%, height: 3pt, fill: self.store.accent-color, below: 0pt)
         block(width: 100%, height: size * 1.1, fill: monash-blue)
@@ -124,12 +131,12 @@
     appendix-marker(self)
     hidden-heading(self, title)
     show: std.align.with(horizon)
-    let logo = self.info.at("logo", default: none)
-    if logo != none { block(below: size * 1.2, cover-logo(self, logo)) }
-    block(below: size * .6, text(size: size * 2.2, fill: monash-blue, weight: "bold", title))
-    block(below: size * 1.1, monash-accent-rule(width: 3.2em, height: 3pt, paint: self.store.accent-color))
-    set text(fill: monash-charcoal)
-    body
+    with-corner-logo(self, logo, {
+      block(below: size * .6, text(size: size * 2.2, fill: monash-blue, weight: "bold", title))
+      block(below: size * 1.1, monash-accent-rule(width: 3.2em, height: 3pt, paint: self.store.accent-color))
+      set text(fill: monash-charcoal)
+      body
+    })
   }
   touying-slide(self: self, setting: setting, body)
 })

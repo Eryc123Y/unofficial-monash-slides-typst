@@ -3,7 +3,8 @@
 
 #import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
-#import "chrome.typ": author-text, cover-logo
+#import "chrome.typ": author-text
+#import "logo.typ": corner-margin, with-corner-logo
 #import "navigation.typ": outline-slide-fn
 
 #let _bundled-graphic = image(
@@ -48,9 +49,6 @@
   let color = self.store.title-color
   set par(justify: false)
   set block(spacing: 0pt)
-  if info.logo != none {
-    block(below: size * 1.2, cover-logo(self, info.logo))
-  }
   block(below: size * .75, {
     set par(leading: .3em)
     text(fill: color, size: self.store.title-font-size, weight: "bold", info.title)
@@ -131,16 +129,19 @@
   }
 }
 
-#let _cover-page(self) = {
+#let _cover-page(self, logo) = {
   let size = self.store.font-size
   let plain = self.store.title-graphic == none
+  let top = if logo != none { corner-margin } else if plain { size * 3.8 } else {
+    size * 1.4
+  }
   config-page(
     header: none,
     footer: none,
     margin: (
       left: page-margin-x * 1.5,
       right: if plain { page-margin-x * 1.5 } else { 0pt },
-      top: size * if plain { 3.8 } else { 1.4 },
+      top: top,
       bottom: size * if plain { 2.4 } else { 1.4 },
     ),
     background: _graphic(self),
@@ -148,8 +149,9 @@
 }
 
 /// Creates the title slide from `config-info` (title, subtitle, author,
-/// institution, date, logo). Everything is laid out in one column, which
-/// shrinks rather than overflowing for very long metadata. With
+/// institution, date). Everything is laid out in one column, which shrinks
+/// rather than overflowing for very long metadata. A logo sits in the
+/// top-left corner with the column below it. With
 /// `outline: true` (the default) an outline slide follows.
 ///
 /// ```typst
@@ -167,10 +169,11 @@
   let cover-self = utils.merge-dicts(
     self,
     config-common(freeze-slide-counter: true),
-    _cover-page(self),
+    _cover-page(self, info.logo),
     config,
   )
-  let body = _fitted-column(_column-end(self), _column(cover-self, info, extra))
+  let column = _fitted-column(_column-end(self), _column(cover-self, info, extra))
+  let body = with-corner-logo(cover-self, info.logo, column)
   touying-slide(self: cover-self, setting: std.align.with(horizon), body)
   if self.store.outline {
     outline-slide-fn(self)

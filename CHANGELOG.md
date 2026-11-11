@@ -31,9 +31,11 @@ A general-purpose release with a stable, Typst-style API. Requires Typst
 
 - Options `font`, `code-font`, `accent-color`, `section-slides`,
   `slide-numbering`, and `footer`.
-- `logo` takes an image for the title and ending slides, or
-  `(cover: .., bar: ..)` with a white version for the blue title bar. Logos
-  are scaled to fit each place.
+- `logo` shows your logo in the top-left corner of the title and ending
+  slides and on a white panel at the right of the title bar. A dictionary
+  `(cover: .., bar: .., bar-fill: ..)` chooses an image per place and the
+  panel colour (`none` for a white logo on the blue bar). Logos are scaled
+  to fit each place.
 - Slide kinds `outline-slide`, `focus-slide`, and `ending-slide`;
   `new-section-slide` is exported.
 - Environments `proposition`, `assumption`, `example`, and `exercise`;

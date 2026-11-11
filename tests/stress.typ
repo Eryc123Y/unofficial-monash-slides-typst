@@ -4,9 +4,15 @@
 #import "@preview/unofficial-monash-touying:1.0.0": *
 
 #let aspect = sys.inputs.at("aspect", default: "16-9")
+// `--input logo=on` adds a placeholder horizontal logo (cover corner and
+// title bar) to check that the long cover and long headings still fit.
+#let logo = if sys.inputs.at("logo", default: "off") == "on" {
+  image("assets/placeholder-wordmark.svg")
+}
 
 #show: monash-theme.with(
   aspect-ratio: aspect,
+  logo: logo,
   config-info(
     // Scenario 1: four-line title, two-line subtitle, three authors, a long
     // institution, and a date.

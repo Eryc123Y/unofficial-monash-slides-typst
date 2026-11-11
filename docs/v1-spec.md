@@ -103,7 +103,7 @@ parameters, plus Touying `config-*` values as positional arguments:
 | `title-color` | `black` | color | `titlecolor` |
 | `title-graphic` | `auto` | `auto` (bundled background), `none`, or content | `titlegraphic` |
 | `accent-color` | `monash-orange` | color | — |
-| `logo` | `none` | `none`, content, or a dictionary with keys `cover` and `bar` | `logo` (was ignored) |
+| `logo` | `none` | `none`, content, or a dictionary with keys `cover`, `bar`, `bar-fill` | `logo` (was ignored) |
 | `outline` | `true` | bool | `toc` |
 | `section-slides` | `true` | bool | — |
 | `progress-bar` | `true` | bool | `progress-bar` (was ignored) |
@@ -183,16 +183,21 @@ asserts that every documented name resolves.
   framed environment have normal vertical spacing. No negative-space hacks.
 - **R4 Footnotes.** Footnotes sit fully above the footer rule and progress bar.
 - **R5 `progress-bar: false`** removes the progress bar.
-- **R6 `logo`.** Plain content (`logo: image("assets/logo.svg")`) appears on
-  the title slide (and the ending slide) only. A dictionary
-  `(cover: .., bar: ..)` shows `cover` there and `bar` at the right end of the
-  title bar on content slides; either key may be omitted, and any other key or
-  a non-content value panics with a hint. Logos are bounded in size in every
-  place. When `none`, the layout is identical to having no logo support. The
-  README tells users the bar is blue, so `bar` should be a white or reversed
-  version, and that logos come from their institution's brand resources.
-  (Revised after the first review: one image cannot suit both the white cover
-  and the blue bar.)
+- **R6 `logo`.** Plain content (`logo: image("assets/logo.svg")`) is the main
+  form and must work with an ordinary dark logo. On the title slide (and the
+  ending slide) it sits in the top-left corner, left-aligned with the text
+  column, at roughly 14–16% of the page height for a wide logo, bounded in
+  height and width so it never leaves the page or reaches the title graphic;
+  the title block flows below it and never overlaps it, also for the long
+  cover. On content slides it sits at the right end of the title bar, inside
+  the bar's height and the page's right margin, on a white panel; the heading
+  shrinks or wraps before reaching the panel. A dictionary
+  `(cover: .., bar: .., bar-fill: ..)` sets each place: `cover` and `bar` are
+  optional content, `bar-fill` is `white` by default, a colour, or `none`
+  (logo drawn on the blue bar, for a white or reversed logo). Unknown keys or
+  wrong types panic with a hint. With `none` (the default) the layout is
+  identical to having no logo support. (Revised twice after the first review,
+  with the maintainer.)
 - **R7 Appendix.** After `#show: appendix`: appendix sections are absent from
   the main outline and from other sections' divider outlines, the total in
   `slide-numbering` counts main slides only, and the progress bar is full on

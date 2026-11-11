@@ -1,10 +1,12 @@
 // Scenario 7: each theme option visibly changes the output. scripts/check.sh
 // compiles this deck once per variant:
 //   typst compile tests/options.typ --input variant=logo
-// Variants: default, no-progress-bar, logo, logo-crest, logo-both,
-// logo-bar-only, logo-oversized, footer-auto, authors-array,
-// numbering-total, numbering-none, accent-teal, no-section-slides,
-// no-outline, plain-cover. The logos are placeholder SVGs in tests/assets.
+// Variants: default, no-progress-bar, logo, logo-stacked, logo-crest,
+// logo-plain-cover, logo-both, logo-bar-only, logo-bar-colour,
+// logo-oversized, footer-auto, authors-array, numbering-total,
+// numbering-none, accent-teal, no-section-slides, no-outline, plain-cover.
+// The logos are placeholder SVGs in tests/assets with the aspect ratios of
+// common logos: horizontal 3.3:1, stacked 1.35:1, and square 1:1.
 // Add `--input aspect=4-3` for the narrow format.
 #import "@preview/unofficial-monash-touying:1.0.0": *
 
@@ -13,17 +15,21 @@
 
 #let wordmark = image("assets/placeholder-wordmark.svg")
 #let wordmark-white = image("assets/placeholder-wordmark-white.svg")
+#let stacked = image("assets/placeholder-stacked.svg")
 #let crest = image("assets/placeholder-crest.svg")
 
 #let options = (
   default: (:),
   no-progress-bar: (progress-bar: false),
-  // Plain content: the title slide only.
+  // Plain content: the cover corner and a white panel in the title bar.
   logo: (logo: wordmark),
+  logo-stacked: (logo: stacked),
   logo-crest: (logo: crest),
-  // One image per place.
-  logo-both: (logo: (cover: wordmark, bar: wordmark-white)),
-  logo-bar-only: (logo: (bar: wordmark-white)),
+  logo-plain-cover: (logo: wordmark, title-graphic: none),
+  // One image per place; a white logo drawn directly on the blue bar.
+  logo-both: (logo: (cover: wordmark, bar: wordmark-white, bar-fill: none)),
+  logo-bar-only: (logo: (bar: wordmark)),
+  logo-bar-colour: (logo: (cover: crest, bar: wordmark, bar-fill: monash-grey-light)),
   // Far too large in both directions: still bounded in each place.
   logo-oversized: (logo: (
     cover: rect(width: 40cm, height: 10cm, fill: monash-blue-dark),

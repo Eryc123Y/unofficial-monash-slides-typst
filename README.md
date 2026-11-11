@@ -66,7 +66,7 @@ passed as positional `config-*(..)` arguments, as in the quick start.
 | `title-color` | `black` | color | Colour of the title-slide text. |
 | `title-graphic` | `auto` | `auto`, `none`, or content | `auto`: the bundled background. `none`: a plain cover drawn with shapes. Content: your own, e.g. `image("bg.png", width: 100%, height: 100%, fit: "cover")`. |
 | `accent-color` | `monash-orange` | color | List markers, strong text, progress bar, outline and section numbers. |
-| `logo` | `none` | `none`, content, or `(cover: .., bar: ..)` | Content: your logo on the title and ending slides. A dictionary: `cover` there and `bar` at the right of the title bar. See [Logos](#logos). |
+| `logo` | `none` | `none`, content, or `(cover: .., bar: .., bar-fill: ..)` | Your logo: top-left on the title and ending slides, and on a white panel at the right of the title bar. See [Logos](#logos). |
 | `outline` | `true` | bool | Whether `#title-slide()` is followed by an outline slide. |
 | `section-slides` | `true` | bool | Whether each level-one heading creates a divider slide. Sections still appear in the outline and PDF bookmarks. |
 | `progress-bar` | `true` | bool | The progress bar along the bottom edge. |
@@ -182,26 +182,35 @@ Put the file in your project, for example in the `assets/` folder that
 #show: monash-theme.with(logo: image("assets/logo.svg"), ..)
 ```
 
-A logo given this way appears on the title slide and the ending slide,
-which are white, so the ordinary dark version of the logo is right.
+The logo then appears in two places:
 
-The title bar on content slides is Monash blue, where a dark logo is hard to
-see. To show a logo there too, give a white or reversed version for the bar
-and the ordinary one for the cover:
+- in the top-left corner of the title slide and the ending slide, large,
+  with the title below it;
+- at the right end of the blue title bar on content slides, on a small white
+  panel, so the ordinary dark or coloured version of the logo stays readable.
+
+Each logo is scaled to fit its place, so the image's own size does not
+matter: a wide logo is limited by width and a square or stacked one by
+height. Crop any empty margin out of your logo file first; whitespace inside
+the image counts as part of the logo and makes it look small.
+
+If you have more than one version of the logo, choose one per place:
 
 ```typst
 #show: monash-theme.with(
   logo: (
     cover: image("assets/logo.svg"),
     bar: image("assets/logo-white.svg"),
+    bar-fill: none,
   ),
   ..
 )
 ```
 
-Leave out either key to show nothing in that place. Each logo is scaled to
-fit its place, so the image's own size does not matter: a wide wordmark is
-limited by width and a square crest by height.
+`cover` and `bar` are each optional; leave one out to show nothing there.
+`bar-fill` is the panel behind the bar logo: `white` by default, another
+colour, or `none` to draw the logo straight onto the blue bar. Use `none`
+only with a white or reversed logo, because the bar is Monash blue.
 
 The bundled title background is a logo-free graphic derived from the CC0
 [Quarto Monash presentation template](https://github.com/quarto-monash/presentation).
@@ -300,9 +309,8 @@ Other changes to check in an existing deck:
 - `note` and `warning` are no longer numbered.
 - The package no longer re-exports all of Touying; see
   [Exported names](#exported-names).
-- `progress-bar: false` now takes effect, and `logo:` now shows the logo:
-  plain content on the title and ending slides only, or
-  `(cover: .., bar: ..)` with a white version for the blue title bar.
+- `progress-bar: false` now takes effect, and `logo:` now shows the logo, on
+  the title and ending slides and on a white panel in the title bar.
 - Typst 0.15 or newer is required (Touying 0.8.0).
 
 ## Development

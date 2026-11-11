@@ -47,9 +47,10 @@
   title-graphic: auto,
   /// Accent colour for list markers, strong text, progress, and numbers.
   accent-color: monash-orange,
-  /// Logo. Content goes on the title and ending slides; a dictionary
-  /// `(cover: .., bar: ..)` also puts `bar` (a white or reversed version)
-  /// at the right of the blue title bar. Either key may be left out.
+  /// Logo. Content goes in the top-left corner of the title and ending
+  /// slides and on a white panel at the right of the title bar. A
+  /// dictionary `(cover: .., bar: .., bar-fill: white)` sets each place;
+  /// `bar-fill: none` draws a white logo directly on the blue bar.
   logo: none,
   /// Whether `#title-slide()` is followed by an outline slide.
   outline: true,
@@ -102,6 +103,7 @@
     slide-numbering: slide-numbering,
     footer: footer,
     logo-bar: logo-places(logo).bar,
+    logo-bar-fill: logo-places(logo).bar-fill,
   )
   let margin-self = (store: store)
 

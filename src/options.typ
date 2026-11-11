@@ -80,9 +80,9 @@
 )
 
 #let _logo-hint = (
-  "Pass `logo: image(\"assets/logo.svg\")` for the title slide only, or "
-    + "`logo: (cover: image(..), bar: image(..))` with a white or reversed "
-    + "version for the blue title bar."
+  "Pass `logo: image(\"assets/logo.svg\")`, or "
+    + "`logo: (cover: image(..), bar: image(..), bar-fill: white)` "
+    + "to choose an image for each place."
 )
 
 #let _check-logo(logo) = {
@@ -93,23 +93,36 @@
   )
   for (key, value) in logo {
     _expect(
-      key in ("cover", "bar"),
-      "`logo` has no place called `" + key + "`; use `cover` and `bar`. " + _logo-hint,
+      key in ("cover", "bar", "bar-fill"),
+      "`logo` has no key `" + key + "`; use `cover`, `bar`, and `bar-fill`. " + _logo-hint,
     )
-    _expect(
-      value == none or type(value) == content,
-      "`logo." + key + "` must be `none` or content such as `image(..)`, got "
-        + str(type(value)) + ". " + _logo-hint,
-    )
+    if key == "bar-fill" {
+      _expect(
+        value == none or type(value) == color,
+        "`logo.bar-fill` must be a colour, or `none` to draw the bar logo "
+          + "directly on the blue bar, got " + str(type(value)) + ". " + _logo-hint,
+      )
+    } else {
+      _expect(
+        value == none or type(value) == content,
+        "`logo." + key + "` must be `none` or content such as `image(..)`, got "
+          + str(type(value)) + ". " + _logo-hint,
+      )
+    }
   }
 }
 
-/// The logo for each place: plain content goes on the title slide only.
+/// The logo for each place. Plain content goes on the title and ending
+/// slides and, on a white panel, in the title bar.
 #let logo-places(logo) = {
   if type(logo) == dictionary {
-    (cover: logo.at("cover", default: none), bar: logo.at("bar", default: none))
+    (
+      cover: logo.at("cover", default: none),
+      bar: logo.at("bar", default: none),
+      bar-fill: logo.at("bar-fill", default: white),
+    )
   } else {
-    (cover: logo, bar: none)
+    (cover: logo, bar: logo, bar-fill: white)
   }
 }
 

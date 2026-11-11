@@ -81,8 +81,8 @@ variant_runs=(
   "examples/lecture.typ|handout=true"
   "tests/many-sections.typ|aspect=4-3"
 )
-for variant in no-progress-bar logo logo-crest logo-both logo-bar-only \
-  logo-oversized footer-auto authors-array \
+for variant in no-progress-bar logo logo-stacked logo-crest logo-plain-cover \
+  logo-both logo-bar-only logo-bar-colour logo-oversized footer-auto authors-array \
   numbering-total numbering-none accent-teal no-section-slides no-outline \
   plain-cover; do
   variant_runs+=("tests/options.typ|variant=$variant")
@@ -90,6 +90,9 @@ done
 variant_runs+=("tests/options.typ|variant=plain-cover,aspect=4-3")
 variant_runs+=("tests/options.typ|variant=logo,aspect=4-3")
 variant_runs+=("tests/options.typ|variant=logo-crest,aspect=4-3")
+variant_runs+=("tests/options.typ|variant=logo-stacked,aspect=4-3")
+variant_runs+=("tests/stress.typ|logo=on")
+variant_runs+=("tests/stress.typ|logo=on,aspect=4-3")
 variant_runs+=("tests/options.typ|variant=logo-both,aspect=4-3")
 for run in "${variant_runs[@]}"; do
   deck="${run%%|*}"
@@ -190,7 +193,8 @@ legacy_cases=(
   "font-size-relative|\`font-size\` must be a positive absolute length"
   "numbering-no-symbol|\`slide-numbering\` must be \`none\` or a numbering pattern"
   "unknown-option|unknown option \`colour\`"
-  "logo-bad-key|\`logo\` has no place called \`corner\`; use \`cover\` and \`bar\`"
+  "logo-bad-key|\`logo\` has no key \`corner\`; use \`cover\`, \`bar\`, and \`bar-fill\`"
+  "logo-bad-fill|\`logo.bar-fill\` must be a colour"
   "logo-bad-value|\`logo.cover\` must be \`none\` or content"
 )
 for case in "${legacy_cases[@]}"; do

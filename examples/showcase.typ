@@ -44,7 +44,7 @@ Level-one headings start sections; level-two headings start slides.
   table.header[Option][Default][Effect],
   [`font`], [`auto`], [Typst's default font; `"Arial"` for the Monash look],
   [`title-graphic`], [`auto`], [bundled background, `none`, or an image],
-  [`logo`], [`none`], [your logo; `(cover:, bar:)` adds a white one to the bar],
+  [`logo`], [`none`], [your logo, on the cover and in the title bar],
   [`outline`], [`true`], [outline slide after the title slide],
   [`section-slides`], [`true`], [a divider slide per section],
   [`footer`], [`none`], [`auto` shows short title and author],
