@@ -51,7 +51,7 @@
   if info.logo != none {
     block(below: size * 1.2, bounded-logo(info.logo, size * 2.2))
   }
-  block(below: size * .55, {
+  block(below: size * .75, {
     set par(leading: .3em)
     text(fill: color, size: self.store.title-font-size, weight: "bold", info.title)
   })
@@ -99,9 +99,11 @@
 })
 
 // Decoration of the plain cover, drawn with shapes only: a blue band along
-// the bottom with an accent stripe, and diagonal bars in the top corner.
+// the left edge and the bottom with an accent stripe, and diagonal bars in
+// the top corner.
 #let _plain-decoration(self) = {
   let size = self.store.font-size
+  place(top + left, rect(width: size * .45, height: 100%, fill: monash-blue))
   place(bottom + left, block(width: 100%, {
     block(width: 100%, height: 3pt, fill: self.store.accent-color, below: 0pt)
     block(width: 100%, height: size * 1.1, fill: monash-blue)
@@ -109,12 +111,12 @@
   let bar(dx, fill) = place(top + right, dx: dx, polygon(
     fill: fill,
     (0pt, 0pt),
-    (size * 1.4, 0pt),
-    (size * .2, size * 3.2),
-    (-size * 1.2, size * 3.2),
+    (size * 1.6, 0pt),
+    (size * .2, size * 3.6),
+    (-size * 1.4, size * 3.6),
   ))
-  bar(-size * 4.2, monash-blue-wash)
-  bar(-size * 2.6, monash-blue.transparentize(60%))
+  bar(-size * 4.6, monash-blue-wash)
+  bar(-size * 2.8, monash-blue.transparentize(60%))
   bar(-size * 1.0, monash-blue)
 }
 

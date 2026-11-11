@@ -57,9 +57,9 @@
 
 #let _outline-body(self, title, depth) = {
   block(width: 100%, below: 1.4em, {
-    text(size: 1.35em, fill: monash-blue, weight: "bold", utils.call-or-display(self, title))
-    v(.3em)
-    monash-accent-rule(width: 5.8em, height: 3pt, paint: self.store.accent-color)
+    set block(spacing: .45em)
+    block(text(size: 1.35em, fill: monash-blue, weight: "bold", utils.call-or-display(self, title)))
+    monash-accent-rule(width: 4.2em, height: 3pt, paint: self.store.accent-color)
   })
   block(width: 82%, inset: (left: .35cm), {
     set par(leading: .62em)
@@ -105,24 +105,34 @@
   config: config,
 ))
 
-#let _section-heading(self, level) = context {
+// Number and title share one grid row, centred against each other, so a
+// multi-line title stays aligned with its number; the outline sits in the
+// title column below.
+#let _section-layout(self, level, outline) = context {
   let current = utils.current-heading(level: level)
   let label = if current != none { section-label(current.location(), level: level) }
-  grid(
-    columns: (1fr, 2.35fr),
-    column-gutter: .72cm,
+  let size = self.store.font-size
+  align(center, block(width: 86%, align(left, grid(
+    columns: (auto, 1fr),
+    column-gutter: size * 1.1,
+    row-gutter: size * 1.4,
     align: (right + horizon, left + horizon),
-    text(size: self.store.font-size * 4.1, fill: self.store.accent-color, weight: "bold", label),
-    text(
-      size: self.store.font-size * 2.05,
-      fill: monash-blue,
-      weight: "bold",
-      utils.display-current-heading(level: level, numbered: false),
-    ),
-  )
+    text(size: size * 4.1, fill: self.store.accent-color, weight: "bold", label),
+    {
+      set par(leading: .35em)
+      text(
+        size: size * 2.05,
+        fill: monash-blue,
+        weight: "bold",
+        utils.display-current-heading(level: level, numbered: false),
+      )
+    },
+    [],
+    outline,
+  ))))
 }
 
-#let _section-outline(self, level) = block(width: 78%, inset: (left: 13%), {
+#let _section-outline(self, level) = {
   set par(leading: .58em)
   let faded = (level, it) => _outline-entry(self, it, current: false, alpha: 58%)
   components.custom-progressive-outline(
@@ -135,7 +145,7 @@
     show-current: (level, it) => _outline-entry(self, it, large: true),
     show-future: faded,
   )
-})
+}
 
 /// Section divider slide, created automatically for every level-one
 /// heading unless `section-slides: false`. It shows the section number and
@@ -160,11 +170,7 @@
   let appendix = self.at("appendix", default: false)
   touying-slide(self: self, setting: std.align.with(horizon), {
     appendix-marker(self)
-    _section-heading(self, level)
-    if not appendix {
-      v(.95cm)
-      _section-outline(self, level)
-    }
+    _section-layout(self, level, if not appendix { _section-outline(self, level) })
     body
   })
 })

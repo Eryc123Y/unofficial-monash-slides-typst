@@ -1,7 +1,7 @@
 // Page furniture of content slides: the title bar in the page header, the
 // footer with slide number and progress bar, and the bounded logo.
 
-#import "@preview/touying:0.8.0": components, utils
+#import "@preview/touying:0.8.0": components, touying-notes, utils
 #import "design.typ": *
 
 /// Scales `logo` down so it is at most `max-height` tall. Needs no context.
@@ -125,9 +125,10 @@
     grid(
       columns: (1fr, auto),
       align: (left + bottom, right + bottom),
-      text(size: .5em, fill: monash-dark-grey, _footer-text(self)),
+      text(size: .6em, fill: monash-dark-grey, _footer-text(self)),
+      // monash-dark-grey on white has a contrast ratio of 5.9:1.
       if self.store.slide-numbering != none {
-        text(size: .5em, fill: monash-grey, slide-number(self))
+        text(size: .6em, fill: monash-dark-grey, slide-number(self))
       },
     ),
   )
@@ -143,3 +144,16 @@
     place(bottom + left, bar)
   })
 }
+
+/// Speaker-note panel in theme colours, registered as Touying's `notes-fn`.
+#let notes(self: none, ..args) = touying-notes(
+  self: self,
+  header: self => pad(x: 32pt, y: 16pt, text(
+    fill: white,
+    weight: "bold",
+    utils.display-current-heading(depth: self.slide-level),
+  )),
+  header-fill: monash-blue,
+  fill: monash-blue-wash,
+  ..args,
+)

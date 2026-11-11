@@ -3,7 +3,7 @@
 #import "@preview/touying:0.8.0": config-colors, default-config, config-common, config-info, config-methods, config-page, config-store, touying-slides, utils
 #import "design.typ": *
 #import "options.typ": check-footer, check-options, check-unknown-options
-#import "chrome.typ": content-margin-bottom, content-margin-top, footer as page-footer, title-bar
+#import "chrome.typ": content-margin-bottom, content-margin-top, footer as page-footer, notes, title-bar
 #import "styles.typ": slide-rules
 #import "slides.typ": slide
 #import "navigation.typ": new-section-slide
@@ -116,6 +116,7 @@
     ),
     config-common(
       slide-fn: slide,
+      notes-fn: notes,
       new-section-slide-fn: if section-slides { new-section-slide } else { none },
       slide-level: 2,
       show-strong-with-alert: false,

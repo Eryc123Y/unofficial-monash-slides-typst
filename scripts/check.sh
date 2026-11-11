@@ -72,6 +72,8 @@ variant_runs=(
   "tests/slide-kinds.typ|sections=off"
   "tests/slide-kinds.typ|aspect=4-3"
   "tests/citations.typ|footnotes=off"
+  "tests/visual.typ|notes=on"
+  "tests/visual.typ|aspect=4-3"
 )
 for variant in no-progress-bar logo footer-auto numbering-total numbering-none \
   accent-teal no-section-slides no-outline plain-cover; do
