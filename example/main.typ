@@ -1,6 +1,5 @@
 #import "@preview/unofficial-monash-touying:1.0.0": *
 
-#set text(font: ("Arial", "New Computer Modern"))
 
 #let title-background = image(
   "../template/assets/monash-presentation/background/bg-02.png",

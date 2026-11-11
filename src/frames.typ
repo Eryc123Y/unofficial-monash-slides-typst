@@ -27,42 +27,42 @@
     supplement-line
   }
 
+  let header = block(
+    width: 100%,
+    fill: accent-color,
+    inset: (x: space-md, y: space-xs),
+    below: 0pt,
+    {
+      text(size: .68em, fill: white, weight: "bold", title-line)
+      if tags.len() > 0 {
+        h(space-sm)
+        text(size: .52em, fill: white.transparentize(25%), tags.join([, ]))
+      }
+    },
+  )
+  // The body uses ordinary flow spacing, so paragraphs, lists, equations,
+  // and code blocks are separated as they are outside a frame.
+  let content = if body not in (none, []) {
+    block(width: 100%, inset: (x: space-md, top: .5em, bottom: .55em), {
+      set text(size: .84em, fill: monash-charcoal)
+      set par(leading: .55em, spacing: .8em)
+      set block(spacing: .8em)
+      body
+    })
+  }
   block(
     width: 100%,
     fill: _frame-fill(accent-color),
     stroke: (
-      left: (paint: accent-color, thickness: monash-frame-rule),
+      left: (paint: accent-color, thickness: frame-rule),
       rest: (paint: monash-grey-soft, thickness: .55pt),
     ),
     radius: 2pt,
     inset: 0pt,
-    [
-      #block(
-        width: 100%,
-        fill: accent-color,
-        inset: (x: monash-space-md, y: monash-space-xs),
-        [
-          #text(size: .68em, fill: white, weight: "bold", title-line)
-          #if tags.len() > 0 {
-            h(monash-space-sm)
-            text(size: .52em, fill: white.transparentize(25%), tags.join([, ]))
-          }
-        ],
-      )
-      #if body != [] {
-        block(
-          width: 100%,
-          inset: (x: monash-space-md, top: 0pt, bottom: .32em),
-          [
-            #set text(size: .84em, fill: monash-charcoal)
-            #set par(leading: .72em, spacing: 0pt)
-            #set block(above: 0pt, below: 0pt)
-            #v(-.52em)
-            #body
-          ],
-        )
-      }
-    ],
+    {
+      header
+      content
+    },
   )
 }
 
@@ -83,7 +83,7 @@
   body,
 ) = block(
   width: 100%,
-  inset: (x: monash-space-md, y: monash-space-xs),
+  inset: (x: space-md, y: space-xs),
   [
     #let proof-label = if _has-title(title) {
       [#text(weight: "bold")[Proof] (#title).]

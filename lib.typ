@@ -31,7 +31,9 @@
 )
 
 // Theme and slide kinds.
-#import "src/theme.typ": monash-theme, slide, title-slide
+#import "src/theme.typ": monash-theme
+#import "src/slides.typ": slide
+#import "src/cover.typ": title-slide
 
 // Environments.
 #import "src/frames.typ": (

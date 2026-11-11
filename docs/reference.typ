@@ -3,7 +3,7 @@
 
 #set document(title: "Unofficial Monash Touying Reference")
 #set page(paper: "a4", margin: 2cm)
-#set text(font: ("Arial", "New Computer Modern"), size: 10pt)
+#set text(size: 10pt)
 #set par(justify: false, leading: .65em)
 
 = Unofficial Monash Touying Reference
@@ -20,7 +20,7 @@ documentation document.
   scope: reference-scope,
 )
 #let theme-docs = tidy.parse-module(
-  read("../src/theme.typ"),
+  read("../src/theme.typ") + read("../src/slides.typ") + read("../src/cover.typ") + read("../src/navigation.typ"),
   name: "Theme",
   scope: reference-scope,
 )

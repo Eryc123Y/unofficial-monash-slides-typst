@@ -1,3 +1,5 @@
+// Colour tokens (exported) and layout constants (internal).
+
 #let monash-blue = rgb("#1969AA")
 #let monash-blue-dark = rgb("#005C91")
 #let monash-orange = rgb("#C14B14")
@@ -15,30 +17,20 @@
 #let monash-blue-grey = rgb("#557A95")
 #let monash-teal = rgb("#007C89")
 
-#let monash-page-margin-x = 1.0cm
-#let monash-page-margin-top = 1.0cm
-#let monash-page-margin-bottom = .1cm
-#let monash-title-bar-height = 1.7cm
-#let monash-footer-height = .18cm
+// Layout constants. Lengths that scale with the body size are factors of
+// `font-size`; the rest are absolute.
+#let page-margin-x = 1.0cm
+#let bar-height-factor = 2.2 // single-line title bar height / font-size
+#let bar-text-factor = 1.3 // title bar text size / font-size
+#let bar-min-text-ratio = .75 // floor for shrinking a long slide heading
+#let bar-gap-factor = .9 // space between title bar and body / font-size
+#let footer-height-factor = 1.5 // bottom margin / font-size
+#let progress-height = 2pt
+#let frame-rule = 2.4pt
 
-#let monash-space-xs = .24em
-#let monash-space-sm = .42em
-#let monash-space-md = .72em
-#let monash-space-lg = 1.05em
-#let monash-space-xl = 1.55em
-#let monash-space-2xl = 2.25em
-
-#let monash-body-size = 22pt
-#let monash-title-font-size = 36pt
-#let monash-cover-title-size = 36pt
-#let monash-title-bar-font-size = 1.3em
-#let monash-heading-three-size = .86em
-#let monash-footer-size = .5em
-#let monash-logo-cover-height = 1.25em
-#let monash-logo-content-height = 1.25em
-
-#let monash-rule-thin = 2pt
-#let monash-frame-rule = 2.4pt
+#let space-xs = .24em
+#let space-sm = .42em
+#let space-md = .72em
 
 /// Draws a small Monash accent rule.
 ///

@@ -1,6 +1,5 @@
 #import "@preview/unofficial-monash-touying:1.0.0": *
 
-#set text(font: ("Arial", "New Computer Modern"))
 
 // Replace this with your own approved title graphic, or remove `titlegraphic`
 // from `monash-theme.with(...)` to use a plain title slide.

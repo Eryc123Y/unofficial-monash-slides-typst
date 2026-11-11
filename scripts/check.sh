@@ -63,6 +63,27 @@ for deck in "${decks[@]}"; do
   typst_compile "$deck" "$(output_name "$deck")"
 done
 
+# Parametrised test decks: each extra input set is compiled separately.
+variant_runs=(
+  "tests/stress.typ|aspect=4-3"
+  "tests/options.typ|aspect=4-3"
+)
+for variant in no-progress-bar logo footer-auto numbering-total numbering-none \
+  accent-teal no-section-slides no-outline plain-cover; do
+  variant_runs+=("tests/options.typ|variant=$variant")
+done
+variant_runs+=("tests/options.typ|variant=plain-cover,aspect=4-3")
+variant_runs+=("tests/options.typ|variant=logo,aspect=4-3")
+for run in "${variant_runs[@]}"; do
+  deck="${run%%|*}"
+  inputs="${run#*|}"
+  input_args=()
+  IFS=',' read -ra pairs <<<"$inputs"
+  for pair in "${pairs[@]}"; do input_args+=(--input "$pair"); done
+  echo -n "[$inputs] "
+  typst_compile "$deck" "build/$(basename "${deck%.typ}")-${inputs//[=,]/-}.pdf" "${input_args[@]}"
+done
+
 # Decks that name an installed font run only where that font exists.
 font_available() {
   typst fonts ${font_flags[@]+"${font_flags[@]}"} | grep -qx "$1"
