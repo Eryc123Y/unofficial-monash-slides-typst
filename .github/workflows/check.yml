@@ -1,0 +1,16 @@
+name: Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: "0.15"
+      - name: Compile every deck with the embedded fonts only
+        run: scripts/check.sh --ignore-system-fonts

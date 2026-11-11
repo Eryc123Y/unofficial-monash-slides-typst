@@ -124,8 +124,14 @@
     inset: (x: page-margin-x),
     grid(
       columns: (1fr, auto),
+      column-gutter: self.store.font-size,
       align: (left + bottom, right + bottom),
-      text(size: .6em, fill: monash-dark-grey, _footer-text(self)),
+      // Long footer text shrinks to stay on one line above the progress bar.
+      utils.fit-to-width(
+        grow: false,
+        100%,
+        text(size: .6em, fill: monash-dark-grey, _footer-text(self)),
+      ),
       // monash-dark-grey on white has a contrast ratio of 5.9:1.
       if self.store.slide-numbering != none {
         text(size: .6em, fill: monash-dark-grey, slide-number(self))

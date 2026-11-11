@@ -8,36 +8,21 @@
 
 = Unofficial Monash Touying Reference
 
-This reference is generated from the package's Typst doc comments with
-`tidy`. The runtime package does not depend on `tidy`; it is only used for this
-documentation document.
+This reference is generated from the package's doc comments with `tidy`. The
+package itself does not depend on `tidy`. See `README.md` for the user
+manual, including the Touying names the package re-exports.
 
-#let reference-scope = (monash: monash)
+#let scope = (monash: monash)
+#let section(title, ..files) = {
+  let docs = tidy.parse-module(
+    files.pos().map(file => read("../src/" + file)).join("\n"),
+    name: title,
+    scope: scope,
+  )
+  tidy.show-module(docs, style: tidy.styles.default, show-outline: false)
+}
 
-#let frame-docs = tidy.parse-module(
-  read("../src/frames.typ"),
-  name: "Frame Environments",
-  scope: reference-scope,
-)
-#let theme-docs = tidy.parse-module(
-  read("../src/theme.typ") + read("../src/slides.typ") + read("../src/cover.typ") + read("../src/navigation.typ"),
-  name: "Theme",
-  scope: reference-scope,
-)
-#let design-docs = tidy.parse-module(
-  read("../src/design.typ"),
-  name: "Design Helpers",
-  scope: reference-scope,
-)
-
-== Frame Environments
-
-#tidy.show-module(frame-docs, style: tidy.styles.default)
-
-== Theme
-
-#tidy.show-module(theme-docs, style: tidy.styles.default)
-
-== Design Helpers
-
-#tidy.show-module(design-docs, style: tidy.styles.default)
+#section("Theme", "theme.typ")
+#section("Slides", "cover.typ", "slides.typ", "navigation.typ")
+#section("Environments", "frames.typ")
+#section("Design helpers", "design.typ")

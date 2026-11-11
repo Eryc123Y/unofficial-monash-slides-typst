@@ -70,12 +70,14 @@
 // keeps. Inline code is enlarged to 0.85em overall (1.0625 x 0.8).
 #let _code-rules(body) = {
   show raw.where(block: false): set text(size: 1.0625em)
-  show raw.where(block: false): it => box(
+  // `highlight` rather than `box`, so long inline code breaks across lines
+  // like text instead of wrapping inside a box.
+  show raw.where(block: false): it => highlight(
     fill: monash-blue-wash,
-    stroke: (paint: monash-grey-soft, thickness: .45pt),
+    extent: .12em,
+    top-edge: "ascender",
+    bottom-edge: "descender",
     radius: 1.5pt,
-    inset: (x: .2em, y: 0pt),
-    outset: (y: .18em),
     text(fill: monash-blue-dark, it),
   )
   show raw.where(block: true): set text(fill: monash-charcoal)

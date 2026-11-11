@@ -57,7 +57,7 @@ for file in examples/*.typ tests/*.typ; do
   [[ "$file" == tests/legacy.typ ]] && continue
   decks+=("$file")
 done
-decks+=(docs/reference.typ)
+decks+=(docs/reference.typ docs/preview.typ)
 
 for deck in "${decks[@]}"; do
   typst_compile "$deck" "$(output_name "$deck")"
@@ -74,6 +74,7 @@ variant_runs=(
   "tests/citations.typ|footnotes=off"
   "tests/visual.typ|notes=on"
   "tests/visual.typ|aspect=4-3"
+  "examples/lecture.typ|handout=true"
 )
 for variant in no-progress-bar logo footer-auto numbering-total numbering-none \
   accent-teal no-section-slides no-outline plain-cover; do
@@ -91,24 +92,52 @@ for run in "${variant_runs[@]}"; do
   typst_compile "$deck" "build/$(basename "${deck%.typ}")-${inputs//[=,]/-}.pdf" "${input_args[@]}"
 done
 
-# Decks that name an installed font run only where that font exists.
+# Decks that name an installed font run only where that font exists. A deck
+# lists its fonts in `// requires-font: <family>` lines.
+installed_fonts="$(typst fonts ${font_flags[@]+"${font_flags[@]}"})"
 font_available() {
-  typst fonts ${font_flags[@]+"${font_flags[@]}"} | grep -qx "$1"
+  grep -Fqx "$1" <<<"$installed_fonts"
 }
+font_runs=()
 for deck in tests/fonts/*.typ; do
   [[ -e "$deck" ]] || continue
-  required="$(sed -n 's/^\/\/ requires-font: //p' "$deck")"
-  missing=""
-  while IFS= read -r font; do
-    [[ -z "$font" ]] && continue
-    font_available "$font" || missing="$font"
-  done <<<"$required"
-  if [[ -n "$missing" ]]; then
-    echo "skip  $deck (font \"$missing\" not installed)"
-  else
-    typst_compile "$deck" "$(output_name "$deck")"
-  fi
+  font_runs+=("$deck||$(sed -n 's/^\/\/ requires-font: //p' "$deck" | head -1)")
 done
+font_runs+=("tests/fonts/cjk.typ|cjk=off|Noto Sans CJK SC")
+font_runs+=("tests/fonts/cjk.typ|latin=Arial|Arial")
+font_runs+=("tests/fonts/arial.typ|aspect=4-3|Arial")
+font_runs+=("examples/showcase.typ|font=Arial|Arial")
+for run in "${font_runs[@]}"; do
+  IFS='|' read -r deck inputs font <<<"$run"
+  if ! font_available "$font"; then
+    echo "skip  $deck [$inputs] (font \"$font\" not installed)"
+    continue
+  fi
+  input_args=()
+  if [[ -n "$inputs" ]]; then
+    IFS=',' read -ra pairs <<<"$inputs"
+    for pair in "${pairs[@]}"; do input_args+=(--input "$pair"); done
+  fi
+  echo -n "[$inputs] "
+  typst_compile "$deck" "build/fonts-$(basename "${deck%.typ}")-${inputs//[=,]/-}.pdf" ${input_args[@]+"${input_args[@]}"}
+done
+
+# Handout mode collapses animations: fewer pages than the presentation.
+count_pages() {
+  local dir
+  dir="$(mktemp -d)"
+  typst compile --root . ${font_flags[@]+"${font_flags[@]}"} --ppi 10 "$@" "$dir/p-{p}.png" >/dev/null 2>&1
+  ls "$dir" | wc -l | tr -d ' '
+  rm -rf "$dir"
+}
+presentation_pages="$(count_pages tests/handout.typ)"
+handout_pages="$(count_pages --input handout=true tests/handout.typ)"
+if [[ "$presentation_pages" == 7 && "$handout_pages" == 4 ]]; then
+  echo "ok    handout collapses 7 pages to 4"
+else
+  echo "FAIL  handout: expected 7 and 4 pages, got $presentation_pages and $handout_pages"
+  failures=$((failures + 1))
+fi
 
 # Every 0.1.x option name must fail with a message naming the replacement.
 legacy_cases=(
@@ -139,8 +168,14 @@ for case in "${legacy_cases[@]}"; do
 done
 
 if [[ "$thumbnail" == true ]]; then
-  typst compile --root . ${font_flags[@]+"${font_flags[@]}"} --pages 1 template/main.typ thumbnail.png
-  echo "Regenerated thumbnail.png"
+  preview_dir="$(mktemp -d)"
+  typst compile --root . --ignore-system-fonts --ppi 100 docs/preview.typ "$preview_dir/p-{p}.png"
+  cp "$preview_dir/p-1.png" thumbnail.png
+  cp "$preview_dir/p-1.png" docs/preview/title-slide.png
+  cp "$preview_dir/p-3.png" docs/preview/content-slide.png
+  cp "$preview_dir/p-4.png" docs/preview/academic-frames.png
+  rm -rf "$preview_dir"
+  echo "Regenerated thumbnail.png and docs/preview/*.png"
 fi
 
 if [[ "$failures" -gt 0 ]]; then

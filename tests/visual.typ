@@ -79,7 +79,9 @@ User arguments win over the theme's set rules.
 Visit #link("https://www.monash.edu")[the university website]; outline
 entries and references are not styled as links.
 
-Inline code such as `let x = 1` sits at about 0.85em of the text.
+Inline code such as `let x = 1` sits at about 0.85em of the text, and a
+long span such as `normalize(features, mean=features.mean(), std=features.std())`
+breaks across lines like ordinary text.
 
 ```python
 def mse(y, pred):
@@ -90,8 +92,7 @@ def mse(y, pred):
 // glyphs at body size.
 #context {
   let mono = measure(text(font: "DejaVu Sans Mono")[MMMM]).width
-  // Subtracting an empty code box removes its padding.
-  let inline = measure(raw("MMMM")).width - measure(raw("")).width
+  let inline = measure(raw("MMMM")).width
   text(size: .6em, fill: monash-dark-grey)[
     Inline code glyphs: #calc.round(inline / mono, digits: 2)em of the body
     size. Block code keeps Typst's 0.8em.

@@ -44,8 +44,8 @@
   )
 })
 
-/// A heading that is laid out invisibly, so that a special slide's title is
-/// found by `utils.display-current-heading` (Touying's theme guide, step 3).
+// A heading that is laid out invisibly, so that a special slide's title is
+// found by `utils.display-current-heading` (Touying's theme guide, step 3).
 #let hidden-heading(self, title) = place(hide(heading(
   level: self.slide-level,
   title,

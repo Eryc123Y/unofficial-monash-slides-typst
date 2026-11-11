@@ -1,128 +1,81 @@
 #import "@preview/unofficial-monash-touying:1.0.0": *
 
-
-// Replace this with your own approved title graphic, or remove `titlegraphic`
-// from `monash-theme.with(...)` to use a plain title slide.
-#let monash-titlegraphic = image(
-  "assets/monash-presentation/background/bg-02.png",
-  width: 100%,
-  height: 100%,
-  fit: "cover",
-)
-
 #show: monash-theme.with(
-  title-graphic: monash-titlegraphic,
+  // For the Monash look, use Arial where it is installed:
+  // font: "Arial",
   config-info(
-    title: [Unofficial Monash Touying],
-    short-title: [Monash Touying],
-    subtitle: [Academic presentation starter],
+    title: [Presentation Title],
+    short-title: [Short Title],
+    subtitle: [Subtitle],
     author: [Your Name],
     institution: [Monash University],
     date: datetime.today(),
   ),
 )
 
-// Install the academic frame environments:
-// `definition`, `theorem`, `lemma`, `corollary`, `note`, `warning`, `remark`,
-// and `proof`. Use `.with(numbering: false)` to hide frame numbers.
 #show: show-monash-frames
 
 #title-slide()
 
-= Overview
+= Introduction
 
-== Why This Starter
+== Motivation
 
-This package wraps Touying's authoring model. Use headings for sections and
-slides, and use the exported Monash-inspired theme and academic frame
-environments.
+- State the problem in one sentence.
+- Say why it matters.
+  - Add detail at a second level when needed.
 
-- Use headings to create sections and slides.
-- Use `#slide` when you want manual slide control.
-- Use presentation features such as `#pause` directly.
-- Use `outline: false` in `monash-theme.with(...)` if you do not want the automatic
-  outline after the title slide.
+#pause
 
-== A Typical Research Slide
+Content after `#pause` appears on the next click.
 
-Use compact claims, short evidence, and one visual emphasis point per slide.
+== Plan
 
-#grid(
-  columns: (1fr, 1fr),
-  gutter: 1cm,
-  [
-    - State the problem.
-    - Name the method.
-    - Report the key result.
-  ],
-  [
-    #block(
-      width: 100%,
-      height: 4.6em,
-      fill: monash-blue-wash,
-      stroke: (left: (paint: monash-orange, thickness: 2.4pt)),
-      inset: (x: .75em, y: .6em),
-    )[
-      #align(center + horizon)[
-        #text(fill: monash-blue, weight: "bold")[
-          Replace this panel with a figure, table, or quote.
-        ]
-      ]
-    ]
-  ],
-)
++ Background
++ Method
++ Results
 
-= Academic Frames
+= Method
 
-== Theorem-Like Content
+== Key Definition
 
-#definition[Loss Function][
-  A loss function maps a prediction and target to a scalar penalty:
-  $"loss": cal(Y) times cal(Y) -> RR$.
+#definition[Term][
+  A definition states exactly what a word means in this talk.
 ]
 
-#theorem[Convergence Sketch][
-  If $f$ is convex and $L$-smooth, gradient descent with a suitable step size
-  satisfies $f(x_t) - f(x^*) = O(1 / t)$.
+#theorem[Main Result][
+  Under the stated assumptions, the method converges.
+] <main-result>
+
+#proof[
+  Sketch the argument in one or two sentences.
 ]
 
-#proof[Sketch][
-  Apply the theorem assumptions and simplify.
-]
-
-== Notes and Warnings
-
-#note[Usage][
-  Use notes for implementation details, assumptions, or presentation reminders.
-]
-
-#warning[Scope][
-  Keep slide claims narrow enough that the supporting evidence fits on the same
-  slide or the next one.
-]
-
-= Code
-
-== Code
+== Code and Data
 
 ```python
-def mse(y, pred):
-    return ((y - pred) ** 2).mean()
+def mean(values):
+    return sum(values) / len(values)
 ```
 
-Inline code such as `#slide` is styled consistently with fenced code blocks.
+#table(
+  columns: 3,
+  table.header[Method][Accuracy][Time (s)],
+  [Baseline], [71.2%], [12.4],
+  [Ours], [78.9%], [10.1],
+)
 
-== Closing Checklist
+= Results
 
-- Replace the title metadata.
-- Add or remove sections.
-- Swap in approved title graphics and logos when appropriate.
-- Run `typst compile main.typ` before presenting.
+== Findings
 
-== Closing
+@main-result holds on every dataset we tried.
 
-#slide[
-  #align(center + horizon)[
-    #text(size: 1.6em, fill: monash-blue, weight: "bold")[Thank you]
-  ]
+#note[
+  Replace this note with the one thing the audience should remember.
+]
+
+#ending-slide[
+  Your Name \
+  your.name\@monash.edu
 ]

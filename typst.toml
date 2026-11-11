@@ -9,7 +9,7 @@ repository = "https://github.com/Eryc123Y/unofficial-monash-slides-typst.git"
 keywords = ["slides", "monash", "touying", "presentation", "academic"]
 categories = ["presentation"]
 compiler = "0.15.0"
-exclude = ["docs", "example", "scripts"]
+exclude = ["docs", "examples", "scripts", "tests", ".github"]
 
 [template]
 path = "template"

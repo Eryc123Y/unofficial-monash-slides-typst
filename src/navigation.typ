@@ -74,8 +74,8 @@
   })
 }
 
-/// Builds the outline slide for `self`. Used by `outline-slide` and by
-/// `title-slide`, which emits one automatically.
+// Builds the outline slide for `self`. Used by `outline-slide` and by
+// `title-slide`, which emits one automatically.
 #let outline-slide-fn(self, title: auto, depth: 1, config: (:)) = {
   self = utils.merge-dicts(
     self,

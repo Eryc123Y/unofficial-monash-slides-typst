@@ -24,8 +24,8 @@
 // The counter used by `shared-counter: true`.
 #let _shared-counter = counter("monash-shared-statement")
 
-/// Counters Touying must rewind on every subslide so that a frame on a slide
-/// with `#pause` is counted once.
+// Counters Touying must rewind on every subslide so that a frame on a slide
+// with `#pause` is counted once.
 #let frame-counters = (
   _environments.map(env => counter(figure.where(kind: env.kind)))
     + (_shared-counter,)
