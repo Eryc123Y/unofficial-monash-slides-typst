@@ -1,4 +1,4 @@
-#import "@preview/frame-it:2.0.0": frame, frame-style
+#import "@preview/frame-it:2.1.0": frame, frame-style
 #import "design.typ": *
 
 #let _has-title(title) = title not in (none, [], "")

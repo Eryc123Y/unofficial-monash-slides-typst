@@ -1,4 +1,4 @@
-#import "@preview/unofficial-monash-touying:0.1.3": *
+#import "@preview/unofficial-monash-touying:1.0.0": *
 
 #set text(font: ("Arial", "New Computer Modern"))
 
@@ -10,7 +10,7 @@
 )
 
 #show: monash-theme.with(
-  titlegraphic: title-background,
+  title-graphic: title-background,
   config-info(
     title: [Unofficial Monash Touying],
     short-title: [Monash Touying],
@@ -31,11 +31,11 @@
 
 Import only this package, then install the Monash-inspired theme as a document
 show rule. The starter places a global outline after the title slide by default;
-set `toc: false` in `monash-theme.with(...)` if a deck should start directly
+set `outline: false` in `monash-theme.with(...)` if a deck should start directly
 with the first section.
 
 ```typst
-#import "@preview/unofficial-monash-touying:0.1.3": *
+#import "@preview/unofficial-monash-touying:1.0.0": *
 
 #show: monash-theme.with(
   config-info(
@@ -61,7 +61,7 @@ appropriate rights can pass their own logo or title graphic as content.
 #let title-background = image("assets/title-background.png", fit: "cover")
 
 #show: monash-theme.with(
-  titlegraphic: title-background,
+  title-graphic: title-background,
   logo: image("assets/logo.svg", height: 1.25em),
   config-info(title: [Presentation Title]),
 )
@@ -75,7 +75,7 @@ from title to content.
 
 ```typst
 #show: monash-theme.with(
-  toc: false,
+  outline: false,
   config-info(title: [Presentation Title]),
 )
 ```

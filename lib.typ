@@ -1,13 +1,20 @@
-#import "@preview/touying:0.7.3": (
+// Public entrypoint of unofficial-monash-touying. Every name exported here is
+// documented in README.md; tests/api.typ checks that each one resolves.
+
+// Touying authoring names re-exported so a deck needs only this import.
+#import "@preview/touying:0.8.0": (
   alert,
   alternatives,
   appendix,
+  cols,
+  components,
   config-colors,
   config-common,
   config-info,
   config-methods,
   config-page,
   config-store,
+  effect,
   empty-slide,
   handout-only,
   item-by-item,
@@ -15,13 +22,27 @@
   meanwhile,
   only,
   pause,
+  side-by-side,
   speaker-note,
+  touying-recall,
   uncover,
+  utils,
   waypoint,
 )
-#import "@preview/touying:0.7.3": components
-#import "@preview/touying:0.7.3": utils
-#import "@preview/touying:0.7.3": cols, lazy-h, lazy-layout, lazy-v, side-by-side
-#import "src/design.typ": *
-#import "src/theme.typ": *
-#import "src/frames.typ": *
+
+// Theme and slide kinds.
+#import "src/theme.typ": monash-theme, slide, title-slide
+
+// Environments.
+#import "src/frames.typ": (
+  corollary, definition, lemma, monash-frame-style, note, proof, remark,
+  show-monash-frames, theorem, warning,
+)
+
+// Colour tokens and the accent rule.
+#import "src/design.typ": (
+  monash-accent-rule, monash-blue, monash-blue-dark, monash-blue-grey,
+  monash-blue-wash, monash-charcoal, monash-dark-grey, monash-green,
+  monash-grey, monash-grey-light, monash-grey-soft, monash-muted,
+  monash-orange, monash-orange-soft, monash-paper, monash-slate, monash-teal,
+)

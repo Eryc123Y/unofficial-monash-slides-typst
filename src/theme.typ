@@ -1,8 +1,7 @@
-#import "@preview/touying:0.7.3": *
+#import "@preview/touying:0.8.0": *
 #import "@preview/zebraw:0.6.3": zebraw
 #import "design.typ": *
-
-#let monash-blue-light = monash-blue-wash
+#import "options.typ": check-footer, check-options, check-unknown-options
 
 #let _display-logo(self, fallback: [Monash University], height: 1em) = {
   if self.info.logo != none {
@@ -12,21 +11,33 @@
   }
 }
 
-#let _title-color(color) = {
-  if color == "white" {
-    white
-  } else if color == "black" {
-    black
-  } else {
-    color
+#let _title-graphic(graphic) = {
+  if graphic == auto {
+    image(
+      "../template/assets/monash-presentation/background/bg-02.png",
+      width: 100%,
+      height: 100%,
+      fit: "cover",
+    )
+  } else if graphic != none {
+    box(width: 100%, height: 100%, graphic)
   }
 }
 
-#let _titlegraphic(graphic) = {
-  if type(graphic) == str {
-    image(graphic, width: 100%, height: 100%, fit: "cover")
+// Counting symbols of Typst numbering patterns. A pattern with one of them
+// shows the current slide only; with two it receives (current, total).
+#let _counting-symbols = regex("[1aAiIαΑ一壹あいアイא가ㄱ*١۱१১ক①⓵]")
+
+#let _slide-number(self) = context {
+  let pattern = self.store.slide-numbering
+  let current = utils.slide-counter.get().first()
+  let total = utils.last-slide-counter.final().first()
+  if type(pattern) == function {
+    pattern(current, total)
+  } else if pattern.matches(_counting-symbols).len() < 2 {
+    numbering(pattern, current)
   } else {
-    box(width: 100%, height: 100%, graphic)
+    numbering(pattern, current, total)
   }
 }
 
@@ -56,16 +67,14 @@
     ]
     #place(bottom + left, dx: -monash-page-margin-x)[
       #box(width: 100% + 2 * monash-page-margin-x)[
-        #components.progress-bar(height: 2pt, monash-orange, monash-grey-soft)
+        #components.progress-bar(height: 2pt, self.store.accent-color, monash-grey-soft)
       ]
     ]
     #place(bottom + right)[
       #move(dx: -.15cm, dy: -.16cm)[
-        #context text(
-          fill: monash-grey,
-          size: monash-footer-size,
-          utils.slide-counter.display(),
-        )
+        #if self.store.slide-numbering != none {
+          text(fill: monash-grey, size: monash-footer-size, _slide-number(self))
+        }
       ]
     ]
   ]
@@ -137,7 +146,8 @@
 
 #let _monash-outline-entry(self, it, current: true, alpha: 100%, large: false) = {
   let fill = if current { monash-blue } else { monash-muted.transparentize(alpha) }
-  let number-fill = if current { monash-orange } else { monash-orange.transparentize(alpha) }
+  let accent = self.store.accent-color
+  let number-fill = if current { accent } else { accent.transparentize(alpha) }
   let number-color = if current { white } else { white.transparentize(alpha) }
   let title = utils.short-heading(self: self, it.element)
   let number-size = if large { 1em } else { .78em }
@@ -188,11 +198,11 @@
   touying-slide(self: self, {
     set std.align(top)
     block(width: 100%)[
-      #text(size: self.store.fontsize * 1.35, fill: monash-blue, weight: "bold")[
+      #text(size: self.store.font-size * 1.35, fill: monash-blue, weight: "bold")[
         #utils.call-or-display(self, title)
       ]
       #v(.15cm)
-      #monash-accent-rule(width: 5.8em, height: 3pt, paint: monash-orange)
+      #monash-accent-rule(width: 5.8em, height: 3pt, paint: self.store.accent-color)
     ]
 
     v(.9cm)
@@ -215,15 +225,15 @@
 
 /// Creates the title slide for a Monash-inspired Touying deck.
 ///
-/// The slide uses the configured `titlegraphic`, title metadata, author,
+/// The slide uses the configured `title-graphic`, title metadata, author,
 /// institution, and date. Extra content can be placed below the metadata.
-/// By default, it also creates a table-of-contents slide immediately after the
-/// title. Set `toc: false` in `monash-theme.with(...)` to disable it.
+/// By default, it also creates an outline slide immediately after the
+/// title. Set `outline: false` in `monash-theme.with(...)` to disable it.
 #let title-slide(config: (:), extra: none, ..args) = touying-slide-wrapper(self => {
   let info = self.info + args.named()
-  let title-color = _title-color(self.store.titlecolor)
-  let titlefontsize = self.store.titlefontsize
-  let fontsize = self.store.fontsize
+  let title-color = self.store.title-color
+  let titlefontsize = self.store.title-font-size
+  let fontsize = self.store.font-size
 
   let title-self = utils.merge-dicts(
     self,
@@ -234,7 +244,7 @@
 
   touying-slide(self: title-self, {
     place(top + left)[
-      #_titlegraphic(self.store.titlegraphic)
+      #_title-graphic(self.store.title-graphic)
     ]
     place(top + left, dx: 1.0cm, dy: 4.8cm)[
       #block(width: 65%)[
@@ -258,8 +268,8 @@
     ]
   })
 
-  if self.store.toc {
-    _monash-outline-slide(self, ..self.store.toc-args)
+  if self.store.outline {
+    _monash-outline-slide(self)
   }
 })
 
@@ -287,15 +297,15 @@
         #context {
           let loc = utils.current-heading(level: level).location()
           text(
-            size: self.store.fontsize * 4.1,
-            fill: monash-orange,
+            size: self.store.font-size * 4.1,
+            fill: self.store.accent-color,
             weight: "bold",
             _section-number(loc, level: level),
           )
         }
       ],
       [
-        #text(size: self.store.fontsize * 2.05, fill: monash-blue, weight: "bold")[
+        #text(size: self.store.font-size * 2.05, fill: monash-blue, weight: "bold")[
           #section-title
         ]
       ],
@@ -341,46 +351,83 @@
   v(.7em, weak: true)
 }
 
+#let _font-rules(font, code-font, font-size, body) = {
+  set text(size: font-size, fill: black)
+  set text(font: font) if font != auto
+  show raw: set text(font: code-font)
+  body
+}
+
 /// Applies the Monash-inspired slide theme to a Touying deck.
 ///
-/// Use this as the main document show rule. It keeps Touying as the authoring
-/// model while applying Monash title bars, footer progress, text styles,
-/// inline code styling, and light `zebraw` code blocks.
+/// Use this as the main document show rule. Every named parameter below is a
+/// theme option; Touying settings are passed as positional `config-*(..)`
+/// arguments.
 ///
 /// ```typst
 /// #show: monash-theme.with(
+///   font: "Arial",
 ///   config-info(title: [Presentation Title]),
 /// )
 /// ```
 #let monash-theme(
-  /// Touying aspect ratio. Defaults to widescreen slides.
+  /// Slide format: `"16-9"` or `"4-3"`.
   aspect-ratio: "16-9",
-  /// Optional logo content shown by the theme.
+  /// Text font. `auto` keeps Typst's default font (or the one you set before
+  /// the theme). `"Arial"` gives the Monash look where it is installed.
+  font: auto,
+  /// Font for code, as a family name or an array of names.
+  code-font: "DejaVu Sans Mono",
+  /// Body text size.
+  font-size: monash-body-size,
+  /// Title size on the title slide.
+  title-font-size: monash-title-font-size,
+  /// Colour of the title-slide text.
+  title-color: black,
+  /// Title-slide graphic: `auto` for the bundled background, `none` for the
+  /// plain cover, or content such as `image(..)`.
+  title-graphic: auto,
+  /// Accent colour for list markers, strong text, progress, and numbers.
+  accent-color: monash-orange,
+  /// Logo content shown on the title slide and in the title bar.
   logo: none,
-  /// Title-slide background image path or content.
-  titlegraphic: "../template/assets/monash-presentation/background/bg-02.png",
-  /// Title text colour. Accepts `black`, `white`, or a colour value.
-  titlecolor: black,
-  /// Main title font size.
-  titlefontsize: monash-title-font-size,
-  /// Base slide font size.
-  fontsize: monash-body-size,
-  /// Reserved brand motif switch for compatibility with the template surface.
-  brand-motif: false,
-  /// Optional motto value stored for future theme extensions.
-  motto: none,
-  /// Progress indicator location. The current theme uses the footer.
-  progress-position: "footer",
-  /// Whether to show the footer progress bar.
+  /// Whether `#title-slide()` is followed by an outline slide.
+  outline: true,
+  /// Whether level-one headings create section divider slides.
+  section-slides: true,
+  /// Whether the footer shows the progress bar.
   progress-bar: true,
-  /// Whether `#title-slide()` should also create a table-of-contents slide.
-  toc: true,
-  /// Additional arguments forwarded to the generated table-of-contents slide.
-  toc-args: (:),
+  /// Slide number pattern, or `none` to hide it. A pattern with two counting
+  /// symbols such as `"1 / 1"` receives the current slide and the total.
+  slide-numbering: "1",
+  /// Footer text on the left: `none`, `auto` (short title and author), or
+  /// content.
+  footer: none,
+  /// Touying `config-*(..)` values, then the document body.
   ..args,
   /// Document body transformed by the theme.
   body,
 ) = {
+  check-unknown-options(args.named())
+  check-options(
+    aspect-ratio: aspect-ratio,
+    font: font,
+    code-font: code-font,
+    font-size: font-size,
+    title-font-size: title-font-size,
+    title-color: title-color,
+    title-graphic: title-graphic,
+    accent-color: accent-color,
+    logo: logo,
+    outline: outline,
+    section-slides: section-slides,
+    progress-bar: progress-bar,
+    slide-numbering: slide-numbering,
+  )
+  check-footer(footer)
+
+  show: _font-rules.with(font, code-font, font-size)
+
   show: touying-slides.with(
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
@@ -390,21 +437,20 @@
     ),
     config-common(
       slide-fn: slide,
-      new-section-slide-fn: _monash-new-section,
+      new-section-slide-fn: if section-slides { _monash-new-section } else { none },
       slide-level: 2,
       show-strong-with-alert: false,
       zero-margin-footer: true,
     ),
     config-methods(
       init: (self: none, body) => {
-        set text(font: "Arial", size: fontsize, fill: black)
         set par(justify: false, leading: .65em)
         set figure(placement: none)
         set list(
           marker: (
-            box(width: .55em, height: .55em, baseline: -.05em, fill: monash-orange),
-            text(fill: monash-orange.lighten(20%), size: .75em)[#sym.triangle.filled.r],
-            text(fill: monash-orange.lighten(20%), size: .75em)[#sym.star.filled],
+            box(width: .55em, height: .55em, baseline: -.05em, fill: accent-color),
+            text(fill: accent-color.lighten(20%), size: .75em)[#sym.triangle.filled.r],
+            text(fill: accent-color.lighten(20%), size: .75em)[#sym.star.filled],
           ),
           indent: 1.2em,
           body-indent: .6em,
@@ -412,7 +458,7 @@
         set enum(
           full: true,
           numbering: (..nums) => box(
-            fill: monash-orange,
+            fill: accent-color,
             inset: (x: 4pt, y: 2pt),
             text(fill: white, size: .72em, weight: "bold")[#nums.pos().last()],
           ),
@@ -421,26 +467,16 @@
         )
         show heading.where(level: 3): _monash-heading-three
         show heading.where(level: 4): set text(fill: monash-blue, weight: "bold")
-        show strong: it => text(fill: monash-orange, weight: "bold", it.body)
+        show strong: it => text(fill: accent-color, weight: "bold", it.body)
         show raw.where(block: false): it => box(
           fill: monash-blue-wash,
           stroke: (paint: monash-grey-soft, thickness: .45pt),
           radius: 1.5pt,
           inset: (x: .18em, y: .04em),
           baseline: .08em,
-          text(
-            font: ("Source Code Pro", "DejaVu Sans Mono"),
-            size: .68em,
-            fill: monash-blue-dark,
-            weight: "medium",
-            it,
-          ),
+          text(size: .68em, fill: monash-blue-dark, weight: "medium", it),
         )
-        show raw.where(block: true): set text(
-          font: ("Source Code Pro", "DejaVu Sans Mono"),
-          size: .72em,
-          fill: monash-charcoal,
-        )
+        show raw.where(block: true): set text(size: .72em, fill: monash-charcoal)
         show: zebraw.with(
           background-color: monash-grey-light,
           highlight-color: monash-blue-wash,
@@ -455,23 +491,22 @@
     ),
     config-colors(
       primary: monash-blue,
-      secondary: monash-orange,
+      secondary: accent-color,
       tertiary: monash-grey,
       neutral-lightest: monash-paper,
       neutral-darkest: monash-charcoal,
     ),
     config-store(
       align: top,
-      brand-motif: brand-motif,
-      motto: motto,
+      font-size: font-size,
+      title-font-size: title-font-size,
+      title-color: title-color,
+      title-graphic: title-graphic,
+      accent-color: accent-color,
+      outline: outline,
       progress-bar: progress-bar,
-      progress-position: progress-position,
-      toc: toc,
-      toc-args: toc-args,
-      titlegraphic: titlegraphic,
-      titlecolor: titlecolor,
-      titlefontsize: titlefontsize,
-      fontsize: fontsize,
+      slide-numbering: slide-numbering,
+      footer: footer,
     ),
     config-info(logo: logo),
     ..args,

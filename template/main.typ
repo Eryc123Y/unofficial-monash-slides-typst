@@ -1,4 +1,4 @@
-#import "@preview/unofficial-monash-touying:0.1.3": *
+#import "@preview/unofficial-monash-touying:1.0.0": *
 
 #set text(font: ("Arial", "New Computer Modern"))
 
@@ -12,7 +12,7 @@
 )
 
 #show: monash-theme.with(
-  titlegraphic: monash-titlegraphic,
+  title-graphic: monash-titlegraphic,
   config-info(
     title: [Unofficial Monash Touying],
     short-title: [Monash Touying],
@@ -41,7 +41,7 @@ environments.
 - Use headings to create sections and slides.
 - Use `#slide` when you want manual slide control.
 - Use presentation features such as `#pause` directly.
-- Use `toc: false` in `monash-theme.with(...)` if you do not want the automatic
+- Use `outline: false` in `monash-theme.with(...)` if you do not want the automatic
   outline after the title slide.
 
 == A Typical Research Slide
@@ -61,7 +61,7 @@ Use compact claims, short evidence, and one visual emphasis point per slide.
       width: 100%,
       height: 4.6em,
       fill: monash-blue-wash,
-      stroke: (left: (paint: monash-orange, thickness: monash-frame-rule)),
+      stroke: (left: (paint: monash-orange, thickness: 2.4pt)),
       inset: (x: .75em, y: .6em),
     )[
       #align(center + horizon)[
