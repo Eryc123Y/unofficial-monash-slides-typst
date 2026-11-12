@@ -9,7 +9,7 @@ endorsed by Monash University.
 
 | Title slide | Content slide | Environments |
 | --- | --- | --- |
-| ![Title slide with the title, author, and date beside a blue architectural graphic.](docs/preview/title-slide.png) | ![Content slide with a blue title bar, orange square bullets, numbered items, and a code block.](docs/preview/content-slide.png) | ![Slide with a numbered definition, a numbered theorem, and a proof.](docs/preview/academic-frames.png) |
+| ![Title slide with the title, author, and date beside a blue architectural graphic.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.0.0/docs/preview/title-slide.png) | ![Content slide with a blue title bar, orange square bullets, numbered items, and a code block.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.0.0/docs/preview/content-slide.png) | ![Slide with a numbered definition, a numbered theorem, and a proof.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.0.0/docs/preview/academic-frames.png) |
 
 ## Quick start
 
@@ -45,11 +45,11 @@ Or start from scratch:
 - `#pause` reveals the rest of a slide on the next click.
 ```
 
-The [`examples/`](examples) folder has four complete decks:
-[`showcase`](examples/showcase.typ) (a tour of every feature),
-[`research-talk`](examples/research-talk.typ),
-[`lecture`](examples/lecture.typ), and
-[`short-talk`](examples/short-talk.typ).
+The [`examples/`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/tree/v1.0.0/examples) folder has four complete decks:
+[`showcase`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/showcase.typ) (a tour of every feature),
+[`research-talk`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/research-talk.typ),
+[`lecture`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/lecture.typ), and
+[`short-talk`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/short-talk.typ).
 
 ## Options
 
@@ -240,7 +240,7 @@ Touying's built-in option and keep the `#bibliography(..)` call:
 #show: monash-theme.with(config-common(show-bibliography-as-footnote: true), ..)
 ```
 
-See [`examples/research-talk.typ`](examples/research-talk.typ). Touying's
+See [`examples/research-talk.typ`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/research-talk.typ). Touying's
 [FAQ](https://touying-typ.github.io/docs/faq) covers the details.
 
 ## Handouts
