@@ -99,7 +99,7 @@
 /// ]
 /// ```
 #let ending-slide(
-  /// The large title. `auto` is "Thank you" in the language of the text.
+  /// The large title. `auto` is "Thank you", or the `thank-you` label.
   title: auto,
   /// Touying configuration for this slide.
   config: (:),

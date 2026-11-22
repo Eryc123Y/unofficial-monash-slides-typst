@@ -41,9 +41,7 @@
 
 #let _frame-header(title, tags, supplement, number, accent-color) = {
   let label = if number == none { supplement } else { [#supplement #number] }
-  let line = if _has-title(title) {
-    [#label#label-text("title-separator")#title]
-  } else { label }
+  let line = if _has-title(title) { [#label: #title] } else { label }
   block(
     width: 100%,
     fill: accent-color,
@@ -177,8 +175,7 @@
   /// Whether statement-like environments share one counter.
   shared-counter: false,
   /// Labels that replace the built-in ones, such as `(theorem: "Thm")`.
-  /// The built-in labels follow `text.lang`: English, or Chinese with
-  /// `#set text(lang: "zh")`.
+  /// The keys are the environment names, `proof`, and `thank-you`.
   labels: (:),
   /// Document body transformed by the show rule.
   body,
@@ -243,12 +240,10 @@
   )
   let (title, body) = if pos.len() == 2 { pos } else { (none, pos.first()) }
   let name = text(weight: "bold", label-text("proof"))
-  let lead = if _has-title(title) {
-    [#name#label-text("proof-title-open")#title#label-text("proof-title-close")]
-  } else { name }
+  let lead = if _has-title(title) { [#name (#title).] } else { [#name.] }
   block(width: 100%, inset: (x: space-md, y: space-xs), {
     set text(size: .84em, fill: monash-charcoal)
     set par(leading: .55em, spacing: .8em)
-    [#lead#label-text("proof-end")#body#h(1fr)#sym.square.stroked]
+    [#lead #body#h(1fr)#sym.square.stroked]
   })
 }

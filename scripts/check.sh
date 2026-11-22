@@ -81,8 +81,7 @@ variant_runs=(
   "examples/lecture.typ|handout=true"
   "tests/many-sections.typ|aspect=4-3"
   "tests/authors.typ|aspect=4-3"
-  "tests/language.typ|lang=en"
-  "tests/language.typ|lang=en,override=on"
+  "tests/labels.typ|override=on"
 )
 for variant in no-progress-bar logo logo-stacked logo-crest logo-plain-cover \
   logo-both logo-bar-only logo-bar-colour logo-oversized footer-auto authors-array \
@@ -130,8 +129,6 @@ done
 font_runs+=("tests/fonts/cjk.typ|cjk=off|Noto Sans CJK SC")
 font_runs+=("tests/fonts/cjk.typ|latin=Arial|Arial")
 font_runs+=("tests/fonts/arial.typ|aspect=4-3|Arial")
-font_runs+=("tests/language.typ|lang=zh|Noto Sans CJK SC")
-font_runs+=("tests/language.typ|lang=zh-tw|Noto Sans CJK SC")
 font_runs+=("examples/showcase.typ|font=Arial|Arial")
 font_runs+=("tests/cover-meta.typ|font=Arial|Arial")
 font_runs+=("tests/cover-meta.typ|font=Arial,aspect=4-3,logo=on|Arial")

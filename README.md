@@ -162,26 +162,16 @@ With `shared-counter: true`, definitions, theorems, lemmas, corollaries,
 propositions, and assumptions share one counter; examples and exercises keep
 their own.
 
-### Language
+### Labels
 
-The environment names, "Proof", and the "Thank you" of the ending slide
-follow the language of the text. English is the default; set Chinese before
-the theme:
-
-```typst
-#set text(lang: "zh")                 // 定义, 定理, 证明, 谢谢
-#set text(lang: "zh", region: "TW")   // 定義, 定理, 證明, 謝謝
-```
-
-Other languages show the English names. To use your own, or to change a
-single name, pass `labels`:
+To rename an environment, or to use another language, pass `labels`:
 
 ```typst
 #show: show-monash-frames.with(labels: (theorem: "Satz", proof: "Beweis"))
 ```
 
-The keys are the environment names plus `proof` and `thank-you`. Chinese
-text needs a CJK font; see [Fonts](#fonts).
+The keys are the environment names plus `proof` and `thank-you` (the title
+of the ending slide). References such as `@banach` use the new name.
 
 ## Fonts
 
