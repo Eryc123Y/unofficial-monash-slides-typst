@@ -29,7 +29,6 @@ No breaking changes. Decks written for 1.0.0 compile unchanged.
 
 - References, citations, and other links inside the deck are blue, so that
   every link can be told from ordinary text.
-
 - `exercise` frames are purple and `warning` frames red, so that they differ
   from `example` and read as a warning.
 - A proof has a grey rule at the left, in line with the frames, and its end
