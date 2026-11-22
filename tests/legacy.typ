@@ -26,6 +26,7 @@
   logo-bad-value: (logo: (cover: "logo.svg")),
   logo-bad-fill: (logo: (bar: [Logo], bar-fill: "white")),
   math-font-bad: (math-font: 12pt),
+  backlinks-bad: (backlinks: "both"),
 )
 
 // Invalid values outside the theme options.

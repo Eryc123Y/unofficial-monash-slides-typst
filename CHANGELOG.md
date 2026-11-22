@@ -18,8 +18,12 @@ No breaking changes. Decks written for 1.0.0 compile unchanged.
   `show-monash-frames(extra: ..)`.
 - `numbered: false` on a single frame, such as
   `#theorem(numbered: false)[..]`.
-- Back links: a frame lists the other slides that refer to it, each a link
-  back. Turn off with `show-monash-frames(backlinks: false)`.
+- Links in both directions: the target of a reference lists the other slides
+  that point at it, each a link back. This covers environments, captioned
+  figures and tables, numbered equations, and bibliography entries in
+  citation-order styles. Turn off with `monash-theme(backlinks: false)`.
+- `anchor` marks any place in the text and `goto` links to it, with the same
+  links back.
 
 ### Changed
 

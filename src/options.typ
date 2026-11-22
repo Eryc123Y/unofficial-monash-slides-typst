@@ -38,6 +38,7 @@
   "progress-bar",
   "slide-numbering",
   "footer",
+  "backlinks",
 )
 
 /// Panics on any named argument that is not a `monash-theme` option, naming
@@ -143,6 +144,7 @@
   section-slides: none,
   progress-bar: none,
   slide-numbering: none,
+  backlinks: none,
 ) = {
   _expect(
     aspect-ratio in ("16-9", "4-3"),
@@ -184,6 +186,7 @@
   _expect(type(outline) == bool, "`outline` must be `true` or `false`.")
   _expect(type(section-slides) == bool, "`section-slides` must be `true` or `false`.")
   _expect(type(progress-bar) == bool, "`progress-bar` must be `true` or `false`.")
+  _expect(type(backlinks) == bool, "`backlinks` must be `true` or `false`.")
   _expect(
     slide-numbering == none
       or type(slide-numbering) == function

@@ -3,6 +3,7 @@
 #import "@preview/frame-it:2.1.0": frame, frame-style
 #import "@preview/touying:0.8.0": config-common, touying-set-config, utils
 #import "design.typ": *
+#import "backlinks.typ": backlinks-here, backref-marker, current-target
 #import "labels.typ": label-keys, label-text, with-labels
 
 // Every framed environment: label key, accent colour, whether it is
@@ -34,33 +35,6 @@
 
 #let _has-title(title) = title not in (none, [], "")
 
-// Back links. Every reference to an environment leaves a marker naming its
-// target; the frame lists the slides that refer to it, each a link back.
-#let _backlinks-on = state("monash-backlinks", true)
-#let _current-label = state("monash-frame-label", none)
-
-#let _backref-marker(target) = [#metadata(str(target))<monash-backref>]
-
-// "↩ 3, 7": the other slides that refer to the frame being drawn, or
-// `none`. `paint` colours the links.
-#let _backlinks(paint) = context {
-  let target = _current-label.get()
-  if target == none or not _backlinks-on.get() { return }
-  let own = utils.slide-counter.get()
-  let seen = ()
-  let links = ()
-  for marker in query(<monash-backref>).filter(it => it.value == target) {
-    let slide = utils.slide-counter.at(marker.location())
-    // One link per slide: a slide with `#pause` repeats its references.
-    if slide == own or slide in seen { continue }
-    seen.push(slide)
-    links.push(link(marker.location(), str(slide.first())))
-  }
-  if links.len() > 0 {
-    text(size: .6em, fill: paint, weight: "regular")[#sym.arrow.l.hook~#links.join[, ]]
-  }
-}
-
 #let _frame-fill(accent-color) = if accent-color == monash-charcoal {
   monash-grey-light
 } else {
@@ -82,7 +56,7 @@
         text(size: .52em, fill: white.transparentize(25%), tags.join([, ]))
       }
       h(1fr)
-      _backlinks(white)
+      backlinks-here(paint: white, size: .52em)
     },
   )
 }
@@ -142,7 +116,7 @@
     let label = if number == none { supplement } else { [#supplement #number] }
     let name = text(fill: accent-color, weight: "bold", label)
     let lead = if _has-title(title) { [#name (#title).] } else { [#name.] }
-    [#lead #body#h(1fr)#_backlinks(monash-muted)]
+    [#lead #body#h(1fr)#backlinks-here()]
   },
 )
 
@@ -203,8 +177,7 @@
   show figure.where(kind: env.kind): set figure(numbering: pattern)
   show figure.where(kind: env.kind): it => {
     if shared and it.numbering != none { _shared-counter.step() }
-    let target = it.at("label", default: none)
-    _current-label.update(if target != none { str(target) })
+    current-target.update(it.at("label", default: none))
     it
   }
   show: frame-style(kind: env.kind, style)
@@ -221,8 +194,9 @@
   let numbered = numbering and env.numbered
   let shared = numbered and shared-counter and env.shared
   if it.form != "normal" { return it }
-  let marker = _backref-marker(it.target)
-  if numbered and not shared { return it + marker }
+  // An untouched reference gets its marker from the theme's rule.
+  if numbered and not shared { return it }
+  let marker = backref-marker(it.target)
   let supplement = if it.supplement == auto { el.supplement } else if (
     type(it.supplement) == function
   ) { (it.supplement)(el) } else { it.supplement }
@@ -277,9 +251,6 @@
   style: "filled",
   /// Your own environments, made with `monash-frame`.
   extra: (),
-  /// Whether a frame lists the other slides that refer to it, as links
-  /// back to them. With `false`, references link to the frame only.
-  backlinks: true,
   /// Document body transformed by the show rule.
   body,
 ) = {
@@ -295,9 +266,7 @@
   let custom = extra.map(item => item(monash-env: true))
   let environments = _environments + custom
   show ref: _reference.with(environments, numbering, shared-counter)
-  assert(type(backlinks) == bool, message: "unofficial-monash-touying: `backlinks` must be `true` or `false`.")
   let body = with-labels(labels, body)
-  let body = if backlinks { body } else { _backlinks-on.update(false) + body }
   let body = environments.fold(body, (acc, env) => {
     _install(env, numbering, shared-counter, _styles.at(style), acc)
   })

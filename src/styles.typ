@@ -4,6 +4,7 @@
 
 #import "@preview/zebraw:0.6.3": zebraw
 #import "design.typ": *
+#import "backlinks.typ": backlink-rules
 
 // Headings inside a slide are styled with set rules only, so they keep
 // Typst's heading behaviour: a heading at the bottom of a page moves to the
@@ -140,7 +141,7 @@
 }
 
 /// Body rules of the theme, as a Touying `init` method.
-#let slide-rules(accent, self: none, body) = {
+#let slide-rules(accent, backlinks, self: none, body) = {
   set par(justify: false, leading: .65em)
   set figure(placement: none)
   show: _heading-rules
@@ -151,5 +152,6 @@
   show: _caption-rules
   show: _link-rules
   show: _citation-rules
+  show: backlink-rules.with(backlinks)
   body
 }

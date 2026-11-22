@@ -43,6 +43,9 @@
   theorem, warning,
 )
 
+// Links in both directions.
+#import "src/backlinks.typ": anchor, goto
+
 // Colour tokens and the accent rule.
 #import "src/design.typ": (
   monash-accent-rule, monash-blue, monash-blue-dark, monash-blue-grey,

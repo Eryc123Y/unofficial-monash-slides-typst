@@ -75,6 +75,9 @@
   /// Footer text on the left: `none`, `auto` (short title and author), or
   /// content.
   footer: none,
+  /// Whether the target of a reference, `goto`, or citation lists the other
+  /// slides that point at it, as links back. With `false`, links go one way.
+  backlinks: true,
   /// Touying `config-*(..)` values, then the document body.
   ..args,
   /// Document body transformed by the theme.
@@ -96,6 +99,7 @@
     section-slides: section-slides,
     progress-bar: progress-bar,
     slide-numbering: slide-numbering,
+    backlinks: backlinks,
   )
   check-footer(footer)
 
@@ -151,7 +155,7 @@
       default-frozen-counters: default-config.default-frozen-counters + frame-counters,
     ),
     config-methods(
-      init: slide-rules.with(accent-color),
+      init: slide-rules.with(accent-color, backlinks),
       alert: utils.alert-with-primary-color,
     ),
     config-colors(

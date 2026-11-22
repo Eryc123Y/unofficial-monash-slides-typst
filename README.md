@@ -73,6 +73,7 @@ passed as positional `config-*(..)` arguments, as in the quick start.
 | `progress-bar` | `true` | bool | The progress bar along the bottom edge. |
 | `slide-numbering` | `"1"` | `none` or a numbering pattern | `"1"` shows the slide number; a pattern with two counting symbols such as `"1 / 1"` adds the total; `none` hides it. |
 | `footer` | `none` | `none`, `auto`, or content | Text at the left of the footer. `auto` shows the short title (or the title) and the author. |
+| `backlinks` | `true` | bool | Whether the target of a reference lists the slides that point at it, as links back. See [Links in both directions](#links-in-both-directions). |
 
 Title, author, and so on are set with Touying's
 `config-info(title:, short-title:, subtitle:, author:, institution:, date:)`.
@@ -198,17 +199,6 @@ to activate it:
 Each has its own counter and can be labelled and referenced like the
 built-in ones.
 
-### Back links
-
-A reference such as `@banach` is a link to the frame. The frame in turn
-lists the other slides that refer to it (↩ 12, 30), each a link back, so
-during a talk you can jump to a statement and return to where you were.
-Turn this off with `backlinks: false`; references then link one way only.
-
-```typst
-#show: show-monash-frames.with(backlinks: false)
-```
-
 ### Labels
 
 To rename an environment, or to use another language, pass `labels`:
@@ -296,6 +286,41 @@ only with a white or reversed logo, because the bar is Monash blue.
 The bundled title background is a logo-free graphic derived from the CC0
 [Quarto Monash presentation template](https://github.com/quarto-monash/presentation).
 
+## Links in both directions
+
+A reference such as `@banach` is a link to its target. The target in turn
+lists the other slides that point at it (↩ 12, 30), each a link back, so
+during a talk you can jump to a statement and return to where you were.
+This works for:
+
+- environments (`@banach`), including your own;
+- figures, tables, and code figures with a caption (`@results`);
+- numbered display equations (`@iteration`);
+- bibliography entries, which list the slides that cite them, in the styles
+  that number entries in order of citation (`"ieee"`, the default,
+  `"nlm-citation-sequence"`, and `"nature"`);
+- any place you mark yourself with `anchor`.
+
+`anchor` marks a place, with or without text, and `goto` links to it:
+
+```typst
+The key assumption#anchor(<assumption>) is that the data are i.i.d.
+#anchor(<setup>)[The experimental setup] is standard.
+
+// on a later slide
+#goto(<assumption>)[Recall the key assumption.]
+```
+
+`goto` also takes the label of an environment, figure, or equation, when
+you want your own link text instead of "Theorem 1".
+
+A slide is listed once however often it points at the target, and a link
+from the same slide is left out. To make links go one way only:
+
+```typst
+#show: monash-theme.with(backlinks: false)
+```
+
 ## Tables
 
 The first row of every table is styled as a header (tinted and bold),
@@ -348,6 +373,7 @@ The package exports exactly these names (checked by `tests/api.typ`):
 - Environments: `show-monash-frames`, `monash-frame`, `monash-frame-style`, `definition`,
   `theorem`, `lemma`, `corollary`, `proposition`, `assumption`, `example`,
   `exercise`, `remark`, `note`, `warning`, `proof`.
+- Links: `anchor`, `goto`.
 - Design: `monash-accent-rule` and the colours `monash-blue`,
   `monash-blue-dark`, `monash-blue-grey`, `monash-blue-wash`,
   `monash-charcoal`, `monash-dark-grey`, `monash-green`, `monash-grey`,

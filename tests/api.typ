@@ -27,6 +27,9 @@
   "note",
   "warning",
   "proof",
+  // Links
+  "anchor",
+  "goto",
   // Design tokens
   "monash-accent-rule",
   "monash-blue",

@@ -86,6 +86,8 @@ variant_runs=(
   "tests/frames-extra.typ|counter=shared"
   "tests/backlinks.typ|backlinks=off"
   "tests/backlinks.typ|style=plain"
+  "tests/backlinks.typ|bib=apa"
+  "tests/backlinks.typ|bib=nature"
 )
 for variant in no-progress-bar logo logo-stacked logo-crest logo-plain-cover \
   logo-both logo-bar-only logo-bar-colour logo-oversized footer-auto authors-array \
@@ -212,6 +214,7 @@ legacy_cases=(
   "labels-bad-key|\`labels\` has no key \`theorm\`"
   "style-bad|\`style\` must be \"filled\" or \"plain\""
   "extra-bad|\`extra\` must be an array of environments"
+  "backlinks-bad|\`backlinks\` must be \`true\` or \`false\`"
 )
 for case in "${legacy_cases[@]}"; do
   name="${case%%|*}"
