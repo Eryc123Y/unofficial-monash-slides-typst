@@ -14,25 +14,32 @@
   sources.find(source => utils.slide-counter.at(source) != own)
 }
 
-// `body` as a link to `source`. The label lets the theme turn the links
-// off again.
-#let _back(source, body) = if source == none { body } else {
+// How a link inside the deck looks: blue text, or an underline where the
+// text sits on a coloured bar or has a colour of its own.
+#let link-style(body) = text(fill: monash-blue, body)
+#let _underlined(body) = underline(offset: .18em, stroke: .6pt, body)
+
+// `body` as a link to `source`. The label lets the theme style the link,
+// or turn it off again.
+#let _back(source, body, underlined: false) = if source == none { body } else if underlined {
+  [#link(source, body)<monash-backlink-underlined>]
+} else {
   [#link(source, body)<monash-backlink>]
 }
 
 /// `body`, which names the target labelled `target`, as a link back to the
 /// first other slide that points at that target. Without such a slide, or
 /// with `monash-theme(backlinks: false)`, it is `body` unchanged.
-#let back-link(target, body) = context {
+#let back-link(target, body, underlined: false) = context {
   if target == none { return body }
   let markers = query(<monash-backref>).filter(it => it.value == str(target))
-  _back(_first-elsewhere(markers.map(it => it.location())), body)
+  _back(_first-elsewhere(markers.map(it => it.location())), body, underlined: underlined)
 }
 
 // Label of the figure being drawn, for content that cannot be handed it.
 #let current-target = state("monash-backlink-target", none)
 
-#let back-link-here(body) = context back-link(current-target.get(), body)
+#let back-link-here(body) = context back-link(current-target.get(), body, underlined: true)
 
 #let _label-of(it) = it.at("label", default: none)
 
@@ -51,11 +58,22 @@
   body
 }
 
-// A labelled display equation links back as a whole.
+// The number of a labelled display equation links back. The equation is
+// set again without its number so that the number can be a link.
 #let _equation-rules(body) = {
   show math.equation.where(block: true): it => {
     let target = _label-of(it)
-    if target == none { it } else { back-link(target, it) }
+    if target == none or it.numbering == none { return it }
+    context {
+      let markers = query(<monash-backref>).filter(marker => marker.value == str(target))
+      let source = _first-elsewhere(markers.map(marker => marker.location()))
+      if source == none { return it }
+      let number = numbering(it.numbering, ..counter(math.equation).at(it.location()))
+      block(width: 100%, {
+        place(right + horizon, _back(source, number))
+        align(center, math.equation(block: true, numbering: none, it.body))
+      })
+    }
   }
   body
 }
@@ -85,10 +103,13 @@
 /// Rules that record references and make their targets link back, for
 /// every slide body.
 #let backlink-rules(enabled, body) = {
-  show <monash-backlink>: it => if enabled { it } else { it.body }
+  show <monash-backlink>: it => if enabled { link-style(it) } else { it.body }
+  show <monash-backlink-underlined>: it => if enabled { _underlined(it) } else { it.body }
+  // Every link inside the deck is blue, whichever way it points.
   show ref: it => if it.form == "normal" and it.element != none {
-    it + backref-marker(it.target)
+    link-style(it) + backref-marker(it.target)
   } else { it }
+  show cite: set text(fill: monash-blue)
   show: _figure-rules
   show: _equation-rules
   show: _citation-rules
@@ -129,6 +150,6 @@
     type(target) == label,
     message: "unofficial-monash-touying: use #goto(<name>)[Text].",
   )
-  link(target, body)
+  link(target, link-style(body))
   backref-marker(target)
 }

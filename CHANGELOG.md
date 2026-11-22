@@ -19,13 +19,16 @@ No breaking changes. Decks written for 1.0.0 compile unchanged.
 - `numbered: false` on a single frame, such as
   `#theorem(numbered: false)[..]`.
 - Links in both directions: the name of a referenced target ("Theorem 1",
-  "Table 2", an equation, the "[1]" of a bibliography entry) links back to
+  "Table 2", the number of an equation, the "[1]" of a bibliography entry) links back to
   the first other slide that refers to it, with nothing added to the slide.
   Turn off with `monash-theme(backlinks: false)`.
 - `anchor` marks any text as a place to go to and `goto` links to it, with
   the same link back.
 
 ### Changed
+
+- References, citations, and other links inside the deck are blue, so that
+  every link can be told from ordinary text.
 
 - `exercise` frames are purple and `warning` frames red, so that they differ
   from `example` and read as a warning.

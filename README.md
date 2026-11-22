@@ -289,15 +289,21 @@ The bundled title background is a logo-free graphic derived from the CC0
 ## Links in both directions
 
 A reference such as `@banach` is a link to its target, and the name of the
-target ("Theorem 1") is a link back to the slide that refers to it. Nothing
-is added to the slides: during a talk, click the reference to jump to the
-statement, then click the statement's name to return. This works for:
+target ("Theorem 1") is a link back to the slide that refers to it. During a
+talk, click the reference to jump to the statement, then click the
+statement's name to return.
+
+Every link inside the deck is marked, whichever way it points: references,
+citations, and `goto` links are blue, and so is the name of a target that
+links back. In the header bar of an environment, where the text is white,
+the link is underlined instead. A target that no other slide refers to is
+not a link and looks as usual. This works for:
 
 - environments (`@banach`), including your own: the header, such as
   "Theorem 1: Banach";
 - figures, tables, and code figures with a caption (`@results`): the
   "Table 1" of the caption;
-- numbered display equations (`@iteration`): the equation;
+- numbered display equations (`@iteration`): the number;
 - bibliography entries: the number, such as "[1]", in the styles that number
   entries in order of citation (`"ieee"`, the default,
   `"nlm-citation-sequence"`, and `"nature"`);

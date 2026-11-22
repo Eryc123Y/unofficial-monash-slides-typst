@@ -3,7 +3,7 @@
 #import "@preview/frame-it:2.1.0": frame, frame-style
 #import "@preview/touying:0.8.0": config-common, touying-set-config, utils
 #import "design.typ": *
-#import "backlinks.typ": back-link-here, backref-marker, current-target
+#import "backlinks.typ": back-link-here, backref-marker, current-target, link-style
 #import "labels.typ": label-keys, label-text, with-labels
 
 // Every framed environment: label key, accent colour, whether it is
@@ -203,7 +203,7 @@
     str(_shared-counter.at(el.location()).first() + 1)
   }
   let parts = (supplement, number).filter(part => part not in (none, []))
-  link(el.location(), parts.join([~])) + marker
+  link(el.location(), link-style(parts.join([~]))) + marker
 }
 
 #let _check-labels(labels) = {
