@@ -1,4 +1,6 @@
-// Back links: a target lists the other slides that point at it.
+// Back links: the name of a target links back to the first other slide
+// that points at it. Nothing is added to the slides, so check the links in
+// the PDF.
 //   --input backlinks=off   links go one way only
 //   --input style=plain     the light frame style
 //   --input bib=apa         an author-date bibliography
@@ -19,7 +21,7 @@
 
 #lemma[Not referred to from another slide, so it shows no links.] <helper>
 
-The key assumption#anchor(<assumption>) is completeness; #anchor(<setup>)[the setup] is standard.
+#anchor(<assumption>)[The key assumption] is completeness; #anchor(<setup>)[the setup] is standard.
 
 On the same slide, @banach and @helper add no back link.
 

@@ -3,7 +3,7 @@
 #import "@preview/frame-it:2.1.0": frame, frame-style
 #import "@preview/touying:0.8.0": config-common, touying-set-config, utils
 #import "design.typ": *
-#import "backlinks.typ": backlinks-here, backref-marker, current-target
+#import "backlinks.typ": back-link-here, backref-marker, current-target
 #import "labels.typ": label-keys, label-text, with-labels
 
 // Every framed environment: label key, accent colour, whether it is
@@ -50,13 +50,11 @@
     inset: (x: space-md, y: space-xs),
     below: 0pt,
     {
-      text(size: .68em, fill: white, weight: "bold", line)
+      text(size: .68em, fill: white, weight: "bold", back-link-here(line))
       if tags.len() > 0 {
         h(space-sm)
         text(size: .52em, fill: white.transparentize(25%), tags.join([, ]))
       }
-      h(1fr)
-      backlinks-here(paint: white, size: .52em)
     },
   )
 }
@@ -114,9 +112,9 @@
     set par(leading: .55em, spacing: .8em)
     set block(spacing: .8em)
     let label = if number == none { supplement } else { [#supplement #number] }
-    let name = text(fill: accent-color, weight: "bold", label)
+    let name = text(fill: accent-color, weight: "bold", back-link-here(label))
     let lead = if _has-title(title) { [#name (#title).] } else { [#name.] }
-    [#lead #body#h(1fr)#backlinks-here()]
+    [#lead #body]
   },
 )
 

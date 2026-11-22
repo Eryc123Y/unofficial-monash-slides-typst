@@ -73,7 +73,7 @@ passed as positional `config-*(..)` arguments, as in the quick start.
 | `progress-bar` | `true` | bool | The progress bar along the bottom edge. |
 | `slide-numbering` | `"1"` | `none` or a numbering pattern | `"1"` shows the slide number; a pattern with two counting symbols such as `"1 / 1"` adds the total; `none` hides it. |
 | `footer` | `none` | `none`, `auto`, or content | Text at the left of the footer. `auto` shows the short title (or the title) and the author. |
-| `backlinks` | `true` | bool | Whether the target of a reference lists the slides that point at it, as links back. See [Links in both directions](#links-in-both-directions). |
+| `backlinks` | `true` | bool | Whether the name of a referenced target, such as "Theorem 1", links back to the slide that refers to it. See [Links in both directions](#links-in-both-directions). |
 
 Title, author, and so on are set with Touying's
 `config-info(title:, short-title:, subtitle:, author:, institution:, date:)`.
@@ -288,24 +288,25 @@ The bundled title background is a logo-free graphic derived from the CC0
 
 ## Links in both directions
 
-A reference such as `@banach` is a link to its target. The target in turn
-lists the other slides that point at it (↩ 12, 30), each a link back, so
-during a talk you can jump to a statement and return to where you were.
-This works for:
+A reference such as `@banach` is a link to its target, and the name of the
+target ("Theorem 1") is a link back to the slide that refers to it. Nothing
+is added to the slides: during a talk, click the reference to jump to the
+statement, then click the statement's name to return. This works for:
 
-- environments (`@banach`), including your own;
-- figures, tables, and code figures with a caption (`@results`);
-- numbered display equations (`@iteration`);
-- bibliography entries, which list the slides that cite them, in the styles
-  that number entries in order of citation (`"ieee"`, the default,
+- environments (`@banach`), including your own: the header, such as
+  "Theorem 1: Banach";
+- figures, tables, and code figures with a caption (`@results`): the
+  "Table 1" of the caption;
+- numbered display equations (`@iteration`): the equation;
+- bibliography entries: the number, such as "[1]", in the styles that number
+  entries in order of citation (`"ieee"`, the default,
   `"nlm-citation-sequence"`, and `"nature"`);
-- any place you mark yourself with `anchor`.
+- any text you mark yourself with `anchor`.
 
-`anchor` marks a place, with or without text, and `goto` links to it:
+`anchor` marks a piece of text, and `goto` links to it:
 
 ```typst
-The key assumption#anchor(<assumption>) is that the data are i.i.d.
-#anchor(<setup>)[The experimental setup] is standard.
+#anchor(<assumption>)[The key assumption] is that the data are i.i.d.
 
 // on a later slide
 #goto(<assumption>)[Recall the key assumption.]
@@ -314,8 +315,9 @@ The key assumption#anchor(<assumption>) is that the data are i.i.d.
 `goto` also takes the label of an environment, figure, or equation, when
 you want your own link text instead of "Theorem 1".
 
-A slide is listed once however often it points at the target, and a link
-from the same slide is left out. To make links go one way only:
+A target that several slides point at links back to the first of them; to
+return to a later one, use your PDF viewer's "go back" command. To make
+links go one way only:
 
 ```typst
 #show: monash-theme.with(backlinks: false)
