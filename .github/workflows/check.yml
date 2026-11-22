@@ -14,3 +14,8 @@ jobs:
           typst-version: "0.15"
       - name: Compile every deck with the embedded fonts only
         run: scripts/check.sh --ignore-system-fonts
+      - name: Keep the API reference
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference
+          path: build/docs-reference.pdf

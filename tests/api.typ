@@ -1,6 +1,6 @@
 // Asserts that the package exports exactly the documented public names.
 // Compiled by scripts/check.sh; a mismatch fails the compile.
-#import "@preview/unofficial-monash-touying:1.0.0" as monash
+#import "@preview/unofficial-monash-touying:1.1.0" as monash
 
 #let documented = (
   // Theme and slide kinds

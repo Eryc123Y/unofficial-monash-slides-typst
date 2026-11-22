@@ -2,7 +2,7 @@
 // Scenario 12: a CJK font appended to `font` renders Chinese text with that
 // font and leaves Latin text unchanged. Pages 5 and 6 have no Chinese and
 // render identically with `--input cjk=off`, which drops the CJK font.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let latin = sys.inputs.at("latin", default: "Libertinus Serif")
 #let cjk = sys.inputs.at("cjk", default: "on") == "on"

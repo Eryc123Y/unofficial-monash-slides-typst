@@ -1,7 +1,7 @@
 // Scenario 11 (C1, C2): citations shown as footnotes on the slide where
 // they are made, and a compact bibliography that continues onto a further
 // slide when it is long. `--input footnotes=off` checks C1 alone.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let footnotes = sys.inputs.at("footnotes", default: "on") == "on"
 

@@ -2,7 +2,7 @@
 
 #import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
-#import "labels.typ": labels
+#import "labels.typ": label-text
 #import "chrome.typ": plain-inline-code, title-bar-spacer
 #import "logo.typ": corner-margin, with-corner-logo
 #import "appendix.typ": appendix-marker
@@ -99,14 +99,15 @@
 /// ]
 /// ```
 #let ending-slide(
-  /// The large title.
-  title: labels.thank-you,
+  /// The large title. `auto` is "Thank you" in the language of the text.
+  title: auto,
   /// Touying configuration for this slide.
   config: (:),
   /// Closing content.
   body,
 ) = touying-slide-wrapper(self => {
   let size = self.store.font-size
+  let title = if title == auto { label-text("thank-you") } else { title }
   let logo = self.info.at("logo", default: none)
   self = utils.merge-dicts(
     self,

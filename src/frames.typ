@@ -2,7 +2,7 @@
 
 #import "@preview/frame-it:2.1.0": frame, frame-style
 #import "design.typ": *
-#import "labels.typ": labels
+#import "labels.typ": label-keys, label-text, with-labels
 
 // Every framed environment: label key, accent colour, whether it is
 // numbered, and whether it joins the shared counter. The frame-it kind is
@@ -41,7 +41,9 @@
 
 #let _frame-header(title, tags, supplement, number, accent-color) = {
   let label = if number == none { supplement } else { [#supplement #number] }
-  let line = if _has-title(title) { [#label: #title] } else { label }
+  let line = if _has-title(title) {
+    [#label#label-text("title-separator")#title]
+  } else { label }
   block(
     width: 100%,
     fill: accent-color,
@@ -99,7 +101,7 @@
   },
 )
 
-#let _make(env) = frame(kind: env.kind, labels.at(env.name), env.color)
+#let _make(env) = frame(kind: env.kind, label-text(env.name), env.color)
 
 // Install the rules for one environment around `body`.
 #let _install(env, numbering, shared-counter, body) = {
@@ -139,6 +141,23 @@
   link(el.location(), parts.join([~]))
 }
 
+#let _check-labels(labels) = {
+  assert(
+    type(labels) == dictionary,
+    message: "unofficial-monash-touying: `labels` must be a dictionary such as `(theorem: \"Thm\")`.",
+  )
+  for (key, value) in labels {
+    assert(
+      key in label-keys,
+      message: "unofficial-monash-touying: `labels` has no key `" + key + "`. Valid keys are: " + label-keys.join(", ") + ".",
+    )
+    assert(
+      type(value) in (str, content),
+      message: "unofficial-monash-touying: `labels." + key + "` must be a string or content.",
+    )
+  }
+}
+
 /// Activates the Monash environments. Place it after `monash-theme`.
 ///
 /// By default each numbered environment counts on its own (Theorem 1,
@@ -150,16 +169,23 @@
 /// #show: show-monash-frames
 /// #show: show-monash-frames.with(shared-counter: true)
 /// #show: show-monash-frames.with(numbering: false)
+/// #show: show-monash-frames.with(labels: (theorem: "Thm"))
 /// ```
 #let show-monash-frames(
   /// Whether numbered environments show numbers.
   numbering: true,
   /// Whether statement-like environments share one counter.
   shared-counter: false,
+  /// Labels that replace the built-in ones, such as `(theorem: "Thm")`.
+  /// The built-in labels follow `text.lang`: English, or Chinese with
+  /// `#set text(lang: "zh")`.
+  labels: (:),
   /// Document body transformed by the show rule.
   body,
 ) = {
+  _check-labels(labels)
   show ref: _reference.with(numbering, shared-counter)
+  let body = with-labels(labels, body)
   _environments.fold(body, (acc, env) => _install(env, numbering, shared-counter, acc))
 }
 
@@ -216,11 +242,13 @@
     message: "unofficial-monash-touying: use #proof[Body] or #proof[Title][Body].",
   )
   let (title, body) = if pos.len() == 2 { pos } else { (none, pos.first()) }
-  let name = text(weight: "bold", labels.proof)
-  let lead = if _has-title(title) { [#name (#title).] } else { [#name.] }
+  let name = text(weight: "bold", label-text("proof"))
+  let lead = if _has-title(title) {
+    [#name#label-text("proof-title-open")#title#label-text("proof-title-close")]
+  } else { name }
   block(width: 100%, inset: (x: space-md, y: space-xs), {
     set text(size: .84em, fill: monash-charcoal)
     set par(leading: .55em, spacing: .8em)
-    [#lead #body#h(1fr)#sym.square.stroked]
+    [#lead#label-text("proof-end")#body#h(1fr)#sym.square.stroked]
   })
 }

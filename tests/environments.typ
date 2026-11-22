@@ -3,7 +3,7 @@
 //   --input counter=default   Theorem 1, Lemma 1
 //   --input counter=shared    Theorem 1, Lemma 2
 //   --input counter=off       no numbers
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let mode = sys.inputs.at("counter", default: "default")
 

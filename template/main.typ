@@ -1,8 +1,10 @@
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   // For the Monash look, use Arial where it is installed:
   // font: "Arial",
+  // For a deck in Chinese, add `#set text(lang: "zh")` above this rule and
+  // a CJK font: font: ("Arial", "Noto Sans CJK SC"),
   // Your institution's logo, saved under assets/ (see the README's Logos section):
   // logo: image("assets/logo.svg"),
   config-info(

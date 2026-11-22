@@ -1,6 +1,6 @@
 // requires-font: Arial
 // Scenario 12: the stress deck's content in Arial, the recommended font.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   font: "Arial",

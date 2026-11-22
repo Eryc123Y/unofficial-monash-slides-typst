@@ -1,6 +1,6 @@
 // A research talk: citations on the slide where they are made, a shared
 // counter for statements, and backup slides that do not count.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   footer: auto,

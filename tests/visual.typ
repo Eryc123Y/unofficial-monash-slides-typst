@@ -1,7 +1,7 @@
 // Visual polish (V1-V9) and scenario 10. `--input notes=on` renders the
 // speaker-note panel on a second screen; `--input aspect=4-3` the narrow
 // format.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let notes = sys.inputs.at("notes", default: "off") == "on"
 

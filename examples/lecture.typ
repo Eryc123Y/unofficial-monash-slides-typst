@@ -1,7 +1,7 @@
 // A lecture: numbered examples and exercises, code, speaker notes, and a
 // handout. Compile the handout with
 //   typst compile examples/lecture.typ --input handout=true
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   aspect-ratio: "4-3",

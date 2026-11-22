@@ -3,7 +3,7 @@
 // the page count: 1 title + 1 outline + 12 x (divider + slide) = 26.
 //   --input sections=<n>   number of sections (default 12)
 //   --input aspect=4-3     narrow format
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let count = int(sys.inputs.at("sections", default: "12"))
 

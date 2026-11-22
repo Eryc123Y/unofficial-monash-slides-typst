@@ -61,7 +61,7 @@ for file in examples/*.typ tests/*.typ; do
   [[ "$file" == tests/legacy.typ ]] && continue
   decks+=("$file")
 done
-decks+=(docs/reference.typ docs/preview.typ)
+decks+=(docs/reference.typ docs/preview.typ docs/preview-custom.typ)
 
 for deck in "${decks[@]}"; do
   typst_compile "$deck" "$(output_name "$deck")"
@@ -80,6 +80,9 @@ variant_runs=(
   "tests/visual.typ|aspect=4-3"
   "examples/lecture.typ|handout=true"
   "tests/many-sections.typ|aspect=4-3"
+  "tests/authors.typ|aspect=4-3"
+  "tests/language.typ|lang=en"
+  "tests/language.typ|lang=en,override=on"
 )
 for variant in no-progress-bar logo logo-stacked logo-crest logo-plain-cover \
   logo-both logo-bar-only logo-bar-colour logo-oversized footer-auto authors-array \
@@ -127,6 +130,8 @@ done
 font_runs+=("tests/fonts/cjk.typ|cjk=off|Noto Sans CJK SC")
 font_runs+=("tests/fonts/cjk.typ|latin=Arial|Arial")
 font_runs+=("tests/fonts/arial.typ|aspect=4-3|Arial")
+font_runs+=("tests/language.typ|lang=zh|Noto Sans CJK SC")
+font_runs+=("tests/language.typ|lang=zh-tw|Noto Sans CJK SC")
 font_runs+=("examples/showcase.typ|font=Arial|Arial")
 font_runs+=("tests/cover-meta.typ|font=Arial|Arial")
 font_runs+=("tests/cover-meta.typ|font=Arial,aspect=4-3,logo=on|Arial")
@@ -201,6 +206,9 @@ legacy_cases=(
   "logo-bad-key|\`logo\` has no key \`corner\`; use \`cover\`, \`bar\`, and \`bar-fill\`"
   "logo-bad-fill|\`logo.bar-fill\` must be a colour"
   "logo-bad-value|\`logo.cover\` must be \`none\` or content"
+  "math-font-bad|\`math-font\` must be \`auto\`, a font family name"
+  "author-bad-affiliation|author affiliation 2 does not match an institution"
+  "labels-bad-key|\`labels\` has no key \`theorm\`"
 )
 for case in "${legacy_cases[@]}"; do
   name="${case%%|*}"
@@ -235,6 +243,7 @@ if [[ "$thumbnail" == true ]]; then
   cp "$preview_dir/p-1.png" docs/preview/title-slide.png
   cp "$preview_dir/p-3.png" docs/preview/content-slide.png
   cp "$preview_dir/p-4.png" docs/preview/academic-frames.png
+  typst compile --root . --ignore-system-fonts --ppi 100 --pages 1 docs/preview-custom.typ docs/preview/custom-cover.png
   echo "Regenerated thumbnail.png and docs/preview/*.png"
 fi
 

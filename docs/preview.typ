@@ -2,7 +2,7 @@
 // title slide with a fixed date and the default font, so the published
 // preview matches what `typst init` gives a new user.
 // Regenerate with `scripts/check.sh --thumbnail`.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   outline: false,

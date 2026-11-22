@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.1.0
+
+No breaking changes. Decks written for 1.0.0 compile unchanged.
+
+### New
+
+- Environment names, "Proof", and the ending slide's "Thank you" follow the
+  language of the text: Chinese with `#set text(lang: "zh")`, Traditional
+  Chinese with `region: "TW"`, `"HK"`, or `"MO"`, and English otherwise.
+- `show-monash-frames(labels: ..)` replaces single labels, for other
+  languages or shorter names.
+- Authors with affiliations: `config-info(author: ..)` accepts
+  `(name: .., affiliation: ..)` dictionaries, and `institution` an array.
+  The title slide numbers the institutions and marks each name.
+- Option `math-font`.
+
+### Changed
+
+- `ending-slide(title:)` defaults to `auto` instead of the text "Thank you";
+  the slide looks the same in an English deck.
+
 ## 1.0.0
 
 A general-purpose release with a stable, Typst-style API. Requires Typst

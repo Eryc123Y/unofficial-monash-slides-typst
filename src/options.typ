@@ -26,6 +26,7 @@
   "aspect-ratio",
   "font",
   "code-font",
+  "math-font",
   "font-size",
   "title-font-size",
   "title-color",
@@ -131,6 +132,7 @@
   aspect-ratio: none,
   font: none,
   code-font: none,
+  math-font: none,
   font-size: none,
   title-font-size: none,
   title-color: none,
@@ -153,6 +155,10 @@
   _expect(
     _is-font(code-font),
     "`code-font` must be a font family name or an array of names.",
+  )
+  _expect(
+    math-font == auto or _is-font(math-font),
+    "`math-font` must be `auto`, a font family name, or an array of names.",
   )
   _expect(
     _is-size(font-size),

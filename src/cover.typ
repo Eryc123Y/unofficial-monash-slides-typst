@@ -3,7 +3,7 @@
 
 #import "@preview/touying:0.8.0": config-common, config-page, touying-slide, touying-slide-wrapper, utils
 #import "design.typ": *
-#import "chrome.typ": author-text
+#import "authors.typ": author-entries, author-line, institution-lines, institution-list, shows-marks
 #import "logo.typ": corner-margin, with-corner-logo
 #import "navigation.typ": outline-slide-fn
 
@@ -32,14 +32,21 @@
 // Institution and date: "institution | date" on one line when it fits,
 // otherwise the date on its own line without the separator, so a line
 // never ends with a dangling "|".
-#let _meta-line(self, info) = {
+#let _meta-line(self, info, marked) = {
   let parts = ()
-  if info.institution != none { parts.push(info.institution) }
+  let institutions = institution-list(info.institution)
+  if marked {
+    parts.push(institution-lines(institutions))
+  } else if institutions.len() > 0 {
+    parts.push(institutions.join(linebreak()))
+  }
   if info.date != none { parts.push(utils.display-info-date(self)) }
   if parts.len() == 0 { return }
   let style = text.with(size: self.store.font-size * .8, fill: monash-dark-grey)
   let joined = style(parts.join(text(fill: monash-grey)[#h(.4em)|#h(.4em)]))
   if parts.len() == 1 { return joined }
+  // Several institutions take a line each, so the date gets its own too.
+  if institutions.len() > 1 { return style(parts.join(linebreak())) }
   layout(region => {
     if measure(joined).width <= region.width { joined } else {
       style(parts.join(linebreak()))
@@ -65,15 +72,17 @@
     })
   }
   block(above: size * .5, below: size * 1.1, _rule(self))
-  if info.author != none {
+  let entries = if info.author != none { author-entries(info.author, info.institution) } else { () }
+  let marked = shows-marks(entries, institution-list(info.institution))
+  if entries.len() > 0 {
     block(below: size * .5, {
       set par(leading: .45em)
-      text(fill: color, size: size * 1.05, author-text(info.author))
+      text(fill: color, size: size * 1.05, author-line(entries, marked))
     })
   }
   block(below: size * .5, {
     set par(leading: .45em)
-    _meta-line(self, info)
+    _meta-line(self, info, marked)
   })
   if extra != none {
     block(above: size * .3, text(size: size * .75, fill: monash-dark-grey, extra))
@@ -170,7 +179,10 @@
   /// `config-info` fields that override the theme's for this slide.
   ..args,
 ) = touying-slide-wrapper(self => {
-  let info = self.info + args.named()
+  // The theme's authors with affiliations, unless this slide names its own.
+  let authors = self.store.at("authors", default: none)
+  let own = if authors != none { (author: authors) } else { (:) }
+  let info = self.info + own + args.named()
   let cover-self = utils.merge-dicts(
     self,
     config-common(freeze-slide-counter: true),
