@@ -162,6 +162,53 @@ With `shared-counter: true`, definitions, theorems, lemmas, corollaries,
 propositions, and assumptions share one counter; examples and exercises keep
 their own.
 
+To leave one frame without a number, for example a classical result you
+quote, pass `numbered: false`. It does not take a number from the others:
+
+```typst
+#theorem(numbered: false)[Bolzano–Weierstrass][Every bounded sequence ..]
+```
+
+A proof that ends with a display equation has its end mark on the line of
+that equation.
+
+### Frame style
+
+Frames have a coloured header bar by default. `style: "plain"` is lighter:
+a rule at the left and the name in colour at the start of the text, which
+suits slides with several statements.
+
+```typst
+#show: show-monash-frames.with(style: "plain")
+```
+
+### Your own environments
+
+`monash-frame` makes an environment in the same style. List it in `extra`
+to activate it:
+
+```typst
+#let claim = monash-frame("Claim", color: monash-teal)
+#let conjecture = monash-frame("Conjecture", numbered: false)
+#show: show-monash-frames.with(extra: (claim, conjecture))
+
+#claim[Every bounded sequence has a convergent subsequence.] <claim-bw>
+```
+
+Each has its own counter and can be labelled and referenced like the
+built-in ones.
+
+### Back links
+
+A reference such as `@banach` is a link to the frame. The frame in turn
+lists the other slides that refer to it (↩ 12, 30), each a link back, so
+during a talk you can jump to a statement and return to where you were.
+Turn this off with `backlinks: false`; references then link one way only.
+
+```typst
+#show: show-monash-frames.with(backlinks: false)
+```
+
 ### Labels
 
 To rename an environment, or to use another language, pass `labels`:
@@ -298,7 +345,7 @@ The package exports exactly these names (checked by `tests/api.typ`):
 
 - Theme and slides: `monash-theme`, `title-slide`, `outline-slide`, `slide`,
   `new-section-slide`, `focus-slide`, `ending-slide`.
-- Environments: `show-monash-frames`, `monash-frame-style`, `definition`,
+- Environments: `show-monash-frames`, `monash-frame`, `monash-frame-style`, `definition`,
   `theorem`, `lemma`, `corollary`, `proposition`, `assumption`, `example`,
   `exercise`, `remark`, `note`, `warning`, `proof`.
 - Design: `monash-accent-rule` and the colours `monash-blue`,

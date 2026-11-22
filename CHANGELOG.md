@@ -12,9 +12,21 @@ No breaking changes. Decks written for 1.0.0 compile unchanged.
   `(name: .., affiliation: ..)` dictionaries, and `institution` an array.
   The title slide numbers the institutions and marks each name.
 - Option `math-font`.
+- `show-monash-frames(style: "plain")`: a lighter frame with a rule at the
+  left and the name in colour, without a header bar.
+- `monash-frame` makes your own environments, activated with
+  `show-monash-frames(extra: ..)`.
+- `numbered: false` on a single frame, such as
+  `#theorem(numbered: false)[..]`.
+- Back links: a frame lists the other slides that refer to it, each a link
+  back. Turn off with `show-monash-frames(backlinks: false)`.
 
 ### Changed
 
+- `exercise` frames are purple and `warning` frames red, so that they differ
+  from `example` and read as a warning.
+- A proof has a grey rule at the left, in line with the frames, and its end
+  mark sits on the line of a closing display equation.
 - `ending-slide(title:)` defaults to `auto` instead of the text "Thank you";
   the slide looks the same in an English deck.
 

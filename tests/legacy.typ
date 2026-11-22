@@ -42,6 +42,10 @@
   ..theme-args,
   config-info(title: [Legacy], author: author, institution: [Monash University]),
 )
-#show: show-monash-frames.with(labels: labels)
+#show: show-monash-frames.with(
+  labels: labels,
+  ..if name == "style-bad" { (style: "light") },
+  ..if name == "extra-bad" { (extra: ("Claim",)) },
+)
 
 #title-slide()

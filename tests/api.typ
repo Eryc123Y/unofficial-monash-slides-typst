@@ -14,6 +14,7 @@
   // Environments
   "show-monash-frames",
   "monash-frame-style",
+  "monash-frame",
   "definition",
   "theorem",
   "lemma",
@@ -78,7 +79,7 @@
 
 #assert(missing == (), message: "documented but not exported: " + repr(missing))
 #assert(extra == (), message: "exported but not documented: " + repr(extra))
-#for name in documented.filter(it => it.starts-with("monash-") and it not in ("monash-theme", "monash-frame-style", "monash-accent-rule")) {
+#for name in documented.filter(it => it.starts-with("monash-") and it not in ("monash-theme", "monash-frame", "monash-frame-style", "monash-accent-rule")) {
   assert(type(dictionary(monash).at(name)) == color, message: name + " is not a color")
 }
 

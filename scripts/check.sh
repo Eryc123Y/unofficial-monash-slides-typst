@@ -82,6 +82,10 @@ variant_runs=(
   "tests/many-sections.typ|aspect=4-3"
   "tests/authors.typ|aspect=4-3"
   "tests/labels.typ|override=on"
+  "tests/frames-extra.typ|style=plain"
+  "tests/frames-extra.typ|counter=shared"
+  "tests/backlinks.typ|backlinks=off"
+  "tests/backlinks.typ|style=plain"
 )
 for variant in no-progress-bar logo logo-stacked logo-crest logo-plain-cover \
   logo-both logo-bar-only logo-bar-colour logo-oversized footer-auto authors-array \
@@ -206,6 +210,8 @@ legacy_cases=(
   "math-font-bad|\`math-font\` must be \`auto\`, a font family name"
   "author-bad-affiliation|author affiliation 2 does not match an institution"
   "labels-bad-key|\`labels\` has no key \`theorm\`"
+  "style-bad|\`style\` must be \"filled\" or \"plain\""
+  "extra-bad|\`extra\` must be an array of environments"
 )
 for case in "${legacy_cases[@]}"; do
   name="${case%%|*}"

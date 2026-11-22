@@ -39,7 +39,7 @@
 // Environments.
 #import "src/frames.typ": (
   assumption, corollary, definition, example, exercise, lemma,
-  monash-frame-style, note, proof, proposition, remark, show-monash-frames,
+  monash-frame, monash-frame-style, note, proof, proposition, remark, show-monash-frames,
   theorem, warning,
 )
 
