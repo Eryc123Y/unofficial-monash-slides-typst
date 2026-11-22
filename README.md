@@ -73,7 +73,7 @@ passed as positional `config-*(..)` arguments, as in the quick start.
 | `progress-bar` | `true` | bool | The progress bar along the bottom edge. |
 | `slide-numbering` | `"1"` | `none` or a numbering pattern | `"1"` shows the slide number; a pattern with two counting symbols such as `"1 / 1"` adds the total; `none` hides it. |
 | `footer` | `none` | `none`, `auto`, or content | Text at the left of the footer. `auto` shows the short title (or the title) and the author. |
-| `backlinks` | `true` | bool | Whether the name of a referenced target, such as "Theorem 1", links back to the slide that refers to it. See [Links in both directions](#links-in-both-directions). |
+| `backlinks` | `true` | bool | Whether the name of a target, such as "Theorem 1", links back to the slide that refers to it, when there is exactly one. See [Links in both directions](#links-in-both-directions). |
 
 Title, author, and so on are set with Touying's
 `config-info(title:, short-title:, subtitle:, author:, institution:, date:)`.
@@ -288,26 +288,29 @@ The bundled title background is a logo-free graphic derived from the CC0
 
 ## Links in both directions
 
-A reference such as `@banach` is a link to its target, and the name of the
-target ("Theorem 1") is a link back to the slide that refers to it. During a
-talk, click the reference to jump to the statement, then click the
-statement's name to return.
+A reference such as `@banach` is a link to its target. When exactly one
+other slide refers to a target, the name of the target ("Theorem 1") is a
+link back to that slide: during a talk, click the reference to jump to the
+statement, then click the statement's name to return. A target that several
+slides refer to has no single way back, so its name is not a link; use your
+PDF viewer's "go back" command there.
 
 Every link inside the deck is marked, whichever way it points: references,
 citations, and `goto` links are blue, and so is the name of a target that
 links back. In the header bar of an environment, where the text is white,
-the link is underlined instead. A target that no other slide refers to is
-not a link and looks as usual. This works for:
+the link is underlined instead. A target without a link back looks as
+usual. This works for:
 
 - environments (`@banach`), including your own: the header, such as
   "Theorem 1: Banach";
 - figures, tables, and code figures with a caption (`@results`): the
   "Table 1" of the caption;
 - numbered display equations (`@iteration`): the number;
-- bibliography entries: the number, such as "[1]", in the styles that number
-  entries in order of citation (`"ieee"`, the default,
-  `"nlm-citation-sequence"`, and `"nature"`);
 - any text you mark yourself with `anchor`.
+
+In a bibliography that numbers its entries, the number ("[1]") links to the
+first citation of that entry. Typst does this itself, also when several
+slides cite the entry and with `backlinks: false`.
 
 `anchor` marks a piece of text, and `goto` links to it:
 
@@ -321,9 +324,7 @@ not a link and looks as usual. This works for:
 `goto` also takes the label of an environment, figure, or equation, when
 you want your own link text instead of "Theorem 1".
 
-A target that several slides point at links back to the first of them; to
-return to a later one, use your PDF viewer's "go back" command. To make
-links go one way only:
+To make links go one way only:
 
 ```typst
 #show: monash-theme.with(backlinks: false)

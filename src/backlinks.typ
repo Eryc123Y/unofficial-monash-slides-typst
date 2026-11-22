@@ -1,6 +1,6 @@
 // Links in both directions. Every reference and `goto` leaves a marker
 // naming its target, and the name of the target ("Theorem 1", "Table 2")
-// is itself the link back, with nothing added to the slide.
+// is itself the link back when exactly one other slide points at it.
 
 #import "@preview/touying:0.8.0": utils
 #import "design.typ": *
@@ -8,10 +8,14 @@
 // A marker for a labelled target.
 #let backref-marker(target) = [#metadata(str(target))<monash-backref>]
 
-// The first place on another slide among `sources`, or `none`.
-#let _first-elsewhere(sources) = {
+// The place to go back to: the one other slide among `sources`. With no
+// other slide, or with several, there is no single way back, so `none`.
+#let _only-elsewhere(sources) = {
   let own = utils.slide-counter.get()
-  sources.find(source => utils.slide-counter.at(source) != own)
+  let elsewhere = sources.filter(source => utils.slide-counter.at(source) != own)
+  let slides = elsewhere.map(source => utils.slide-counter.at(source)).dedup()
+  // The last one: on a slide with `#pause` it is the complete subslide.
+  if slides.len() == 1 { elsewhere.last() }
 }
 
 // How a link inside the deck looks: blue text, or an underline where the
@@ -28,12 +32,13 @@
 }
 
 /// `body`, which names the target labelled `target`, as a link back to the
-/// first other slide that points at that target. Without such a slide, or
-/// with `monash-theme(backlinks: false)`, it is `body` unchanged.
+/// one other slide that points at that target. When no other slide does,
+/// or several do, or with `monash-theme(backlinks: false)`, it is `body`
+/// unchanged.
 #let back-link(target, body, underlined: false) = context {
   if target == none { return body }
   let markers = query(<monash-backref>).filter(it => it.value == str(target))
-  _back(_first-elsewhere(markers.map(it => it.location())), body, underlined: underlined)
+  _back(_only-elsewhere(markers.map(it => it.location())), body, underlined: underlined)
 }
 
 // Label of the figure being drawn, for content that cannot be handed it.
@@ -66,7 +71,7 @@
     if target == none or it.numbering == none { return it }
     context {
       let markers = query(<monash-backref>).filter(marker => marker.value == str(target))
-      let source = _first-elsewhere(markers.map(marker => marker.location()))
+      let source = _only-elsewhere(markers.map(marker => marker.location()))
       if source == none { return it }
       let number = numbering(it.numbering, ..counter(math.equation).at(it.location()))
       block(width: 100%, {
@@ -78,23 +83,13 @@
   body
 }
 
-// The number of a bibliography entry links back to its first citation on
-// another slide. Entries carry no key, so this works where their order is
-// known: styles that number them in the order of first citation.
-#let _citation-order-styles = ("ieee", "vancouver", "nlm-citation-sequence", "nature")
-
-#let _entry-number(cell) = context {
-  let citations = query(cite)
-  let key = citations.map(it => it.key).dedup().at(cell.y, default: none)
-  let sources = citations.filter(it => it.key == key).map(it => it.location())
-  _back(_first-elsewhere(sources), cell)
-}
-
+// Typst itself links the number of a bibliography entry to the first
+// citation of that entry, in styles that number the entries. The theme only
+// marks that number as a link.
 #let _citation-rules(body) = {
+  show cite: set text(fill: monash-blue)
   show bibliography: it => {
-    if it.style not in _citation-order-styles or it.full { return it }
-    // These styles set the entries in a grid: number, then entry.
-    show grid.cell.where(x: 0): _entry-number
+    show grid.cell.where(x: 0): set text(fill: monash-blue)
     it
   }
   body
@@ -109,7 +104,6 @@
   show ref: it => if it.form == "normal" and it.element != none {
     link-style(it) + backref-marker(it.target)
   } else { it }
-  show cite: set text(fill: monash-blue)
   show: _figure-rules
   show: _equation-rules
   show: _citation-rules

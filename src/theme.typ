@@ -75,8 +75,9 @@
   /// Footer text on the left: `none`, `auto` (short title and author), or
   /// content.
   footer: none,
-  /// Whether the name of a referenced target, such as "Theorem 1", links
-  /// back to the slide that refers to it. With `false`, links go one way.
+  /// Whether the name of a target, such as "Theorem 1", links back to the
+  /// slide that refers to it, when exactly one other slide does. With
+  /// `false`, links go one way.
   backlinks: true,
   /// Touying `config-*(..)` values, then the document body.
   ..args,

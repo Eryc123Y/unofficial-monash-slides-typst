@@ -1,6 +1,5 @@
-// Back links: the name of a target links back to the first other slide
-// that points at it. Nothing is added to the slides, so check the links in
-// the PDF.
+// Back links: the name of a target links back when exactly one other slide
+// points at it. scripts/check.sh checks the links of the PDF.
 //   --input backlinks=off   links go one way only
 //   --input style=plain     the light frame style
 //   --input bib=apa         an author-date bibliography
@@ -17,13 +16,16 @@
 
 == The targets
 
-#theorem[Banach][Every contraction has a unique fixed point.] <banach>
+// Referred to from one other slide: a link back.
+#theorem[Once][Used on one other slide.] <once>
 
-#lemma[Not referred to from another slide, so it shows no links.] <helper>
+// Referred to from two other slides: no link back.
+#theorem[Twice][Used on two other slides.] <twice>
 
-#anchor(<assumption>)[The key assumption] is completeness; #anchor(<setup>)[the setup] is standard.
+// Referred to from this slide only: no link back.
+#lemma[Used here only.] <here-only>
 
-On the same slide, @banach and @helper add no back link.
+#anchor(<assumption>)[The key assumption] is completeness; @here-only is local.
 
 == More targets
 
@@ -36,23 +38,18 @@ $ x_(n+1) = T x_n $ <iteration>
 
 #figure(rect(width: 4em, height: 2em), caption: [Not referred to.]) <unused>
 
-== First use
-
-By @banach and @iteration, the iteration converges; see @results and
-@vaswani2017attention. #goto(<assumption>)[Recall the assumption.]
-
 == A slide with pauses
 
-Before the pause we recall @banach.
+@once before the pause, and @once again: one slide, so one way back.
 
 #pause
 
-After the pause the slide is still listed once.
+@twice, @iteration, @results, #goto(<assumption>)[the assumption], and
+@vaswani2017attention.
 
-== Second use
+== Another use
 
-@banach again, with #goto(<setup>)[the setup] and #goto(<banach>)[the theorem by name],
-@devlin2019bert, and @vaswani2017attention.
+@twice a second time, with @devlin2019bert and @vaswani2017attention.
 
 == References
 
