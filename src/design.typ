@@ -17,6 +17,10 @@
 #let monash-blue-grey = rgb("#557A95")
 #let monash-teal = rgb("#007C89")
 
+// Environment colours outside the exported palette.
+#let warning-red = rgb("#A61B1B")
+#let exercise-purple = rgb("#6A4C93")
+
 // Layout constants. Lengths that scale with the body size are factors of
 // `font-size`; the rest are absolute.
 #let page-margin-x = 1.0cm

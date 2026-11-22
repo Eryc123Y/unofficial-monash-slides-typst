@@ -1,6 +1,6 @@
 // Feature tour of unofficial-monash-touying.
 // Compile with `--input font=Arial` to see the deck in Arial.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   font: sys.inputs.at("font", default: auto),
@@ -25,7 +25,7 @@
 == Minimal Preamble
 
 ```typst
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   config-info(title: [Title], author: [Your Name]),

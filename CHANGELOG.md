@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.1.0
+
+No breaking changes. Decks written for 1.0.0 compile unchanged.
+
+### New
+
+- `show-monash-frames(labels: ..)` renames environments, "Proof", and the
+  ending slide's "Thank you", for shorter names or another language.
+- Authors with affiliations: `config-info(author: ..)` accepts
+  `(name: .., affiliation: ..)` dictionaries, and `institution` an array.
+  The title slide numbers the institutions and marks each name.
+- Option `math-font`.
+- `show-monash-frames(style: "plain")`: a lighter frame with a rule at the
+  left and the name in colour, without a header bar.
+- `monash-frame` makes your own environments, activated with
+  `show-monash-frames(extra: ..)`.
+- `numbered: false` on a single frame, such as
+  `#theorem(numbered: false)[..]`.
+- Links in both directions: the name of a referenced target ("Theorem 1",
+  "Table 2", the number of an equation, anchored text) links back to the
+  slide that refers to it, when exactly one other slide does. Turn off with
+  `monash-theme(backlinks: false)`.
+- `anchor` marks any text as a place to go to and `goto` links to it, with
+  the same link back.
+
+### Changed
+
+- References, citations, and other links inside the deck are blue, so that
+  every link can be told from ordinary text.
+- `exercise` frames are purple and `warning` frames red, so that they differ
+  from `example` and read as a warning.
+- A proof has a grey rule at the left, in line with the frames, and its end
+  mark sits on the line of a closing display equation.
+- `ending-slide(title:)` defaults to `auto` instead of the text "Thank you";
+  the slide looks the same in an English deck.
+
 ## 1.0.0
 
 A general-purpose release with a stable, Typst-style API. Requires Typst

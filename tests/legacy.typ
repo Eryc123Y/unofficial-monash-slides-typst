@@ -1,7 +1,7 @@
 // Each 0.1.x option name, and each invalid option value, must panic with a
 // message naming the fix. scripts/check.sh compiles this file once per case
 // with `--input legacy=<case>` and checks the error text.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let name = sys.inputs.at("legacy", default: "fontsize")
 #let values = (
@@ -25,12 +25,28 @@
   logo-bad-key: (logo: (corner: [Logo])),
   logo-bad-value: (logo: (cover: "logo.svg")),
   logo-bad-fill: (logo: (bar: [Logo], bar-fill: "white")),
+  math-font-bad: (math-font: 12pt),
+  backlinks-bad: (backlinks: "both"),
 )
 
-#let theme-args = if name in invalid { invalid.at(name) } else {
-  ((name): values.at(name))
-}
+// Invalid values outside the theme options.
+#let author = if name == "author-bad-affiliation" {
+  ((name: "Ann Lee", affiliation: 2),)
+} else { [Author] }
+#let labels = if name == "labels-bad-key" { (theorm: "Thm") } else { (:) }
 
-#show: monash-theme.with(..theme-args, config-info(title: [Legacy]))
+#let theme-args = if name in invalid { invalid.at(name) } else if name in values {
+  ((name): values.at(name))
+} else { (:) }
+
+#show: monash-theme.with(
+  ..theme-args,
+  config-info(title: [Legacy], author: author, institution: [Monash University]),
+)
+#show: show-monash-frames.with(
+  labels: labels,
+  ..if name == "style-bad" { (style: "light") },
+  ..if name == "extra-bad" { (extra: ("Claim",)) },
+)
 
 #title-slide()

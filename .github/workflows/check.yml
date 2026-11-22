@@ -8,9 +8,14 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: typst-community/setup-typst@v5
         with:
           typst-version: "0.15"
       - name: Compile every deck with the embedded fonts only
         run: scripts/check.sh --ignore-system-fonts
+      - name: Keep the API reference
+        uses: actions/upload-artifact@v7
+        with:
+          name: reference
+          path: build/docs-reference.pdf

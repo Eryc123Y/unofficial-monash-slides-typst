@@ -8,7 +8,7 @@
 // The logos are placeholder SVGs in tests/assets with the aspect ratios of
 // common logos: horizontal 3.3:1, stacked 1.35:1, and square 1:1.
 // Add `--input aspect=4-3` for the narrow format.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let variant = sys.inputs.at("variant", default: "default")
 #let aspect = sys.inputs.at("aspect", default: "16-9")

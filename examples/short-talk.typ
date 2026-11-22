@@ -1,6 +1,6 @@
 // A short talk: no outline and no section dividers, so a 12-minute slot is
 // spent on content.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   outline: false,

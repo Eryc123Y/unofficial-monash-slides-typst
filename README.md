@@ -9,20 +9,20 @@ endorsed by Monash University.
 
 | Title slide | Content slide | Environments |
 | --- | --- | --- |
-| ![Title slide with the title, author, and date beside a blue architectural graphic.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.0.0/docs/preview/title-slide.png) | ![Content slide with a blue title bar, orange square bullets, numbered items, and a code block.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.0.0/docs/preview/content-slide.png) | ![Slide with a numbered definition, a numbered theorem, and a proof.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.0.0/docs/preview/academic-frames.png) |
+| ![Title slide with the title, author, and date beside a blue architectural graphic.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.1.0/docs/preview/title-slide.png) | ![Content slide with a blue title bar, orange square bullets, numbered items, and a code block.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.1.0/docs/preview/content-slide.png) | ![Slide with a numbered definition, a numbered theorem, and a proof.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.1.0/docs/preview/academic-frames.png) |
 
 ## Quick start
 
 Create a deck from the template:
 
 ```sh
-typst init @preview/unofficial-monash-touying:1.0.0 my-talk
+typst init @preview/unofficial-monash-touying:1.1.0 my-talk
 ```
 
 Or start from scratch:
 
 ```typst
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   config-info(
@@ -45,11 +45,11 @@ Or start from scratch:
 - `#pause` reveals the rest of a slide on the next click.
 ```
 
-The [`examples/`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/tree/v1.0.0/examples) folder has four complete decks:
-[`showcase`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/showcase.typ) (a tour of every feature),
-[`research-talk`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/research-talk.typ),
-[`lecture`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/lecture.typ), and
-[`short-talk`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/short-talk.typ).
+The [`examples/`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/tree/v1.1.0/examples) folder has four complete decks:
+[`showcase`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.1.0/examples/showcase.typ) (a tour of every feature),
+[`research-talk`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.1.0/examples/research-talk.typ),
+[`lecture`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.1.0/examples/lecture.typ), and
+[`short-talk`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.1.0/examples/short-talk.typ).
 
 ## Options
 
@@ -61,6 +61,7 @@ passed as positional `config-*(..)` arguments, as in the quick start.
 | `aspect-ratio` | `"16-9"` | `"16-9"`, `"4-3"` | Slide format. |
 | `font` | `auto` | `auto`, a family name, or an array of names | Text font. `auto` keeps Typst's default font. See [Fonts](#fonts). |
 | `code-font` | `"DejaVu Sans Mono"` | a family name or an array of names | Font of code. |
+| `math-font` | `auto` | `auto`, a family name, or an array of names | Font of math. `auto` keeps Typst's math font. |
 | `font-size` | `22pt` | length | Body text size. |
 | `title-font-size` | `36pt` | length | Title size on the title slide. |
 | `title-color` | `black` | color | Colour of the title-slide text. |
@@ -72,9 +73,31 @@ passed as positional `config-*(..)` arguments, as in the quick start.
 | `progress-bar` | `true` | bool | The progress bar along the bottom edge. |
 | `slide-numbering` | `"1"` | `none` or a numbering pattern | `"1"` shows the slide number; a pattern with two counting symbols such as `"1 / 1"` adds the total; `none` hides it. |
 | `footer` | `none` | `none`, `auto`, or content | Text at the left of the footer. `auto` shows the short title (or the title) and the author. |
+| `backlinks` | `true` | bool | Whether the name of a target, such as "Theorem 1", links back to the slide that refers to it, when there is exactly one. See [Links in both directions](#links-in-both-directions). |
 
 Title, author, and so on are set with Touying's
 `config-info(title:, short-title:, subtitle:, author:, institution:, date:)`.
+
+### Authors and affiliations
+
+`author` is one name or an array of names. For authors from several
+institutions, give `institution` as an array and say which ones each author
+belongs to; the title slide then numbers the institutions and marks the
+names:
+
+```typst
+config-info(
+  author: (
+    (name: "Ann Lee", affiliation: 1),
+    (name: "Bo Chen", affiliation: (1, 2)),
+  ),
+  institution: ([Monash University], [University of Melbourne]),
+)
+```
+
+`affiliation` is a position in `institution`, counted from 1, or an array of
+positions. The footer (`footer: auto`) and the PDF metadata show the names
+alone. With a single institution nothing is numbered.
 
 ## Slide kinds
 
@@ -85,7 +108,7 @@ Title, author, and so on are set with Touying's
 | `slide(..)` | A content slide. `== Heading` creates one; call it directly for layouts such as `#slide(composer: (1fr, 1fr))[Left][Right]`. |
 | `new-section-slide` | The divider slide made for each `= Section`. Turn these off with `section-slides: false`. |
 | `focus-slide[..]` | One statement, large and white on a full Monash blue slide. |
-| `ending-slide(title: [Thank you])[..]` | A closing slide with free content such as contact details. |
+| `ending-slide(title: auto)[..]` | A closing slide with free content such as contact details. The title is "Thank you" unless you set it. |
 
 Title, outline, section, focus, and ending slides do not advance the slide
 number.
@@ -140,6 +163,53 @@ With `shared-counter: true`, definitions, theorems, lemmas, corollaries,
 propositions, and assumptions share one counter; examples and exercises keep
 their own.
 
+To leave one frame without a number, for example a classical result you
+quote, pass `numbered: false`. It does not take a number from the others:
+
+```typst
+#theorem(numbered: false)[Bolzano–Weierstrass][Every bounded sequence ..]
+```
+
+A proof that ends with a display equation has its end mark on the line of
+that equation.
+
+### Frame style
+
+Frames have a coloured header bar by default. `style: "plain"` is lighter:
+a rule at the left and the name in colour at the start of the text, which
+suits slides with several statements.
+
+```typst
+#show: show-monash-frames.with(style: "plain")
+```
+
+### Your own environments
+
+`monash-frame` makes an environment in the same style. List it in `extra`
+to activate it:
+
+```typst
+#let claim = monash-frame("Claim", color: monash-teal)
+#let conjecture = monash-frame("Conjecture", numbered: false)
+#show: show-monash-frames.with(extra: (claim, conjecture))
+
+#claim[Every bounded sequence has a convergent subsequence.] <claim-bw>
+```
+
+Each has its own counter and can be labelled and referenced like the
+built-in ones.
+
+### Labels
+
+To rename an environment, or to use another language, pass `labels`:
+
+```typst
+#show: show-monash-frames.with(labels: (theorem: "Satz", proof: "Beweis"))
+```
+
+The keys are the environment names plus `proof` and `thank-you` (the title
+of the ending slide). References such as `@banach` use the new name.
+
 ## Fonts
 
 By default (`font: auto`) the theme does not choose a font: slides use Typst's
@@ -164,8 +234,8 @@ the first font; only the characters it lacks use the CJK font:
 #show: monash-theme.with(font: ("Arial", "Noto Sans CJK SC"))
 ```
 
-Math uses Typst's math font. To change it, add a show rule after the theme,
-for example `#show math.equation: set text(font: "New Computer Modern Math")`.
+Math uses Typst's math font. To change it, set `math-font`, for example
+`math-font: "New Computer Modern Math"`.
 
 ## Logos
 
@@ -194,6 +264,8 @@ matter: a wide logo is limited by width and a square or stacked one by
 height. Crop any empty margin out of your logo file first; whitespace inside
 the image counts as part of the logo and makes it look small.
 
+![Title slide with a placeholder logo in the top-left corner, a teal accent rule, and three authors numbered against two institutions.](https://raw.githubusercontent.com/Eryc123Y/unofficial-monash-slides-typst/v1.1.0/docs/preview/custom-cover.png)
+
 If you have more than one version of the logo, choose one per place:
 
 ```typst
@@ -213,6 +285,50 @@ only with a white or reversed logo, because the bar is Monash blue.
 
 The bundled title background is a logo-free graphic derived from the CC0
 [Quarto Monash presentation template](https://github.com/quarto-monash/presentation).
+
+## Links in both directions
+
+A reference such as `@banach` is a link to its target. When exactly one
+other slide refers to a target, the name of the target ("Theorem 1") is a
+link back to that slide: during a talk, click the reference to jump to the
+statement, then click the statement's name to return. A target that several
+slides refer to has no single way back, so its name is not a link; use your
+PDF viewer's "go back" command there.
+
+Every link inside the deck is marked, whichever way it points: references,
+citations, and `goto` links are blue, and so is the name of a target that
+links back. In the header bar of an environment, where the text is white,
+the link is underlined instead. A target without a link back looks as
+usual. This works for:
+
+- environments (`@banach`), including your own: the header, such as
+  "Theorem 1: Banach";
+- figures, tables, and code figures with a caption (`@results`): the
+  "Table 1" of the caption;
+- numbered display equations (`@iteration`): the number;
+- any text you mark yourself with `anchor`.
+
+In a bibliography that numbers its entries, the number ("[1]") links to the
+first citation of that entry. Typst does this itself, also when several
+slides cite the entry and with `backlinks: false`.
+
+`anchor` marks a piece of text, and `goto` links to it:
+
+```typst
+#anchor(<assumption>)[The key assumption] is that the data are i.i.d.
+
+// on a later slide
+#goto(<assumption>)[Recall the key assumption.]
+```
+
+`goto` also takes the label of an environment, figure, or equation, when
+you want your own link text instead of "Theorem 1".
+
+To make links go one way only:
+
+```typst
+#show: monash-theme.with(backlinks: false)
+```
 
 ## Tables
 
@@ -239,7 +355,7 @@ Touying's built-in option and keep the `#bibliography(..)` call:
 #show: monash-theme.with(config-common(show-bibliography-as-footnote: true))
 ```
 
-See [`examples/research-talk.typ`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.0.0/examples/research-talk.typ). Touying's
+See [`examples/research-talk.typ`](https://github.com/Eryc123Y/unofficial-monash-slides-typst/blob/v1.1.0/examples/research-talk.typ). Touying's
 [FAQ](https://touying-typ.github.io/docs/faq) covers the details.
 
 ## Handouts
@@ -263,9 +379,10 @@ The package exports exactly these names (checked by `tests/api.typ`):
 
 - Theme and slides: `monash-theme`, `title-slide`, `outline-slide`, `slide`,
   `new-section-slide`, `focus-slide`, `ending-slide`.
-- Environments: `show-monash-frames`, `monash-frame-style`, `definition`,
+- Environments: `show-monash-frames`, `monash-frame`, `monash-frame-style`, `definition`,
   `theorem`, `lemma`, `corollary`, `proposition`, `assumption`, `example`,
   `exercise`, `remark`, `note`, `warning`, `proof`.
+- Links: `anchor`, `goto`.
 - Design: `monash-accent-rule` and the colours `monash-blue`,
   `monash-blue-dark`, `monash-blue-grey`, `monash-blue-wash`,
   `monash-charcoal`, `monash-dark-grey`, `monash-green`, `monash-grey`,

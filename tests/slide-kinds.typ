@@ -1,7 +1,7 @@
 // A3: outline-slide anywhere, focus-slide, ending-slide, and the slide
 // counter they leave untouched. `--input sections=off` turns section
 // divider slides off; sections still feed the outline and bookmarks.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let sections = sys.inputs.at("sections", default: "on") == "on"
 

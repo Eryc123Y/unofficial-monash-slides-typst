@@ -26,6 +26,7 @@
   "aspect-ratio",
   "font",
   "code-font",
+  "math-font",
   "font-size",
   "title-font-size",
   "title-color",
@@ -37,6 +38,7 @@
   "progress-bar",
   "slide-numbering",
   "footer",
+  "backlinks",
 )
 
 /// Panics on any named argument that is not a `monash-theme` option, naming
@@ -131,6 +133,7 @@
   aspect-ratio: none,
   font: none,
   code-font: none,
+  math-font: none,
   font-size: none,
   title-font-size: none,
   title-color: none,
@@ -141,6 +144,7 @@
   section-slides: none,
   progress-bar: none,
   slide-numbering: none,
+  backlinks: none,
 ) = {
   _expect(
     aspect-ratio in ("16-9", "4-3"),
@@ -153,6 +157,10 @@
   _expect(
     _is-font(code-font),
     "`code-font` must be a font family name or an array of names.",
+  )
+  _expect(
+    math-font == auto or _is-font(math-font),
+    "`math-font` must be `auto`, a font family name, or an array of names.",
   )
   _expect(
     _is-size(font-size),
@@ -178,6 +186,7 @@
   _expect(type(outline) == bool, "`outline` must be `true` or `false`.")
   _expect(type(section-slides) == bool, "`section-slides` must be `true` or `false`.")
   _expect(type(progress-bar) == bool, "`progress-bar` must be `true` or `false`.")
+  _expect(type(backlinks) == bool, "`backlinks` must be `true` or `false`.")
   _expect(
     slide-numbering == none
       or type(slide-numbering) == function

@@ -1,7 +1,7 @@
 // Stress deck for the layout scenarios in docs/v1-spec.md section 6.
 // scripts/check.sh compiles it for both aspect ratios:
 //   typst compile tests/stress.typ --input aspect=4-3
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #let aspect = sys.inputs.at("aspect", default: "16-9")
 // `--input logo=on` adds a placeholder horizontal logo (cover corner and

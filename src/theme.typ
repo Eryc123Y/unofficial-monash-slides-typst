@@ -8,12 +8,20 @@
 #import "slides.typ": slide
 #import "navigation.typ": new-section-slide
 #import "frames.typ": frame-counters
+#import "authors.typ": author-entries, author-names, has-affiliations
 
-#let _font-rules(font, code-font, font-size, body) = {
+#let _font-rules(font, code-font, math-font, font-size, body) = {
   set text(size: font-size, fill: black)
   set text(font: font) if font != auto
   show raw: set text(font: code-font)
+  show math.equation: set text(font: math-font) if math-font != auto
   body
+}
+
+// The `config-info` fields among the positional arguments.
+#let _user-info(args) = {
+  let configs = args.pos().filter(arg => type(arg) == dictionary)
+  configs.fold((:), utils.merge-dicts).at("info", default: (:))
 }
 
 /// Applies the Monash-inspired slide theme to a Touying deck.
@@ -36,6 +44,9 @@
   font: auto,
   /// Font for code, as a family name or an array of names.
   code-font: "DejaVu Sans Mono",
+  /// Font for math, as a family name or an array of names. `auto` keeps
+  /// Typst's math font.
+  math-font: auto,
   /// Body text size.
   font-size: 22pt,
   /// Title size on the title slide.
@@ -64,6 +75,10 @@
   /// Footer text on the left: `none`, `auto` (short title and author), or
   /// content.
   footer: none,
+  /// Whether the name of a target, such as "Theorem 1", links back to the
+  /// slide that refers to it, when exactly one other slide does. With
+  /// `false`, links go one way.
+  backlinks: true,
   /// Touying `config-*(..)` values, then the document body.
   ..args,
   /// Document body transformed by the theme.
@@ -74,6 +89,7 @@
     aspect-ratio: aspect-ratio,
     font: font,
     code-font: code-font,
+    math-font: math-font,
     font-size: font-size,
     title-font-size: title-font-size,
     title-color: title-color,
@@ -84,10 +100,20 @@
     section-slides: section-slides,
     progress-bar: progress-bar,
     slide-numbering: slide-numbering,
+    backlinks: backlinks,
   )
   check-footer(footer)
 
-  show: _font-rules.with(font, code-font, font-size)
+  show: _font-rules.with(font, code-font, math-font, font-size)
+
+  // Authors with affiliations are kept for the cover; Touying, the footer,
+  // and the PDF metadata get the names alone.
+  let author = _user-info(args).at("author", default: none)
+  let structured = has-affiliations(author)
+  if structured {
+    // Report a wrong affiliation here rather than on the title slide.
+    let _ = author-entries(author, _user-info(args).at("institution", default: none))
+  }
 
   let store = (
     align: top,
@@ -104,6 +130,7 @@
     footer: footer,
     logo-bar: logo-places(logo).bar,
     logo-bar-fill: logo-places(logo).bar-fill,
+    authors: if structured { author },
   )
   let margin-self = (store: store)
 
@@ -129,7 +156,7 @@
       default-frozen-counters: default-config.default-frozen-counters + frame-counters,
     ),
     config-methods(
-      init: slide-rules.with(accent-color),
+      init: slide-rules.with(accent-color, backlinks),
       alert: utils.alert-with-primary-color,
     ),
     config-colors(
@@ -142,6 +169,7 @@
     config-store(..store),
     config-info(logo: logo-places(logo).cover),
     ..args,
+    ..if structured { (config-info(author: author-names(author)),) },
   )
 
   body

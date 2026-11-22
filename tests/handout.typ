@@ -1,7 +1,7 @@
 // Scenario 13: with `--input handout=true` the two slides with pauses
 // collapse to one page each (4 pages instead of 7). scripts/check.sh
 // compares the page counts.
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   outline: false,

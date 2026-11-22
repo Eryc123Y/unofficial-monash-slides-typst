@@ -39,9 +39,12 @@
 // Environments.
 #import "src/frames.typ": (
   assumption, corollary, definition, example, exercise, lemma,
-  monash-frame-style, note, proof, proposition, remark, show-monash-frames,
+  monash-frame, monash-frame-style, note, proof, proposition, remark, show-monash-frames,
   theorem, warning,
 )
+
+// Links in both directions.
+#import "src/backlinks.typ": anchor, goto
 
 // Colour tokens and the accent rule.
 #import "src/design.typ": (

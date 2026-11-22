@@ -1,4 +1,4 @@
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   // For the Monash look, use Arial where it is installed:

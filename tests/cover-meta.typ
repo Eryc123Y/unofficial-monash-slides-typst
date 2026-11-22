@@ -3,7 +3,7 @@
 //   --input aspect=4-3   narrow format
 //   --input logo=on      with a placeholder logo in the corner
 //   --input font=Arial   in Arial, where the second cover needs two lines
-#import "@preview/unofficial-monash-touying:1.0.0": *
+#import "@preview/unofficial-monash-touying:1.1.0": *
 
 #show: monash-theme.with(
   aspect-ratio: sys.inputs.at("aspect", default: "16-9"),

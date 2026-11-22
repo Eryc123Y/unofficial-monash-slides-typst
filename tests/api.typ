@@ -1,6 +1,6 @@
 // Asserts that the package exports exactly the documented public names.
 // Compiled by scripts/check.sh; a mismatch fails the compile.
-#import "@preview/unofficial-monash-touying:1.0.0" as monash
+#import "@preview/unofficial-monash-touying:1.1.0" as monash
 
 #let documented = (
   // Theme and slide kinds
@@ -14,6 +14,7 @@
   // Environments
   "show-monash-frames",
   "monash-frame-style",
+  "monash-frame",
   "definition",
   "theorem",
   "lemma",
@@ -26,6 +27,9 @@
   "note",
   "warning",
   "proof",
+  // Links
+  "anchor",
+  "goto",
   // Design tokens
   "monash-accent-rule",
   "monash-blue",
@@ -78,7 +82,7 @@
 
 #assert(missing == (), message: "documented but not exported: " + repr(missing))
 #assert(extra == (), message: "exported but not documented: " + repr(extra))
-#for name in documented.filter(it => it.starts-with("monash-") and it not in ("monash-theme", "monash-frame-style", "monash-accent-rule")) {
+#for name in documented.filter(it => it.starts-with("monash-") and it not in ("monash-theme", "monash-frame", "monash-frame-style", "monash-accent-rule")) {
   assert(type(dictionary(monash).at(name)) == color, message: name + " is not a color")
 }
 
