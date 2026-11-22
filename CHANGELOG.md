@@ -68,7 +68,9 @@ A general-purpose release with a stable, Typst-style API. Requires Typst
 - Nested list levels have distinct markers and sizes; the slide number is
   larger and darker.
 
-## 0.1.3
+## 0.1.3 (not released)
+
+This version was never published to Typst Universe; its fix is part of 1.0.0.
 
 ### Fixed
 
